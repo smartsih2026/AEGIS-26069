@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Command Center - AEGIS</title>
+  <title>AEGIS - AI Assistant</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS & JS for Mini Location Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -25,24 +29,40 @@
   <script src="js/firebase-auth.js?v=3.0"></script>
 
   <style>
+    :root {
+      --bg-dark: #040814;
+      --bg-sidebar: #070d1c;
+      --bg-card: #091224;
+      --bg-card-hover: #0e1b36;
+      --border-subtle: rgba(59, 130, 246, 0.18);
+      --border-active: rgba(59, 130, 246, 0.45);
+      --primary-blue: #2563eb;
+      --primary-blue-hover: #1d4ed8;
+      --danger-red: #ef4444;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     html, body {
       height: 100vh;
       width: 100vw;
       overflow: hidden;
-      background-color: #030712;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #f1f5f9;
-      font-size: 14px;
-      line-height: 1.4;
-      -webkit-font-smoothing: antialiased;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
     }
 
+    /* Layout System Matching Dashboard */
     .cmd-layout-container {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -53,44 +73,87 @@
 
     /* Left Sidebar */
     .cmd-sidebar {
-      background: #060b18;
-      border-right: 1px solid rgba(59, 130, 246, 0.18);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      padding: 0.85rem 0.75rem;
+      padding: 0.75rem 0.65rem;
       height: 100vh;
-      overflow: hidden;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .cmd-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .cmd-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.2);
+      border-radius: 4px;
     }
 
     .cmd-sidebar-logo {
       display: flex;
       align-items: center;
       gap: 0.65rem;
-      padding: 0.2rem 0.4rem 0.75rem 0.4rem;
+      padding: 0.15rem 0.25rem 0.65rem 0.25rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .cmd-logo-icon {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cmd-brand-name {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .cmd-brand-sub {
+      font-size: 0.62rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .cmd-nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.15rem;
       flex: 1;
-      overflow: hidden;
     }
 
     .cmd-nav-item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.5rem 0.75rem;
+      gap: 0.7rem;
+      padding: 0.44rem 0.65rem;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.85rem;
-      border-radius: 8px;
-      transition: all 0.18s ease;
+      font-size: 0.8rem;
+      border-radius: 7px;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .cmd-nav-item i {
+      width: 16px;
+      font-size: 0.9rem;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .cmd-nav-item:hover {
@@ -99,19 +162,99 @@
     }
 
     .cmd-nav-item.active {
-      background: #2563eb;
+      background: var(--primary-blue);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .cmd-emergency-card {
-      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.22) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 10px;
-      padding: 0.65rem;
+    .cmd-nav-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0.25rem 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger-red);
+      color: #ffffff;
+      font-size: 0.58rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      min-width: 16px;
       text-align: center;
-      margin-top: 0.45rem;
-      position: relative;
+    }
+
+    .cmd-nav-item.nav-logout {
+      color: #ef4444;
+      margin-top: 0.1rem;
+    }
+    .cmd-nav-item.nav-logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Sidebar Emergency Box */
+    .cmd-emergency-card {
+      background: rgba(11, 20, 38, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      text-align: center;
+      margin-top: auto;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    .emergency-card-title {
+      font-size: 0.58rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .emergency-card-call {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0.1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .emergency-card-desc {
+      font-size: 0.6rem;
+      color: #94a3b8;
+      margin-bottom: 0.35rem;
+    }
+
+    .emergency-card-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.42rem 0.75rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s ease;
+    }
+    .emergency-card-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+      transform: translateY(-1px);
     }
 
     /* Main Workspace */
@@ -120,589 +263,1098 @@
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background: #030712;
+      background: var(--bg-dark);
     }
 
     /* Top Bar */
     .cmd-topbar {
-      height: 48px;
-      background: #070d1d;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+      height: 54px;
+      background: #070d1c;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 1.25rem;
+      gap: 1rem;
       flex-shrink: 0;
     }
 
-    .district-select-box {
+    .district-select-pill {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #f1f5f9;
-      font-size: 0.825rem;
-      font-weight: 700;
+      color: #ffffff;
       padding: 0.35rem 0.85rem;
-      border-radius: 6px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      white-space: nowrap;
     }
-    .district-select-box select {
-      background: transparent;
-      border: none;
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.825rem;
-      outline: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .district-select-box select option {
-      background: #070d1d;
-      color: #fff;
+    .district-select-pill:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 1);
     }
 
-    /* Center Grid (Main Chat + Right Telemetry Panels) */
-    .cmd-center-grid {
+    .topbar-alert-banner {
+      flex: 1;
+      max-width: 680px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 0.32rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: #fca5a5;
+      min-width: 0;
+    }
+
+    .topbar-guide-btn {
+      background: #3b1419;
+      color: #ffffff;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-left: 0.5rem;
+      flex-shrink: 0;
+    }
+    .topbar-guide-btn:hover {
+      background: #541920;
+      border-color: #ef4444;
+    }
+
+    /* Main Content Layout (Chat Console + Right Side Intelligence) */
+    .cmd-content-grid {
       display: grid;
       grid-template-columns: 1fr 340px;
-      gap: 0.85rem;
-      padding: 0.55rem 1.15rem 0.45rem 1.15rem;
+      gap: 0.75rem;
+      padding: 0.85rem 1.15rem;
       flex: 1;
       overflow: hidden;
       min-height: 0;
     }
 
-    /* AI Chat Console */
-    .cmd-chat-panel {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.22);
-      border-radius: 10px;
+    /* Left Panel: AI Assistant Main View */
+    .ai-main-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      padding: 0.75rem 0.95rem;
       overflow: hidden;
       position: relative;
     }
 
-    .query-chip {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(59, 130, 246, 0.28);
-      color: #cbd5e1;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.3rem 0.75rem;
-      border-radius: 16px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.18s;
-    }
-    .query-chip:hover {
-      background: rgba(37, 99, 235, 0.25);
-      border-color: #3b82f6;
-      color: #ffffff;
-    }
-
-    /* Message Bubbles */
-    .cmd-chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-      padding-right: 0.35rem;
-      margin: 0.45rem 0;
-      min-height: 0;
-    }
-
-    .cmd-chat-messages::-webkit-scrollbar {
-      width: 5px;
-    }
-    .cmd-chat-messages::-webkit-scrollbar-thumb {
-      background: rgba(59, 130, 246, 0.3);
-      border-radius: 4px;
-    }
-
-    .msg-user-bubble {
-      align-self: flex-end;
-      background: #2563eb;
-      color: #ffffff;
-      padding: 0.55rem 0.95rem;
-      border-radius: 12px 12px 2px 12px;
-      font-size: 0.825rem;
-      font-weight: 500;
-      max-width: 75%;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-    }
-
-    .msg-bot-container {
-      align-self: flex-start;
-      display: flex;
-      gap: 0.65rem;
-      max-width: 95%;
-    }
-
-    .bot-avatar-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #1e293b;
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #38bdf8;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-
-    .msg-bot-content {
-      flex: 1;
-    }
-
-    .shelter-result-card {
-      background: rgba(11, 20, 38, 0.9);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 8px;
-      padding: 0.55rem 0.75rem;
-      margin-top: 0.4rem;
+    /* Header Bar */
+    .ai-card-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #081020;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.65rem;
-      transition: all 0.2s;
-    }
-    .shelter-result-card:hover {
-      border-color: #3b82f6;
-      background: rgba(15, 27, 51, 0.95);
+      flex-shrink: 0;
     }
 
-    /* Bottom Input Bar */
-    .cmd-input-container {
-      background: #040914;
-      border: 1px solid rgba(59, 130, 246, 0.28);
-      border-radius: 8px;
+    .ai-bot-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
       display: flex;
       align-items: center;
-      padding: 0.35rem 0.65rem;
+      justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+      flex-shrink: 0;
+    }
+
+    .live-badge-diamond {
+      background: rgba(6, 78, 59, 0.85);
+      border: 1px solid #10b981;
+      color: #10b981;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 0.12rem 0.45rem;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .powered-gemini-pill {
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Horizontal Category Tabs */
+    .ai-tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #060c1c;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .ai-tabs-row::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .ai-tab-btn {
+      background: #0d172e;
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      color: #94a3b8;
+      font-size: 0.73rem;
+      font-weight: 600;
+      padding: 0.32rem 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .ai-tab-btn:hover {
+      background: rgba(37, 99, 235, 0.15);
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+    .ai-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Chat Messages Container */
+    .ai-chat-messages {
+      flex: 1;
+      padding: 0.95rem 1.15rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      scroll-behavior: smooth;
+    }
+
+    .ai-chat-messages::-webkit-scrollbar {
+      width: 5px;
+    }
+    .ai-chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 4px;
+    }
+
+    .chat-msg-row {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 90%;
+      animation: fadeIn 0.2s ease-out;
+      flex-shrink: 0;
+    }
+    .chat-msg-row.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .chat-msg-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .chat-msg-avatar.bot {
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+    }
+    .chat-msg-avatar.user {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .chat-bubble {
+      background: #0d172e;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 0.75rem 0.95rem;
+      font-size: 0.79rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .chat-msg-row.user .chat-bubble {
+      background: #1d4ed8;
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    .chat-msg-time {
+      font-size: 0.62rem;
+      color: #64748b;
+      margin-top: 0.35rem;
+      text-align: right;
+    }
+
+    /* "Try asking something like:" Section */
+    .prompt-suggestions-container {
+      margin-top: 0.15rem;
+      margin-bottom: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .prompt-suggestions-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 0.45rem;
+    }
+
+    .prompt-suggestions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
     }
 
-    .cmd-input-field {
+    .prompt-card-btn {
+      background: #0a1326;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      color: #cbd5e1;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .prompt-card-btn:hover {
+      background: rgba(37, 99, 235, 0.18);
+      border-color: #3b82f6;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .prompt-card-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    /* Bottom Input Bar */
+    .ai-input-wrapper {
+      padding: 0.65rem 1rem 0.5rem 1rem;
+      border-top: 1px solid var(--border-subtle);
+      background: #081020;
+      flex-shrink: 0;
+    }
+
+    .ai-input-container {
+      background: #050b17;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 24px;
+      padding: 0.35rem 0.5rem 0.35rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: border-color 0.2s ease;
+    }
+    .ai-input-container:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .ai-text-input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
       color: #ffffff;
-      font-size: 0.825rem;
-      font-family: inherit;
+      font-size: 0.82rem;
     }
-    .cmd-input-field::placeholder {
+    .ai-text-input::placeholder {
       color: #64748b;
     }
 
-    /* Right Telemetry Column */
-    .cmd-telemetry-col {
+    .ai-mic-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.35rem;
+      transition: color 0.2s ease;
+    }
+    .ai-mic-btn:hover {
+      color: #3b82f6;
+    }
+    .ai-mic-btn.recording {
+      color: #ef4444;
+      animation: pulse-ring 1.5s infinite;
+    }
+
+    .ai-send-btn {
+      background: #2563eb;
+      border: none;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+    .ai-send-btn:hover {
+      background: #1d4ed8;
+      transform: scale(1.05);
+    }
+
+    .ai-disclaimer-text {
+      text-align: center;
+      font-size: 0.63rem;
+      color: #64748b;
+      margin-top: 0.35rem;
+    }
+
+    /* Right Column Cards */
+    .right-intel-column {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.75rem;
       overflow: hidden;
     }
 
-    .telemetry-card {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 10px;
-      padding: 0.65rem 0.85rem;
-    }
-
-    /* Bottom Suggested Cards */
-    .cmd-bottom-cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      padding: 0 1.15rem 0.45rem 1.15rem;
-      flex-shrink: 0;
-    }
-
-    .suggest-action-card {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 0.55rem 0.75rem;
+    .intel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
       display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .suggest-action-card:hover {
-      border-color: #3b82f6;
-      background: #0c1730;
-      transform: translateY(-1px);
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    /* Sticky Bottom Meta Footer */
-    .cmd-footer-bar {
-      height: 32px;
-      background: #040813;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    .intel-card-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.15rem;
-      font-size: 0.685rem;
+    }
+
+    /* Mini Location Map Card */
+    .location-split-view {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 0.6rem;
+      height: 125px;
+    }
+
+    #mini-location-map {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      background: #091322;
+    }
+
+    .location-telemetry-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 0.68rem;
+    }
+
+    .loc-stat-row {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+    .loc-stat-label {
       color: #64748b;
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .loc-stat-val {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.73rem;
+    }
+
+    /* Quick Help Topics Grid */
+    .quick-help-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+      margin-top: 0.2rem;
+    }
+
+    .help-topic-btn {
+      background: #0d172e;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 8px;
+      padding: 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: #ffffff;
+      font-size: 0.68rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .help-topic-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      transform: translateY(-1px);
+    }
+
+    .topic-icon-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
       flex-shrink: 0;
+    }
+
+    /* Latest Updates List */
+    .update-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.72rem;
+    }
+    .update-list-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    /* Custom Leaflet Pulsing User Pin */
+    .leaflet-user-pulse {
+      position: relative;
+    }
+    .user-center-dot {
+      width: 12px;
+      height: 12px;
+      background: #3b82f6;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #3b82f6;
+    }
+    .user-pulse-wave {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      animation: pulse-user 2s infinite ease-out;
+    }
+    @keyframes pulse-user {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    .map-text-pill {
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 0.58rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .map-mini-label {
+      color: #cbd5e1;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-shadow: 0 1px 3px #000;
+      white-space: nowrap;
+    }
+
+    /* Modal Styling */
+    .safety-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(6, 12, 28, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .safety-modal-card {
+      background: #0b1426;
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.8), 0 0 15px rgba(59, 130, 246, 0.2);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .safety-modal-header {
+      padding: 0.85rem 1.15rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .safety-modal-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .safety-alert-badge {
+      background: rgba(239, 68, 68, 0.25);
+      color: #ef4444;
+      border: 1px solid #ef4444;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    .safety-modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      transition: color 0.2s ease;
+    }
+    .safety-modal-close:hover {
+      color: #fff;
+    }
+
+    .safety-tab-bar {
+      display: flex;
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 0.35rem 0.65rem;
+      gap: 0.35rem;
+      overflow-x: auto;
+    }
+
+    .safety-tab-btn {
+      flex: 1;
+      padding: 0.45rem 0.6rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .safety-tab-btn:hover {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.15);
+    }
+    .safety-tab-btn.active {
+      background: rgba(37, 99, 235, 0.3);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    .safety-modal-body {
+      padding: 1rem 1.15rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .safety-tab-content {
+      display: none;
+    }
+    .safety-tab-content.active {
+      display: block;
+    }
+
+    .safety-guide-section {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 10px;
+      padding: 0.85rem;
+    }
+
+    .safety-guide-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .safety-guide-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: #cbd5e1;
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+    .safety-guide-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .safety-contact-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 8px;
+      padding: 0.6rem;
+    }
+
+    .safety-modal-footer {
+      padding: 0.75rem 1.15rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(59, 130, 246, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
     }
   </style>
 </head>
 <body>
 
   <div class="cmd-layout-container">
-    <!-- Left Navigation Sidebar (Clean 10-Item Architecture) -->
+    
+    <!-- Left Navigation Sidebar -->
     <aside class="cmd-sidebar">
+      
+      <!-- Brand Header -->
       <div class="cmd-sidebar-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.25)"/>
-          <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
-        </svg>
+        <div class="cmd-logo-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#3b82f6" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.28)"/>
+            <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 1.15rem; color: #fff; line-height: 1;">AEGIS</div>
-          <div style="font-size: 0.58rem; color: #94a3b8; font-weight: 500;">Stronger Together, Safer Together.</div>
+          <div class="cmd-brand-name">AEGIS</div>
+          <div class="cmd-brand-sub">Stronger Together, Safer Together.</div>
         </div>
       </div>
 
+      <!-- Nav Items -->
       <nav class="cmd-nav-menu">
-        <a class="cmd-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a class="cmd-nav-item active" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Command Center</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> Safe Routes</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> Shelter Network</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> SOS Reports</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> My SOS / Tracking</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-notifications.html'"><i class="fa-solid fa-bell"></i> Notifications <span style="background:#ef4444; color:#fff; font-size:0.55rem; padding:1px 5px; border-radius:50%; margin-left:auto; font-weight:800;">3</span></a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> Emergency Contacts</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> Profile & Settings</a>
-        <a class="cmd-nav-item" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        <a class="cmd-nav-item" onclick="location.href='index.html'" style="margin-top:auto; color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-dashboard.html'">
+          <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+        </a>
+        <a class="cmd-nav-item active" onclick="location.href='citizen-ai.html'">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Assistant</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-sos.html'">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> <span>SOS</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-intel.html'">
+          <i class="fa-solid fa-route"></i> <span>Safe Routes</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-shelters.html'">
+          <i class="fa-solid fa-campground"></i> <span>Shelters</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-tracking.html'">
+          <i class="fa-solid fa-location-crosshairs"></i> <span>My SOS / Tracking</span>
+        </a>
+
+        <div class="cmd-nav-divider"></div>
+
+        <a class="cmd-nav-item" onclick="location.href='citizen-notifications.html'">
+          <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-contacts.html'">
+          <i class="fa-solid fa-phone"></i> <span>Emergency Contacts</span>
+        </a>
+
+        <div class="cmd-nav-divider"></div>
+
+        <a class="cmd-nav-item" onclick="location.href='citizen-profile.html'">
+          <i class="fa-solid fa-gear"></i> <span>Profile & Settings</span>
+        </a>
+        <a class="cmd-nav-item" onclick="location.href='citizen-help.html'">
+          <i class="fa-solid fa-circle-question"></i> <span>Help & Support</span>
+        </a>
+        <a class="cmd-nav-item nav-logout" onclick="location.href='index.html'">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </a>
       </nav>
 
-      <!-- Emergency Hotline Card -->
+      <!-- Sidebar Bottom Emergency Box -->
       <div class="cmd-emergency-card">
-        <div style="font-size: 0.65rem; color: #fca5a5; font-weight: 700;">In case of emergency</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
-        <div style="font-size: 0.625rem; color: #cbd5e1; margin-bottom: 0.25rem;">or send SOS instantly</div>
-        
-        <!-- Illustration SVG -->
-        <div style="display:flex; justify-content:center; margin-top:0.35rem;">
-          <svg width="110" height="32" viewBox="0 0 120 35" fill="none">
-            <path d="M10 25 Q35 15 60 25 T110 25" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
-            <path d="M25 22 L95 22 L85 30 L35 30 Z" fill="#ea580c"/>
-            <circle cx="45" cy="14" r="4" fill="#fbbf24"/>
-            <circle cx="60" cy="13" r="4" fill="#60a5fa"/>
-            <circle cx="75" cy="14" r="4" fill="#34d399"/>
-            <path d="M45 18 L45 22 M60 17 L60 22 M75 18 L75 22" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="emergency-card-title">IN CASE OF EMERGENCY</div>
+        <div class="emergency-card-call"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
+        <div class="emergency-card-desc">or send SOS instantly</div>
+        <button class="emergency-card-btn" onclick="location.href='citizen-sos.html'">
+          <span style="font-size:0.85rem;">✦</span> Send SOS Now
+        </button>
       </div>
     </aside>
 
     <!-- Main Workspace Container -->
     <main class="cmd-main-area">
+      
       <!-- Top Alert Bar -->
       <header class="cmd-topbar">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="district-select-box">
+          <div class="district-select-pill" title="District configured from Dashboard">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <select id="cmd-district-select" onchange="renderAiForDistrict(this.value)">
-              <!-- Upper Assam -->
-              <option value="Golaghat" selected>Golaghat District, Assam</option>
-              <option value="Jorhat">Jorhat District, Assam</option>
-              <option value="Dibrugarh">Dibrugarh District, Assam</option>
-              <option value="Sivasagar">Sivasagar District, Assam</option>
-              <option value="Tinsukia">Tinsukia District, Assam</option>
-              <option value="Dhemaji">Dhemaji District, Assam</option>
-              <option value="Lakhimpur">Lakhimpur District, Assam</option>
-              <!-- Central Assam -->
-              <option value="Nagaon">Nagaon District, Assam</option>
-              <option value="Hojai">Hojai District, Assam</option>
-              <option value="Morigaon">Morigaon District, Assam</option>
-              <option value="Dima Hasao">Dima Hasao District, Assam</option>
-              <option value="East Karbi Anglong">East Karbi Anglong District, Assam</option>
-              <!-- Lower & North Assam -->
-              <option value="Kamrup Metropolitan">Kamrup Metropolitan (Guwahati), Assam</option>
-              <option value="Darrang">Darrang District, Assam</option>
-              <option value="Barpeta">Barpeta District, Assam</option>
-              <option value="Sonitpur">Sonitpur District, Assam</option>
-              <option value="Dhubri">Dhubri District, Assam</option>
-              <option value="Goalpara">Goalpara District, Assam</option>
-              <!-- Barak Valley -->
-              <option value="Cachar">Cachar District, Assam</option>
-              <option value="Hailakandi">Hailakandi District, Assam</option>
-              <option value="Karimganj">Karimganj District, Assam</option>
-            </select>
+            <span id="topbar-dist-name">Golaghat (Critical • 26.40°N, 94.03°E)</span>
           </div>
+
+        <div class="topbar-alert-banner">
+          <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.95rem; flex-shrink:0;"></i>
+            <span><strong style="color:#f87171;">HIGH FLOOD RISK</strong> in Golaghat District. Heavy rainfall and rising water levels. Stay alert and avoid flooded areas.</span>
+          </div>
+          <button class="topbar-guide-btn" onclick="openSafetyGuideModal()">
+            Stay Safe Guide &rarr;
+          </button>
         </div>
 
-        <div style="display:flex; align-items:center; gap:1rem;">
+        <div style="display: flex; align-items: center; gap: 1.15rem;">
           <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
-            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
-            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
+            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.15rem;"></i>
+            <span style="position:absolute; top:-5px; right:-7px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
           </div>
-
-          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
-            <div style="position:relative;">
-              <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #38bdf8;" alt="Avatar">
-              <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#10b981; border:2px solid #070d1d; border-radius:50%;"></span>
-            </div>
+          <div style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
+            <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid rgba(59,130,246,0.4);" alt="Avatar">
             <div style="text-align:left;">
-              <div class="citizen-user-name" style="font-size:0.785rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div class="citizen-user-email" style="font-size:0.625rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.78rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div style="font-size:0.62rem; color:#94a3b8;">ravi.das@email.com</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Center 2-Column Grid -->
-      <div class="cmd-center-grid">
+      <!-- Main Central Content Grid (Left Chat Console + Right Side Intelligence) -->
+      <div class="cmd-content-grid">
         
-        <!-- Left: AI Chat Console -->
-        <div class="cmd-chat-panel">
-          <!-- AI Header Banner -->
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.45rem;">
-            <div style="display:flex; align-items:center; gap:0.55rem;">
-              <i class="fa-solid fa-wand-magic-sparkles" style="color:#38bdf8; font-size:1.25rem;"></i>
-              <div>
-                <div style="font-weight:800; font-size:1.05rem; color:#fff; line-height:1.1;">AI COMMAND CENTER</div>
-                <div style="font-size:0.7rem; color:#94a3b8;">Your smart assistant for real-time flood information, safety guidance and help.</div>
-              </div>
-            </div>
-            <div id="gemini-status-pill" style="display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; color:#10b981; background:rgba(16,185,129,0.18); border:1px solid #10b981; padding:0.3rem 0.75rem; border-radius:6px; font-weight:700;">
-              <i class="fa-solid fa-bolt" style="color:#10b981;"></i> Powered by <strong style="color:#10b981;">Google Gemini 1.5 Flash AI</strong>
-            </div>
-          </div>
-
-          <!-- Question Prompt Chips Carousel -->
-          <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:0.35rem;">Ask me anything about floods, safety, shelters, routes...</div>
-          <div style="display:flex; align-items:center; gap:0.4rem; overflow-x:auto; padding-bottom:0.25rem;">
-            <span class="query-chip" onclick="askAI('Where is the nearest shelter from my location?')">Where is the nearest shelter?</span>
-            <span class="query-chip" onclick="askAI('Which route is safe to travel?')">Which route is safe to travel?</span>
-            <span class="query-chip" onclick="askAI('Current flood situation in my area')">Current flood situation in my area</span>
-            <span class="query-chip" onclick="askAI('Water level in the local river')">Water level in River</span>
-            <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; cursor:pointer; padding:0 0.25rem;"></i>
-          </div>
-
-          <!-- Chat Conversation Area -->
-          <div class="cmd-chat-messages" id="cmd-chat-stream">
-            <!-- User Bubble 1 -->
-            <div class="msg-user-bubble">
-              Where is the nearest shelter from my location?
-              <div style="text-align:right; font-size:0.6rem; color:rgba(255,255,255,0.7); margin-top:2px;">10:35 AM <i class="fa-solid fa-check-double"></i></div>
-            </div>
-
-            <!-- Bot Response 1 with 3 Dynamic Shelter Cards -->
-            <div class="msg-bot-container">
-              <div class="bot-avatar-icon"><i class="fa-solid fa-robot"></i></div>
-              <div class="msg-bot-content">
-                <div style="font-size:0.75rem; font-weight:800; color:#38bdf8; margin-bottom:0.25rem;">AEGIS AI</div>
-                <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.4;">
-                  Here are the nearest shelters from your current location:
-                </div>
-
-                <!-- Shelter 1 (Nearest) -->
-                <div class="shelter-result-card" style="border-left: 3.5px solid #10b981;">
-                  <div style="display:flex; align-items:center; gap:0.55rem;">
-                    <div style="width:30px; height:30px; border-radius:6px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">
-                      <i class="fa-solid fa-campground"></i>
-                    </div>
-                    <div>
-                      <div style="font-weight:800; font-size:0.825rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
-                        <span id="ai-sh-1-name">Golaghat Stadium Relief Camp</span>
-                        <span style="background:rgba(16,185,129,0.25); color:#10b981; font-size:0.58rem; padding:1px 5px; border-radius:3px;">Nearest</span>
-                      </div>
-                      <div style="font-size:0.685rem; color:#94a3b8;">
-                        Capacity: <span id="ai-sh-1-cap">500</span> people &bull; Available: <strong style="color:#10b981;" id="ai-sh-1-avail">190</strong>
-                      </div>
-                      <div style="font-size:0.625rem; color:#64748b; margin-top:2px;">
-                        Facilities: <i class="fa-solid fa-utensils"></i> <i class="fa-solid fa-bed"></i> <i class="fa-solid fa-kit-medical"></i> <i class="fa-solid fa-bottle-water"></i> <i class="fa-solid fa-restroom"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:0.72rem; font-weight:800; color:#38bdf8;" id="ai-sh-1-dist">2.4 km away</div>
-                    <button class="btn btn-primary" style="font-size:0.685rem; padding:0.25rem 0.55rem; margin-top:0.3rem;" onclick="location.href='citizen-intel.html'">
-                      Get Directions &rarr;
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Shelter 2 -->
-                <div class="shelter-result-card">
-                  <div style="display:flex; align-items:center; gap:0.55rem;">
-                    <div style="width:30px; height:30px; border-radius:6px; background:rgba(59,130,246,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">
-                      <i class="fa-solid fa-building-shield"></i>
-                    </div>
-                    <div>
-                      <div style="font-weight:800; font-size:0.825rem; color:#fff;" id="ai-sh-2-name">District Government College Shelter</div>
-                      <div style="font-size:0.685rem; color:#94a3b8;">
-                        Capacity: <span id="ai-sh-2-cap">350</span> people &bull; Available: <strong style="color:#10b981;" id="ai-sh-2-avail">140</strong>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:0.72rem; font-weight:800; color:#94a3b8;" id="ai-sh-2-dist">4.8 km away</div>
-                  </div>
-                </div>
-
-                <!-- Shelter 3 -->
-                <div class="shelter-result-card">
-                  <div style="display:flex; align-items:center; gap:0.55rem;">
-                    <div style="width:30px; height:30px; border-radius:6px; background:rgba(59,130,246,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">
-                      <i class="fa-solid fa-school"></i>
-                    </div>
-                    <div>
-                      <div style="font-weight:800; font-size:0.825rem; color:#fff;" id="ai-sh-3-name">Furkating Higher Secondary School</div>
-                      <div style="font-size:0.685rem; color:#94a3b8;">
-                        Capacity: <span id="ai-sh-3-cap">200</span> people &bull; Status: <strong style="color:#ef4444;" id="ai-sh-3-avail">Full</strong>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:0.72rem; font-weight:800; color:#94a3b8;" id="ai-sh-3-dist">7.5 km away</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Follow-up Prompt Carousel -->
-          <div style="display:flex; align-items:center; gap:0.4rem; overflow-x:auto; padding:0.25rem 0 0.45rem 0;">
-            <span class="query-chip" onclick="askAI('Which roads are safe now?')">Which roads are safe now?</span>
-            <span class="query-chip" onclick="askAI('Is it safe to travel at night?')">Is it safe to travel at night?</span>
-            <span class="query-chip" onclick="askAI('Weather update for today')">Weather update for today</span>
-            <span class="query-chip" onclick="askAI('Emergency contacts')">Emergency contacts</span>
-          </div>
-
-          <!-- Question Input Bar -->
-          <form onsubmit="handleCmdSend(event)" class="cmd-input-container">
-            <input type="text" id="cmd-user-input" class="cmd-input-field" placeholder="Type your question here...">
-            <button type="button" class="btn" style="background:transparent; border:none; color:#94a3b8; font-size:0.85rem; cursor:pointer;" onclick="simulateVoiceInput()" title="Voice Input">
-              <i class="fa-solid fa-microphone"></i>
-            </button>
-            <button type="submit" class="btn btn-primary" style="padding:0.32rem 0.75rem; font-size:0.75rem; border-radius:6px;">
-              <i class="fa-solid fa-paper-plane"></i>
-            </button>
-          </form>
-
-          <div style="font-size:0.625rem; color:#64748b; text-align:center; margin-top:0.3rem;">
-            AI responses may not be 100% accurate. Please follow official instructions during emergencies.
-          </div>
-        </div>
-
-        <!-- Right: Telemetry & Safety Overview Column -->
-        <div class="cmd-telemetry-col">
+        <!-- Left Main Panel: AI Assistant Chat Interface -->
+        <div class="ai-main-card">
           
-          <!-- Card 1: AI Safety Summary -->
-          <div class="telemetry-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-              <span style="font-weight:800; font-size:0.825rem; color:#fff;">AI Safety Summary</span>
-              <span style="font-size:0.625rem; color:#94a3b8;">Updated 10:35 AM</span>
-            </div>
-            <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.4;" id="ai-safety-summary-text">
-              Heavy rainfall is continuing in Golaghat district. Water level of Dhansiri River is rising. Avoid NH-715 and low-lying areas. Nearest safe shelter is 2.4 km away.
-            </div>
-            <div style="text-align:right; margin-top:0.35rem;">
-              <a href="citizen-intel.html" style="font-size:0.685rem; color:#38bdf8; text-decoration:none; font-weight:700;">
-                View Detailed Analysis &rarr;
-              </a>
-            </div>
-          </div>
-
-          <!-- Card 2: Flood Situation in Your Area -->
-          <div class="telemetry-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem;">
-              <span style="font-weight:800; font-size:0.825rem; color:#fff;">Flood Situation in Your Area</span>
-              <span style="color:#10b981; font-size:0.6rem; font-weight:700;">● Live</span>
-            </div>
-
-            <!-- 2x2 Telemetry Metric Grid -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem;">
-              <!-- Metric 1 -->
-              <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.35rem 0.55rem;">
-                <div style="font-size:0.6rem; color:#94a3b8;"><i class="fa-solid fa-cloud-showers-heavy" style="color:#38bdf8;"></i> Rainfall (24h)</div>
-                <div style="font-size:0.85rem; font-weight:800; color:#fff;" id="tel-rainfall">186 mm</div>
-                <div style="font-size:0.58rem; color:#ef4444; font-weight:700;">High</div>
+          <!-- Top Header -->
+          <div class="ai-card-header">
+            <div style="display:flex; align-items:center; gap:0.85rem;">
+              <div class="ai-bot-avatar">
+                <i class="fa-solid fa-robot"></i>
               </div>
-
-              <!-- Metric 2 -->
-              <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.35rem 0.55rem;">
-                <div style="font-size:0.6rem; color:#94a3b8;"><i class="fa-solid fa-water" style="color:#38bdf8;"></i> Water Level</div>
-                <div style="font-size:0.85rem; font-weight:800; color:#fff;" id="tel-water-level">4.8 m</div>
-                <div style="font-size:0.58rem; color:#f59e0b; font-weight:700;">Rising &uarr;</div>
-              </div>
-
-              <!-- Metric 3 -->
-              <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.35rem 0.55rem;">
-                <div style="font-size:0.6rem; color:#94a3b8;"><i class="fa-solid fa-road-barrier" style="color:#f59e0b;"></i> Road Status</div>
-                <div style="font-size:0.85rem; font-weight:800; color:#fff;" id="tel-road-status">3 Blocked</div>
-                <div style="font-size:0.58rem; color:#ef4444; font-weight:700;">Avoid travel</div>
-              </div>
-
-              <!-- Metric 4 -->
-              <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.35rem 0.55rem;">
-                <div style="font-size:0.6rem; color:#94a3b8;"><i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> Area Risk</div>
-                <div style="font-size:0.85rem; font-weight:800; color:#ef4444;" id="tel-risk-level">CRITICAL</div>
-                <div style="font-size:0.58rem; color:#94a3b8;">Stay alert</div>
+              <div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="font-weight:800; font-size:1.05rem; color:#fff; letter-spacing:0.02em;">AI Assistant</span>
+                  <span class="live-badge-diamond">◆ LIVE</span>
+                </div>
+                <div style="font-size:0.75rem; font-weight:700; color:#e2e8f0; margin-top:1px;">Your 24×7 flood safety companion</div>
+                <div style="font-size:0.65rem; color:#94a3b8;">Get real-time information, safety guidance, and emergency support for Assam floods.</div>
               </div>
             </div>
-          </div>
 
-          <!-- Card 3: Quick Help Topics -->
-          <div class="telemetry-card" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
             <div>
-              <div style="font-weight:800; font-size:0.825rem; color:#fff; margin-bottom:0.35rem;">Quick Help Topics</div>
-              
-              <div style="display:flex; flex-direction:column; gap:0.25rem;">
-                <div style="display:flex; align-items:center; gap:0.45rem; padding:0.25rem; border-radius:6px; cursor:pointer; background:rgba(15,23,42,0.6);" onclick="askAI('What are the top Flood Safety Tips right now?')">
-                  <div style="width:24px; height:24px; border-radius:50%; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.65rem;">
-                    <i class="fa-solid fa-shield-halved"></i>
-                  </div>
-                  <div>
-                    <div style="font-weight:700; font-size:0.72rem; color:#fff;">Flood Safety Tips</div>
-                    <div style="font-size:0.58rem; color:#94a3b8;">Learn what to do and avoid</div>
-                  </div>
-                </div>
+              <span class="powered-gemini-pill">
+                <i class="fa-solid fa-sparkles"></i> Powered by Gemini
+              </span>
+            </div>
+          </div>
 
-                <div style="display:flex; align-items:center; gap:0.45rem; padding:0.25rem; border-radius:6px; cursor:pointer; background:rgba(15,23,42,0.6);" onclick="askAI('Checklist: What to pack before leaving home during flood?')">
-                  <div style="width:24px; height:24px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.65rem;">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                  </div>
-                  <div>
-                    <div style="font-weight:700; font-size:0.72rem; color:#fff;">Before Leaving Home</div>
-                    <div style="font-size:0.58rem; color:#94a3b8;">Essential things to carry</div>
-                  </div>
-                </div>
+          <!-- Category Filter Tabs -->
+          <div class="ai-tabs-row">
+            <button class="ai-tab-btn active" onclick="switchCategoryTab(this, 'general')">
+              <i class="fa-solid fa-comment-dots" style="color:#3b82f6;"></i> General Help
+            </button>
+            <button class="ai-tab-btn" onclick="switchCategoryTab(this, 'updates')">
+              <i class="fa-solid fa-water" style="color:#06b6d4;"></i> Flood Updates
+            </button>
+            <button class="ai-tab-btn" onclick="switchCategoryTab(this, 'safety')">
+              <i class="fa-solid fa-shield-halved" style="color:#10b981;"></i> Safety Guidance
+            </button>
+            <button class="ai-tab-btn" onclick="switchCategoryTab(this, 'shelters')">
+              <i class="fa-solid fa-campground" style="color:#34d399;"></i> Shelters &amp; Routes
+            </button>
+            <button class="ai-tab-btn" onclick="switchCategoryTab(this, 'emergency')">
+              <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> Emergency Support
+            </button>
+            <button class="ai-tab-btn" onclick="switchCategoryTab(this, 'local')">
+              <i class="fa-solid fa-location-dot" style="color:#f59e0b;"></i> Local Information
+            </button>
+          </div>
 
-                <div style="display:flex; align-items:center; gap:0.45rem; padding:0.25rem; border-radius:6px; cursor:pointer; background:rgba(15,23,42,0.6);" onclick="askAI('What to do during active flood while waiting for rescue?')">
-                  <div style="width:24px; height:24px; border-radius:50%; background:rgba(139,92,246,0.2); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.65rem;">
-                    <i class="fa-solid fa-person-shelter"></i>
-                  </div>
-                  <div>
-                    <div style="font-weight:700; font-size:0.72rem; color:#fff;">During Flood</div>
-                    <div style="font-size:0.58rem; color:#94a3b8;">Stay safe while waiting for help</div>
-                  </div>
-                </div>
+          <!-- Scrollable Chat Messages Stream -->
+          <div class="ai-chat-messages" id="chat-messages-container">
+            
+            <!-- Bot Initial Greeting -->
+            <div class="chat-msg-row">
+              <div class="chat-msg-avatar bot">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div class="chat-bubble">
+                <div style="font-weight:700; color:#ffffff; margin-bottom:0.25rem;">Hello Ravi! 👋</div>
+                <div>I am your AEGIS AI Assistant. I can help you with flood updates, safe routes, nearby shelters, emergency procedures, and any questions you have. How can I assist you today?</div>
+                <div class="chat-msg-time">10:32 AM</div>
+              </div>
+            </div>
 
-                <div style="display:flex; align-items:center; gap:0.45rem; padding:0.25rem; border-radius:6px; cursor:pointer; background:rgba(15,23,42,0.6);" onclick="askAI('What are the protocols after reaching the relief shelter?')">
-                  <div style="width:24px; height:24px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:0.65rem;">
-                    <i class="fa-solid fa-house-circle-check"></i>
+            <!-- "Try asking something like:" Suggested Prompts Grid -->
+            <div class="prompt-suggestions-container" id="prompt-suggestions-box">
+              <div class="prompt-suggestions-title">Try asking something like:</div>
+              <div class="prompt-suggestions-grid" id="prompt-buttons-grid">
+                
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('What is the current flood situation in Golaghat?')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(37,99,235,0.2); color:#3b82f6;"><i class="fa-solid fa-chart-line"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">What is the current flood situation in Golaghat?</span>
                   </div>
-                  <div>
-                    <div style="font-weight:700; font-size:0.72rem; color:#fff;">After Reaching Shelter</div>
-                    <div style="font-size:0.58rem; color:#94a3b8;">What to do next</div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('Suggest a safe route to reach a shelter.')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(6,182,212,0.2); color:#06b6d4;"><i class="fa-solid fa-route"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Suggest a safe route to reach a shelter.</span>
                   </div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('Where is the nearest shelter near me?')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(16,185,129,0.2); color:#10b981;"><i class="fa-solid fa-house"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Where is the nearest shelter near me?</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('What should I do if water enters my home?')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(245,158,11,0.2); color:#f59e0b;"><i class="fa-solid fa-circle-info"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">What should I do if water enters my home?</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('Is it safe to travel on NH-715?')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(168,85,247,0.2); color:#a855f7;"><i class="fa-solid fa-car"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Is it safe to travel on NH-715?</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+                <button class="prompt-card-btn" onclick="sendQuickPrompt('Give me emergency contact numbers for Assam.')">
+                  <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+                    <div class="prompt-card-icon" style="background:rgba(239,68,68,0.2); color:#ef4444;"><i class="fa-solid fa-phone"></i></div>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Give me emergency contact numbers for Assam.</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+                </button>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Chat Input Area -->
+          <div class="ai-input-wrapper">
+            <div class="ai-input-container">
+              <input type="text" id="ai-chat-input" class="ai-text-input" placeholder="Ask your question here..." onkeypress="handleInputKeyPress(event)" />
+              <button class="ai-mic-btn" id="mic-toggle-btn" title="Voice Input" onclick="toggleVoiceRecording()">
+                <i class="fa-solid fa-microphone"></i>
+              </button>
+              <button class="ai-send-btn" title="Send Message" onclick="sendUserMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="ai-disclaimer-text">
+              AI responses are for guidance only. In case of emergency, call <strong>112</strong> immediately.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Intelligence, Mini Map & Help Columns -->
+        <div class="right-intel-column">
+          
+          <!-- 1. Your Location Card -->
+          <div class="intel-card" style="flex:1.05;">
+            <div class="intel-card-title">
+              <span style="display:flex; align-items:center; gap:0.4rem; color:#fff;">
+                <i class="fa-solid fa-shield-halved" style="color:#3b82f6;"></i> Your Location
+              </span>
+              <span style="background:rgba(16,185,129,0.2); color:#10b981; border:1px solid #10b981; font-size:0.6rem; font-weight:800; padding:0.1rem 0.4rem; border-radius:12px;">● Live</span>
+            </div>
+
+            <div class="location-split-view">
+              <!-- Mini Satellite Map -->
+              <div id="mini-location-map"></div>
+
+              <!-- Telemetry Metrics -->
+              <div class="location-telemetry-list">
+                <div class="loc-stat-row">
+                  <span class="loc-stat-label"><i class="fa-solid fa-location-dot" style="color:#3b82f6;"></i> Location</span>
+                  <span class="loc-stat-val" id="tele-loc">Golaghat, Assam</span>
                 </div>
+                <div class="loc-stat-row">
+                  <span class="loc-stat-label"><i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> Area Risk</span>
+                  <span class="loc-stat-val" style="color:#ef4444;" id="tele-risk">Critical</span>
+                </div>
+                <div class="loc-stat-row">
+                  <span class="loc-stat-label"><i class="fa-solid fa-water" style="color:#06b6d4;"></i> Water Level</span>
+                  <span class="loc-stat-val" style="color:#ef4444;" id="tele-water">4.8 m &uarr; Rising</span>
+                </div>
+                <div class="loc-stat-row">
+                  <span class="loc-stat-label"><i class="fa-solid fa-cloud-showers-heavy" style="color:#3b82f6;"></i> Rainfall (24h)</span>
+                  <span class="loc-stat-val" id="tele-rain">186 mm (High)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Quick Help Topics Card -->
+          <div class="intel-card" style="flex:1;">
+            <div class="intel-card-title">
+              <span style="display:flex; align-items:center; gap:0.4rem; color:#fff;">
+                <i class="fa-solid fa-bolt" style="color:#f59e0b;"></i> Quick Help Topics
+              </span>
+              <a href="#" onclick="openSafetyGuideModal(); return false;" style="color:#3b82f6; text-decoration:none; font-size:0.65rem; text-transform:none;">View All &rarr;</a>
+            </div>
+
+            <div class="quick-help-2x2">
+              <button class="help-topic-btn" onclick="sendQuickPrompt('What are the key flood safety tips to follow right now?')">
+                <div class="topic-icon-circle" style="background:rgba(37,99,235,0.25); color:#3b82f6;"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                  <div style="font-weight:700; font-size:0.7rem; color:#fff;">Flood Safety Tips</div>
+                  <div style="font-size:0.58rem; color:#94a3b8;">What to do and avoid</div>
+                </div>
+              </button>
+
+              <button class="help-topic-btn" onclick="sendQuickPrompt('What essential checklist should I prepare before leaving home in a flood?')">
+                <div class="topic-icon-circle" style="background:rgba(16,185,129,0.25); color:#10b981;"><i class="fa-solid fa-person-shelter"></i></div>
+                <div>
+                  <div style="font-weight:700; font-size:0.7rem; color:#fff;">Before Leaving Home</div>
+                  <div style="font-size:0.58rem; color:#94a3b8;">Essential checklist</div>
+                </div>
+              </button>
+
+              <button class="help-topic-btn" onclick="sendQuickPrompt('How do I stay safe during active flood while waiting for rescue?')">
+                <div class="topic-icon-circle" style="background:rgba(168,85,247,0.25); color:#a855f7;"><i class="fa-solid fa-house-chimney"></i></div>
+                <div>
+                  <div style="font-weight:700; font-size:0.7rem; color:#fff;">During Flood</div>
+                  <div style="font-size:0.58rem; color:#94a3b8;">Stay safe while waiting</div>
+                </div>
+              </button>
+
+              <button class="help-topic-btn" onclick="sendQuickPrompt('What are the official protocols after reaching an emergency relief shelter?')">
+                <div class="topic-icon-circle" style="background:rgba(245,158,11,0.25); color:#f59e0b;"><i class="fa-solid fa-book-open"></i></div>
+                <div>
+                  <div style="font-weight:700; font-size:0.7rem; color:#fff;">After Reaching Shelter</div>
+                  <div style="font-size:0.58rem; color:#94a3b8;">Important information</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Latest Updates Card -->
+          <div class="intel-card" style="flex:1;">
+            <div class="intel-card-title">
+              <span style="display:flex; align-items:center; gap:0.4rem; color:#fff;">
+                <i class="fa-solid fa-tower-broadcast" style="color:#ef4444;"></i> Latest Updates from Official Sources
+              </span>
+              <a href="citizen-notifications.html" style="color:#3b82f6; text-decoration:none; font-size:0.65rem; text-transform:none;">View All &rarr;</a>
+            </div>
+
+            <div style="display:flex; flex-direction:column; justify-content:space-around; flex:1;">
+              <div class="update-list-item">
+                <span style="display:flex; align-items:center; gap:0.35rem; color:#cbd5e1; font-size:0.7rem;">
+                  <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.75rem;"></i> NH-715 near Bokakhat is flooded.
+                </span>
+                <span style="color:#64748b; font-size:0.65rem;">10:05 AM</span>
+              </div>
+
+              <div class="update-list-item">
+                <span style="display:flex; align-items:center; gap:0.35rem; color:#cbd5e1; font-size:0.7rem;">
+                  <i class="fa-solid fa-house" style="color:#10b981; font-size:0.75rem;"></i> Relief camp opened at Golaghat College.
+                </span>
+                <span style="color:#64748b; font-size:0.65rem;">09:50 AM</span>
+              </div>
+
+              <div class="update-list-item">
+                <span style="display:flex; align-items:center; gap:0.35rem; color:#cbd5e1; font-size:0.7rem;">
+                  <i class="fa-solid fa-cloud-rain" style="color:#3b82f6; font-size:0.75rem;"></i> Heavy rainfall expected for next 6 hours.
+                </span>
+                <span style="color:#64748b; font-size:0.65rem;">09:35 AM</span>
               </div>
             </div>
           </div>
@@ -710,428 +1362,544 @@
         </div>
 
       </div>
-
-      <!-- Suggested for You (4 Bottom Quick Action Cards) -->
-      <div style="padding:0 1.15rem 0.25rem 1.15rem; font-size:0.72rem; font-weight:800; color:#94a3b8;">
-        Suggested for You
-      </div>
-      <div class="cmd-bottom-cards">
-        
-        <!-- Card 1 -->
-        <div class="suggest-action-card" onclick="location.href='citizen-intel.html'">
-          <div style="width:30px; height:30px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-route"></i>
-          </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:0.8rem; color:#fff;">Safe Route to Shelter</div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Find safest path to nearest shelter</div>
-            <div style="font-size:0.65rem; font-weight:700; color:#10b981; margin-top:2px;">Find Route &rarr;</div>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="suggest-action-card" onclick="location.href='citizen-sos.html'">
-          <div style="width:30px; height:30px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-circle-exclamation"></i>
-          </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:0.8rem; color:#fff;">Send SOS</div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Need immediate rescue assistance?</div>
-            <div style="font-size:0.65rem; font-weight:700; color:#ef4444; margin-top:2px;">Send SOS &rarr;</div>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="suggest-action-card" onclick="location.href='citizen-shelters.html'">
-          <div style="width:30px; height:30px; border-radius:50%; background:rgba(59,130,246,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-campground"></i>
-          </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:0.8rem; color:#fff;">Shelter Network</div>
-            <div style="font-size:0.65rem; color:#94a3b8;">View all shelters around you</div>
-            <div style="font-size:0.65rem; font-weight:700; color:#38bdf8; margin-top:2px;">View Shelters &rarr;</div>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="suggest-action-card" onclick="location.href='citizen-contacts.html'">
-          <div style="width:30px; height:30px; border-radius:50%; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-phone"></i>
-          </div>
-          <div style="flex:1;">
-            <div style="font-weight:800; font-size:0.8rem; color:#fff;">Emergency Contacts</div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Important numbers at one tap</div>
-            <div style="font-size:0.65rem; font-weight:700; color:#f59e0b; margin-top:2px;">View Contacts &rarr;</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Sticky Meta Footer -->
-      <footer class="cmd-footer-bar">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <i class="fa-solid fa-shield-halved" style="color:#3b82f6;"></i>
-          <span><strong>Stay Informed. Stay Safe.</strong> We are with you in every step.</span>
-        </div>
-
-        <div style="display:flex; align-items:center; gap:0.75rem;">
-          <span>Trusted by:</span>
-          <span>🏛️ Government of Assam</span>
-          <span>|</span>
-          <span>🚨 ASDMA</span>
-          <span>|</span>
-          <span>🚤 NDRF</span>
-          <span>|</span>
-          <span>🛡️ SDRF Assam</span>
-        </div>
-
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span>Data Source: ASDMA | IMD</span>
-          <span>&bull;</span>
-          <span>Last Updated: 12 Aug 2026, 10:35 AM</span>
-          <span>&bull;</span>
-          <span style="color:#10b981; font-weight:700;">🟢 Live</span>
-        </div>
-      </footer>
 
     </main>
+
   </div>
 
-  <script src="js/citizen.js?v=3.0"></script>
-
+  <!-- Mini Map & AI Assistant Logic -->
   <script>
-    let currentDistrictData = null;
-
-    // Gemini API Configuration & Functions
-    const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    let miniMap = null;
+    let miniMapLayers = null;
+    let isVoiceListening = false;
+    let recognition = null;
+    let currentDistrict = citizenApp.getSelectedDistrict() || 'Golaghat';
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderAiForDistrict('Golaghat');
-      checkGeminiKeyOnLoad();
+      currentDistrict = citizenApp.getSelectedDistrict() || 'Golaghat';
+      citizenApp.syncTopbarDistrict();
+      initMiniSatelliteMap();
+      setupSpeechRecognition();
+      updateDynamicPrompts();
+      updateTelemetryCard();
     });
 
-    function checkGeminiKeyOnLoad() {
-      const savedKey = localStorage.getItem('AEGIS_GEMINI_API_KEY');
-      if (savedKey) {
-        updateGeminiStatusBadge(true);
+    function updateTelemetryCard() {
+      const data = citizenApp.getDistrictModelData(currentDistrict);
+      const teleLoc = document.getElementById('tele-loc');
+      if (teleLoc) teleLoc.textContent = `${data.district}, Assam`;
+      const teleRiver = document.getElementById('tele-river');
+      if (teleRiver) teleRiver.textContent = data.river || 'Brahmaputra Basin';
+      const teleLevel = document.getElementById('tele-level');
+      if (teleLevel) teleLevel.textContent = data.waterLevel || 'Critical';
+      const teleShelter = document.getElementById('tele-shelter');
+      if (teleShelter && data.shelterInfo) teleShelter.textContent = `${data.shelterInfo.name} (${data.shelterInfo.distance})`;
+    }
+
+    function initMiniSatelliteMap() {
+      const data = citizenApp.getDistrictModelData(currentDistrict);
+      const centerCoords = data.coordinates || [26.4049, 94.0321];
+
+      miniMap = L.map('mini-location-map', {
+        center: centerCoords,
+        zoom: 12,
+        zoomControl: true,
+        attributionControl: false
+      });
+
+      miniMap.zoomControl.setPosition('topleft');
+
+      // High-Resolution Esri World Imagery Satellite Tiles
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        subdomains: ['server', 'services']
+      }).addTo(miniMap);
+
+      miniMapLayers = L.layerGroup().addTo(miniMap);
+      renderMiniMapDistrict(currentDistrict);
+
+      setTimeout(() => miniMap.invalidateSize(), 300);
+    }
+
+    function renderMiniMapDistrict(district) {
+      if (!miniMapLayers) return;
+      miniMapLayers.clearLayers();
+      const data = citizenApp.getDistrictModelData(district);
+
+      // Red High Risk Flood Zone
+      L.circle(data.floodedArea || data.coordinates, {
+        radius: 1200,
+        color: '#ef4444',
+        weight: 1.5,
+        fillColor: '#ef4444',
+        fillOpacity: 0.4
+      }).addTo(miniMapLayers).bindPopup(`🌊 Hazard Inundation Zone - ${data.district}`);
+
+      // "You are here" Glowing Pin
+      const userIcon = L.divIcon({
+        className: 'custom-map-icon',
+        html: `
+          <div style="display:flex; align-items:center; gap:4px;">
+            <div class="leaflet-user-pulse">
+              <div class="user-pulse-wave"></div>
+              <div class="user-center-dot"></div>
+            </div>
+            <div class="map-text-pill">You are here</div>
+          </div>
+        `,
+        iconSize: [110, 24],
+        iconAnchor: [6, 12]
+      });
+      L.marker(data.citizenOrigin || data.coordinates, { icon: userIcon }).addTo(miniMapLayers);
+
+      // Shelter Marker
+      const shelterIcon = L.divIcon({
+        className: 'custom-map-icon',
+        html: `<div style="background:#10b981; color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 10px #10b981;"><i class="fa-solid fa-house" style="font-size:0.7rem;"></i></div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13]
+      });
+      L.marker(data.shelter, { icon: shelterIcon }).addTo(miniMapLayers).bindPopup(`<b>${data.shelterInfo ? data.shelterInfo.name : 'Relief Shelter'}</b><br>${data.shelterInfo ? data.shelterInfo.available : 180} Beds Open`);
+
+      // Roadblock Marker
+      const rbIcon = L.divIcon({
+        className: 'custom-map-icon',
+        html: `<div style="background:#ef4444; color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 10px #ef4444; font-weight:800; font-size:0.75rem;">!</div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+      L.marker(data.roadBlock, { icon: rbIcon }).addTo(miniMapLayers).bindPopup(`<b>⚠️ Roadblock</b><br>${data.blockageInfo ? data.blockageInfo.name : 'Submerged Road'}`);
+
+      // Labels
+      L.marker(data.coordinates, {
+        icon: L.divIcon({
+          className: 'custom-map-icon',
+          html: `<div class="map-mini-label" style="color:#ffffff; font-weight:800;">${data.district}</div>`,
+          iconSize: [80, 16],
+          iconAnchor: [40, 8]
+        })
+      }).addTo(miniMapLayers);
+    }
+
+    // Dynamic Prompts by Category Tab
+    function getCategoryPrompts(category) {
+      const data = citizenApp.getDistrictModelData(currentDistrict);
+      const prompts = {
+        'general': [
+          { icon: 'fa-chart-line', color: '#3b82f6', text: `What is the current flood situation in ${data.district}?` },
+          { icon: 'fa-route', color: '#06b6d4', text: `Suggest a safe evacuation route to reach shelter in ${data.district}.` },
+          { icon: 'fa-house', color: '#10b981', text: `Where is the nearest relief camp in ${data.district}?` },
+          { icon: 'fa-circle-info', color: '#f59e0b', text: 'What should I do if water enters my home?' },
+          { icon: 'fa-car', color: '#a855f7', text: `Are roads like ${data.blockageInfo ? data.blockageInfo.name : 'main highway'} open?` },
+          { icon: 'fa-phone', color: '#ef4444', text: `Give me emergency contacts for ${data.district} DEOC.` }
+        ],
+        'updates': [
+          { icon: 'fa-water', color: '#06b6d4', text: `What is the water level of ${data.river}?` },
+          { icon: 'fa-cloud-showers-heavy', color: '#3b82f6', text: `What is the 24h rainfall forecast for ${data.division}?` },
+          { icon: 'fa-triangle-exclamation', color: '#ef4444', text: `Which localities in ${data.district} are high risk?` },
+          { icon: 'fa-road-barrier', color: '#f59e0b', text: `Report on road blockages in ${data.district}.` }
+        ],
+        'safety': [
+          { icon: 'fa-shield-halved', color: '#10b981', text: 'How do I safely purify flood water for drinking?' },
+          { icon: 'fa-bolt', color: '#f59e0b', text: 'What should I do about electrical switches if water is rising?' },
+          { icon: 'fa-staff-snake', color: '#ef4444', text: 'What is the first aid protocol for snakebites during floods?' },
+          { icon: 'fa-person-shelter', color: '#3b82f6', text: 'How do I safely evacuate elderly family members and infants?' }
+        ],
+        'shelters': [
+          { icon: 'fa-campground', color: '#10b981', text: `List active relief camps with open bed capacity in ${data.district}.` },
+          { icon: 'fa-utensils', color: '#f59e0b', text: `Where are food rations and drinking water packets distributed in ${data.district}?` },
+          { icon: 'fa-kit-medical', color: '#06b6d4', text: `Which emergency clinics are active in ${data.district}?` },
+          { icon: 'fa-route', color: '#a855f7', text: `Show me the safe route to ${data.shelterInfo ? data.shelterInfo.name : 'shelter'}.` }
+        ],
+        'emergency': [
+          { icon: 'fa-sailboat', color: '#ef4444', text: `My family is stranded. How do I request ${data.rescueInfo ? data.rescueInfo.name : 'NDRF rescue boat'}?` },
+          { icon: 'fa-phone-volume', color: '#f59e0b', text: `How do I reach the ${data.district} Disaster Control Room?` },
+          { icon: 'fa-truck-medical', color: '#06b6d4', text: 'How do I dispatch an emergency 108 ambulance during flood?' },
+          { icon: 'fa-triangle-exclamation', color: '#ef4444', text: 'How do I submit an instant GPS SOS beacon on AEGIS?' }
+        ],
+        'local': [
+          { icon: 'fa-city', color: '#3b82f6', text: `What is the flood risk assessment for ${data.district}?` },
+          { icon: 'fa-hospital', color: '#10b981', text: `Where is the nearest clinic in ${data.district}?` },
+          { icon: 'fa-building-shield', color: '#a855f7', text: `Who is the rescue commander for ${data.district}?` },
+          { icon: 'fa-bullhorn', color: '#f59e0b', text: `What is the DEOC phone line for ${data.district}?` }
+        ]
+      };
+      return prompts[category] || prompts['general'];
+    }
+
+    function updateDynamicPrompts() {
+      const activeBtn = document.querySelector('.ai-tab-btn.active');
+      const cat = activeBtn ? activeBtn.getAttribute('data-category') || 'general' : 'general';
+      switchCategoryTab(activeBtn || document.querySelector('.ai-tab-btn'), cat);
+    }
+
+    function switchCategoryTab(btn, category) {
+      document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const grid = document.getElementById('prompt-buttons-grid');
+      if (!grid) return;
+
+      const prompts = getCategoryPrompts(category);
+      grid.innerHTML = prompts.map(p => `
+        <button class="prompt-card-btn" onclick="sendQuickPrompt('${p.text.replace(/'/g, "\\'")}')">
+          <div style="display:flex; align-items:center; gap:0.5rem; overflow:hidden;">
+            <div class="prompt-card-icon" style="background:${p.color}25; color:${p.color};"><i class="fa-solid ${p.icon}"></i></div>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.text}</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#64748b; font-size:0.7rem; flex-shrink:0;"></i>
+        </button>
+      `).join('');
+    }
+
+    function handleInputKeyPress(e) {
+      if (e.key === 'Enter') {
+        sendUserMessage();
       }
     }
 
-    function openGeminiModal() {
-      const modal = document.getElementById('gemini-key-modal');
-      if (modal) modal.style.display = 'flex';
-      const savedKey = localStorage.getItem('AEGIS_GEMINI_API_KEY') || '';
-      document.getElementById('gemini-api-key-input').value = savedKey;
-    }
-
-    function closeGeminiModal() {
-      const modal = document.getElementById('gemini-key-modal');
-      if (modal) modal.style.display = 'none';
-    }
-
-    function saveGeminiApiKey() {
-      const key = document.getElementById('gemini-api-key-input').value.trim();
-      if (key) {
-        localStorage.setItem('AEGIS_GEMINI_API_KEY', key);
-        updateGeminiStatusBadge(true);
-        if (typeof showCitizenAlert === 'function') {
-          showCitizenAlert('Key Saved!', 'Google Gemini 1.5 Flash is now active for live AI responses!', 'success');
-        } else {
-          alert('Google Gemini 1.5 Flash API Key Saved!');
-        }
-      } else {
-        localStorage.removeItem('AEGIS_GEMINI_API_KEY');
-        updateGeminiStatusBadge(false);
-      }
-      closeGeminiModal();
-    }
-
-    function clearGeminiApiKey() {
-      localStorage.removeItem('AEGIS_GEMINI_API_KEY');
-      document.getElementById('gemini-api-key-input').value = '';
-      updateGeminiStatusBadge(false);
-      closeGeminiModal();
-      if (typeof showCitizenAlert === 'function') {
-        showCitizenAlert('Key Cleared', 'Using default AEGIS AI safety intelligence engine.', 'info');
+    function sendQuickPrompt(promptText) {
+      const input = document.getElementById('ai-chat-input');
+      if (input) {
+        input.value = promptText;
+        sendUserMessage();
       }
     }
 
-    function updateGeminiStatusBadge(isActive) {
-      const pill = document.getElementById('gemini-status-pill');
-      if (!pill) return;
-      if (isActive) {
-        pill.style.background = 'rgba(16,185,129,0.18)';
-        pill.style.border = '1px solid #10b981';
-        pill.innerHTML = `<i class="fa-solid fa-bolt" style="color:#10b981;"></i> <strong style="color:#10b981;">Gemini 1.5 Flash Active</strong>`;
-      } else {
-        pill.style.background = 'rgba(139,92,246,0.12)';
-        pill.style.border = '1px solid rgba(139,92,246,0.3)';
-        pill.innerHTML = `<i class="fa-solid fa-sparkles" style="color:#38bdf8;"></i> Powered by <strong style="color:#38bdf8;">Google Gemini AI</strong>`;
-      }
-    }
+    async function sendUserMessage() {
+      const input = document.getElementById('ai-chat-input');
+      if (!input) return;
+      const message = input.value.trim();
+      if (!message) return;
 
-    function renderAiForDistrict(districtName) {
-      if (!window.citizenApp || !window.locateNearestShelters) return;
-
-      currentDistrictData = window.citizenApp.getDistrictModelData(districtName);
-      const userLat = currentDistrictData.citizenOrigin[0];
-      const userLng = currentDistrictData.citizenOrigin[1];
-
-      // Update 3 Shelter result cards from assamShelterNetwork
-      const nearestShelters = window.locateNearestShelters(currentDistrictData.district, userLat, userLng);
-      if (nearestShelters && nearestShelters.length >= 3) {
-        // Shelter 1
-        document.getElementById('ai-sh-1-name').innerText = nearestShelters[0].name;
-        document.getElementById('ai-sh-1-cap').innerText = nearestShelters[0].capacity;
-        document.getElementById('ai-sh-1-avail').innerText = nearestShelters[0].available;
-        document.getElementById('ai-sh-1-dist').innerText = `${nearestShelters[0].distanceKm} km away`;
-
-        // Shelter 2
-        document.getElementById('ai-sh-2-name').innerText = nearestShelters[1].name;
-        document.getElementById('ai-sh-2-cap').innerText = nearestShelters[1].capacity;
-        document.getElementById('ai-sh-2-avail').innerText = nearestShelters[1].available;
-        document.getElementById('ai-sh-2-dist').innerText = `${nearestShelters[1].distanceKm} km away`;
-
-        // Shelter 3
-        document.getElementById('ai-sh-3-name').innerText = nearestShelters[2].name;
-        document.getElementById('ai-sh-3-cap').innerText = nearestShelters[2].capacity;
-        document.getElementById('ai-sh-3-avail').innerText = nearestShelters[2].status === 'Full' ? 'Full' : nearestShelters[2].available;
-        document.getElementById('ai-sh-3-dist').innerText = `${nearestShelters[2].distanceKm} km away`;
-      }
-
-      // Update AI Safety Summary
-      const dist = currentDistrictData.shelterInfo ? currentDistrictData.shelterInfo.distance : '2.4 km';
-      document.getElementById('ai-safety-summary-text').innerText = `Heavy rainfall is continuing in ${currentDistrictData.district} district. Water level of local rivers is rising. Avoid low-lying causeways and flooded areas. Nearest safe shelter is ${dist} away.`;
-    }
-
-    function askAI(question) {
-      document.getElementById('cmd-user-input').value = question;
-      handleCmdSend(new Event('submit'));
-    }
-
-    function simulateVoiceInput() {
-      const input = document.getElementById('cmd-user-input');
-      input.placeholder = "Listening... 🎙️ Speak now";
-      setTimeout(() => {
-        input.value = "Is the main highway road towards the relief camp safe?";
-        input.placeholder = "Type your question here...";
-        handleCmdSend(new Event('submit'));
-      }, 900);
-    }
-
-    // Groq Cloud LPU API (Ultra-Fast 70B Sub-Second Brain)
-    const GROQ_API_KEY = atob("Z3NrX0NwU3ljNzZNZER2ak1BMEdJYnRHV0dkeWIzRllJcm5sSUpENWpBc01sU3M5UWkzeVpkRk8=");
-    const GROQ_API_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
-
-    async function fetchGroqAiBrainResponse(userPrompt, districtName) {
-      const groqKey = localStorage.getItem('AEGIS_GROQ_API_KEY') || GROQ_API_KEY;
-      const groqModels = ["llama-3.3-70b-versatile", "llama3-70b-8192", "mixtral-8x7b-32768"];
-
-      for (const modelName of groqModels) {
-        try {
-          const response = await fetch(GROQ_API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${groqKey}`
-            },
-            body: JSON.stringify({
-              model: modelName,
-              messages: [
-                {
-                  role: "system",
-                  content: `You are AEGIS Brain — the official high-speed AI disaster response intelligence system for Assam, India. Provide direct, urgent, life-saving emergency advice for citizens in ${districtName} district. Always prioritize immediate human safety, avoiding submerged electrical appliances/switches, moving to elevated roofs, clean water, and emergency helplines (National Emergency: 112, Medical: 108, ASDMA Control: 1070). Format response with clean HTML like <strong>, <em>, and <ul><li>. Keep under 140 words.`
-                },
-                {
-                  role: "user",
-                  content: userPrompt
-                }
-              ],
-              temperature: 0.3,
-              max_tokens: 350
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.choices && data.choices[0] && data.choices[0].message) {
-              let text = data.choices[0].message.content;
-              text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-              text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-              text = text.replace(/\n/g, '<br>');
-              return `<div style="margin-bottom:0.35rem;"><span style="background:rgba(139,92,246,0.25); color:#a78bfa; font-size:0.58rem; font-weight:800; padding:2px 7px; border-radius:4px; border:1px solid rgba(139,92,246,0.4);"><i class="fa-solid fa-brain"></i> AEGIS Brain (Groq 70B LPU • Sub-Second AI)</span></div>${text}`;
-            }
-          } else {
-            console.warn(`Groq model ${modelName} returned status ${response.status}:`, await response.text());
-          }
-        } catch (e) {
-          console.warn(`Groq API call failed for model ${modelName}:`, e);
-        }
-      }
-
-      // If Groq API fails or falls back, use Gemini or Local AI
-      return fetchGeminiAiResponse(userPrompt, districtName);
-    }
-
-    // Hardcoded Gemini API Key for automatic zero-configuration execution
-    const BUILTIN_GEMINI_API_KEY = atob("QVEuQWI4Uk42S0lCRFMtOVp4cm1EdnJhZ2tOdTloNk1BNXgwT001VUl3clNWd2tXVUhUc0E=");
-
-    async function fetchGeminiAiResponse(userPrompt, districtName) {
-      let apiKey = localStorage.getItem('AEGIS_GEMINI_API_KEY');
-      if (!apiKey || apiKey.length < 20) {
-        apiKey = BUILTIN_GEMINI_API_KEY;
-        localStorage.setItem('AEGIS_GEMINI_API_KEY', BUILTIN_GEMINI_API_KEY);
-      }
-      
-      if (apiKey) {
-        const modelEndpoints = [
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent",
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
-        ];
-
-        for (const endpoint of modelEndpoints) {
-          try {
-            const response = await fetch(`${endpoint}?key=${apiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{
-                  parts: [{
-                    text: `You are AEGIS AI, the official disaster response and flood emergency assistant for Assam, India. Provide concise, urgent, life-saving safety instructions for citizens in ${districtName} district regarding their question: "${userPrompt}". Prioritize immediate human safety, avoiding submerged electrical appliances/switches, moving to elevated surfaces/roofs, clean water, and emergency helpline numbers (112, 108, 1070). Format response cleanly with HTML like <strong>, <em>, and <ul><li>. Keep under 140 words.`
-                  }]
-                }],
-                generationConfig: {
-                  temperature: 0.3,
-                  maxOutputTokens: 350
-                }
-              })
-            });
-
-            if (response.ok) {
-              const data = await response.json();
-              if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-                let text = data.candidates[0].content.parts[0].text;
-                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                text = text.replace(/\n/g, '<br>');
-                return `<div style="margin-bottom:0.35rem;"><span style="background:rgba(16,185,129,0.25); color:#10b981; font-size:0.58rem; font-weight:800; padding:2px 7px; border-radius:4px; border:1px solid rgba(16,185,129,0.4);"><i class="fa-solid fa-bolt"></i> Live Gemini 1.5 Flash Response</span></div>${text}`;
-              }
-            } else {
-              console.warn(`Gemini endpoint ${endpoint} returned status ${response.status}:`, await response.text());
-            }
-          } catch (e) {
-            console.warn(`Gemini API call failed for ${endpoint}:`, e);
-          }
-        }
-      }
-
-      // Local Intelligent Reasoning Engine Fallback
-      return getLocalAiResponse(userPrompt, districtName);
-    }
-
-    function getLocalAiResponse(text, distName) {
-      const q = text.toLowerCase();
-      if (q.includes('electric') || q.includes('switch') || q.includes('power') || q.includes('current') || q.includes('shock')) {
-        return `<strong>🚨 CRITICAL ELECTRICAL SAFETY PROTOCOL (${distName}):</strong><br>
-        1. <strong>Do NOT touch</strong> the submerged main switchboard or any electrical appliances in standing water.<br>
-        2. Stay out of the water if live electrical wires are submerged nearby to avoid electrocution.<br>
-        3. If safe to do so from a dry location using a non-conductive wooden stick, trip the breaker. Otherwise, leave it untouched.<br>
-        4. Move your family immediately to the roof or higher floors and call <strong style="color:#ef4444;">112</strong> for immediate rescue support!`;
-      } else if (q.includes('shelter') || q.includes('camp') || q.includes('stay')) {
-        return `<strong>⛺ Shelter Guidance for ${distName}:</strong> The nearest designated high-elevation shelter is <strong>${distName} Degree College Relief Camp</strong> (Capacity: 500 people, 182 spots available). Drinking water, medical aid, and community kitchens are operational. <a href="citizen-shelters.html" style="color:#38bdf8; font-weight:700;">View All Shelters &rarr;</a>`;
-      } else if (q.includes('road') || q.includes('safe') || q.includes('route') || q.includes('highway')) {
-        return `<strong>⚠️ Road Safety Update in ${distName}:</strong> NH-715 low-lying section is waterlogged under 3.2ft floodwater. <strong>Recommended Safe Route:</strong> Use the elevated Garmur Bypass Road. <a href="citizen-intel.html" style="color:#10b981; font-weight:700; text-decoration:none;">Open Safe GPS Route Map &rarr;</a>`;
-      } else if (q.includes('night') || q.includes('travel') || q.includes('dark')) {
-        return `<strong>⚠️ Night Travel Advisory:</strong> ASDMA strictly advises against traveling after 7:00 PM in ${distName} due to flash flood surges and low visibility on breached roads. Relocate to the nearest shelter before sunset.`;
-      } else if (q.includes('weather') || q.includes('rain') || q.includes('water') || q.includes('river')) {
-        return `<strong>🌧️ Weather & Water Telemetry (${distName}):</strong> Heavy monsoon rainfall of 186mm recorded. River level is currently 4.8m (Rising 0.2m/hr). High flood alert Level 4 active.`;
-      } else if (q.includes('pack') || q.includes('leaving') || q.includes('carry') || q.includes('item') || q.includes('bag')) {
-        return `<strong>🎒 Pre-Evacuation Essential Checklist:</strong><br>1. Official IDs, land titles & cash wrapped in sealed plastic bags.<br>2. 3-day supply of drinking water, dry food & infant milk.<br>3. First-aid kit, ORS packets, and daily medications.<br>4. Power bank, flashlight, and emergency whistle.`;
-      } else if (q.includes('contact') || q.includes('call') || q.includes('number') || q.includes('help')) {
-        return `<strong>📞 Emergency Helplines (${distName}):</strong> National Emergency Call: <strong style="color:#ef4444;">112</strong> &bull; Medical Ambulance: <strong style="color:#f59e0b;">108</strong> &bull; ASDMA State Control Room: <strong style="color:#38bdf8;">1070</strong> &bull; <a href="citizen-contacts.html" style="color:#38bdf8; font-weight:700;">Open Helpline Directory &rarr;</a>`;
-      } else {
-        return `<strong>🤖 AEGIS Emergency Guidance (${distName}):</strong> For your query regarding <em>"${text}"</em>, please move to the highest floor or roof, keep essential documents sealed in plastic, turn off main gas/power if safe, and call <strong style="color:#ef4444;">112</strong> if trapped in rising water.`;
-      }
-    }
-
-    async function handleCmdSend(e) {
-      if (e) e.preventDefault();
-      const input = document.getElementById('cmd-user-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const chat = document.getElementById('cmd-chat-stream');
-
-      // User Message Bubble
-      const userBubble = document.createElement('div');
-      userBubble.className = 'msg-user-bubble';
-      userBubble.innerHTML = `${text} <div style="text-align:right; font-size:0.6rem; color:rgba(255,255,255,0.7); margin-top:2px;">Just now <i class="fa-solid fa-check-double"></i></div>`;
-      chat.appendChild(userBubble);
       input.value = '';
 
-      chat.scrollTop = chat.scrollHeight;
+      const container = document.getElementById('chat-messages-container');
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      // Thinking Indicator
-      const botContainer = document.createElement('div');
-      botContainer.className = 'msg-bot-container';
-      botContainer.innerHTML = `
-        <div class="bot-avatar-icon"><i class="fa-solid fa-brain" style="color:#a78bfa;"></i></div>
-        <div class="msg-bot-content">
-          <div style="font-size:0.75rem; font-weight:800; color:#a78bfa; margin-bottom:0.25rem;">AEGIS Brain</div>
-          <div style="font-size:0.78rem; color:#94a3b8; display:flex; align-items:center; gap:0.45rem;">
-            <i class="fa-solid fa-spinner fa-spin" style="color:#a78bfa;"></i> AEGIS Brain is thinking with Groq 70B LPU...
+      // Append User Bubble
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-msg-row user';
+      userBubble.innerHTML = `
+        <div class="chat-msg-avatar user">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="chat-bubble">
+          <div>${escapeHtml(message)}</div>
+          <div class="chat-msg-time" style="color:#bfdbfe;">${timeStr}</div>
+        </div>
+      `;
+      container.appendChild(userBubble);
+      container.scrollTop = container.scrollHeight;
+
+      // Append Bot Loading Bubble
+      const botBubble = document.createElement('div');
+      botBubble.className = 'chat-msg-row';
+      botBubble.innerHTML = `
+        <div class="chat-msg-avatar bot">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div class="chat-bubble" id="latest-bot-reply">
+          <div style="display:flex; align-items:center; gap:0.5rem; color:#94a3b8;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Analyzing flood telemetry &amp; protocols for ${currentDistrict}...
           </div>
         </div>
       `;
-      chat.appendChild(botContainer);
-      chat.scrollTop = chat.scrollHeight;
+      container.appendChild(botBubble);
+      container.scrollTop = container.scrollHeight;
 
-      // Query Groq LPU Engine -> Gemini -> Local Fallback
-      const distName = currentDistrictData ? currentDistrictData.district : 'Golaghat';
-      const answerHTML = await fetchGroqAiBrainResponse(text, distName);
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message,
+            district: currentDistrict,
+            history: []
+          })
+        });
 
-      botContainer.querySelector('.msg-bot-content').innerHTML = `
-        <div style="font-size:0.75rem; font-weight:800; color:#a78bfa; margin-bottom:0.25rem;">AEGIS Brain</div>
-        <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.45;">${answerHTML}</div>
+        if (res.ok) {
+          const data = await res.json();
+          renderBotResponse(data.reply || data.response || citizenApp.getDistrictAIKnowledge(currentDistrict, message));
+        } else {
+          fallbackLocalReply(message);
+        }
+      } catch (err) {
+        fallbackLocalReply(message);
+      }
+    }
+
+    function renderBotResponse(replyText) {
+      const botReplyDiv = document.getElementById('latest-bot-reply');
+      if (!botReplyDiv) return;
+      botReplyDiv.removeAttribute('id');
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      let html = replyText
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.1); padding:1px 4px; border-radius:3px;">$1</code>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+
+      botReplyDiv.innerHTML = `
+        <div>${html}</div>
+        <div class="chat-msg-time">${timeStr}</div>
       `;
-      chat.scrollTop = chat.scrollHeight;
+
+      const container = document.getElementById('chat-messages-container');
+      if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    function fallbackLocalReply(userQuery) {
+      const reply = citizenApp.getDistrictAIKnowledge(currentDistrict, userQuery);
+      renderBotResponse(reply);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function setupSpeechRecognition() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRec();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-IN';
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          const input = document.getElementById('ai-chat-input');
+          if (input) {
+            input.value = transcript;
+            sendUserMessage();
+          }
+        };
+
+        recognition.onend = () => {
+          isVoiceListening = false;
+          const micBtn = document.getElementById('mic-toggle-btn');
+          if (micBtn) micBtn.classList.remove('recording');
+        };
+      }
+    }
+
+    function toggleVoiceRecording() {
+      if (!recognition) {
+        alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+        return;
+      }
+      const micBtn = document.getElementById('mic-toggle-btn');
+      if (isVoiceListening) {
+        recognition.stop();
+        isVoiceListening = false;
+        if (micBtn) micBtn.classList.remove('recording');
+      } else {
+        recognition.start();
+        isVoiceListening = true;
+        if (micBtn) micBtn.classList.add('recording');
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function setupSpeechRecognition() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRec();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-IN';
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          const input = document.getElementById('ai-chat-input');
+          if (input) {
+            input.value = transcript;
+            sendUserMessage();
+          }
+        };
+
+        recognition.onend = () => {
+          isVoiceListening = false;
+          const micBtn = document.getElementById('mic-toggle-btn');
+          if (micBtn) micBtn.classList.remove('recording');
+        };
+      }
+    }
+
+    function toggleVoiceRecording() {
+      if (!recognition) {
+        alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+        return;
+      }
+      const micBtn = document.getElementById('mic-toggle-btn');
+      if (isVoiceListening) {
+        recognition.stop();
+        isVoiceListening = false;
+        if (micBtn) micBtn.classList.remove('recording');
+      } else {
+        recognition.start();
+        isVoiceListening = true;
+        if (micBtn) micBtn.classList.add('recording');
+      }
     }
   </script>
 
-  <!-- Gemini API Key Modal -->
-  <div id="gemini-key-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(3,7,18,0.85); backdrop-filter:blur(16px); z-index:99999; align-items:center; justify-content:center;">
-    <div style="background:#070d1d; border:1px solid rgba(56,189,248,0.4); border-radius:14px; padding:1.5rem; width:440px; max-width:92vw; box-shadow:0 25px 50px rgba(0,0,0,0.85), 0 0 30px rgba(56,189,248,0.2);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <div style="font-weight:800; font-size:1.1rem; color:#fff; display:flex; align-items:center; gap:0.45rem;">
-          <i class="fa-solid fa-sparkles" style="color:#38bdf8;"></i> Gemini 1.5 Flash Settings
+  <!-- ================= ADVANCED SAFETY GUIDE ALERT MODAL ================= -->
+  <div id="safety-guide-modal-backdrop" class="safety-modal-backdrop" style="display:none;">
+    <div class="safety-modal-card">
+      <div class="safety-modal-header">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div class="safety-modal-icon">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:1.05rem; color:#fff; display:flex; align-items:center; gap:0.5rem;">
+              AEGIS Emergency Flood Survival Guide
+              <span class="safety-alert-badge">LEVEL 4 SEVERE FLOOD WARNING</span>
+            </div>
+            <div style="font-size:0.72rem; color:#cbd5e1;">Official Evacuation Protocols &amp; Survival Checklist &bull; Assam State</div>
+          </div>
         </div>
-        <button onclick="closeGeminiModal()" style="background:transparent; border:none; color:#94a3b8; font-size:1.1rem; cursor:pointer;">&times;</button>
+        <button class="safety-modal-close" onclick="closeSafetyGuideModal()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <p style="font-size:0.785rem; color:#cbd5e1; line-height:1.45; margin-bottom:0.85rem;">
-        Connect your <strong>Google Gemini API Key</strong> to enable real-time generative AI intelligence for flood guidance, route safety, and emergency assistance!
-      </p>
-
-      <div style="margin-bottom:0.85rem;">
-        <label style="font-size:0.685rem; font-weight:700; color:#94a3b8; display:block; margin-bottom:0.35rem;">Google Gemini API Key:</label>
-        <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." style="width:100%; background:rgba(15,23,42,0.9); border:1px solid rgba(59,130,246,0.3); color:#fff; font-size:0.8rem; padding:0.5rem; border-radius:6px; outline:none;">
+      <!-- Tab Buttons inside Modal -->
+      <div class="safety-tab-bar">
+        <button class="safety-tab-btn active" onclick="switchSafetyTab(0)">🌊 1. Evacuation &amp; Survival</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(1)">⚡ 2. Electrical &amp; Utilities</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(2)">🏥 3. Medical &amp; Health</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(3)">📞 4. Hotlines &amp; Contacts</button>
       </div>
 
-      <div style="font-size:0.685rem; color:#64748b; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between;">
-        <span>Don't have a key?</span>
-        <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">Get Free Key on Google AI Studio &rarr;</a>
+      <!-- Tab Contents -->
+      <div class="safety-modal-body">
+        <!-- Tab 0: Evacuation & Survival -->
+        <div class="safety-tab-content active" id="safety-tab-0">
+          <div class="safety-guide-section">
+            <div class="safety-guide-title"><i class="fa-solid fa-person-running" style="color:#ef4444;"></i> CRITICAL EVACUATION PROTOCOLS</div>
+            <ul class="safety-guide-list">
+              <li><strong>Move Immediately to Upper Grounds:</strong> If flood waters rise, head to upper floors or designated high ground shelters immediately.</li>
+              <li><strong>Prepare Emergency Go-Bag:</strong> Pack drinking water (2L/person/day), non-perishable rations, flashlight, power bank, first-aid kit, and vital documents in waterproof plastic bags.</li>
+              <li><strong>NEVER Walk or Drive in Flood Water:</strong> Just 6 inches of moving water can knock down an adult, and 2 feet of water can float and sweep away vehicles.</li>
+              <li><strong>Follow Designated Safe Routes:</strong> Use the AEGIS Safe Routes map to avoid submerged roads like NH-715 near Bokakhat.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tab 1: Electrical & Utilities -->
+        <div class="safety-tab-content" id="safety-tab-1">
+          <div class="safety-guide-section">
+            <div class="safety-guide-title"><i class="fa-solid fa-bolt" style="color:#f59e0b;"></i> ELECTRICAL &amp; GAS HAZARD PRECAUTIONS</div>
+            <ul class="safety-guide-list">
+              <li><strong>Shut Off Main Power Breaker:</strong> Turn off the main electrical switch and LPG gas cylinder valve before evacuating.</li>
+              <li><strong>Avoid Submerged Wiring:</strong> Never touch electrical switches or appliances if standing in water or wet surroundings.</li>
+              <li><strong>Report Fallen Power Lines:</strong> Stay at least 30 feet away from downed electric poles and immediately report to Assam Power Distribution (APDCL: 1912).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tab 2: Medical & Health -->
+        <div class="safety-tab-content" id="safety-tab-2">
+          <div class="safety-guide-section">
+            <div class="safety-guide-title"><i class="fa-solid fa-kit-medical" style="color:#10b981;"></i> WATER PURIFICATION &amp; HEALTH ADVISORY</div>
+            <ul class="safety-guide-list">
+              <li><strong>Boil Drinking Water:</strong> Boil all water vigorously for at least 1 minute or use Halazone/Chlorine water purification tablets.</li>
+              <li><strong>Sanitize Wounds:</strong> Wash cuts or abrasions immediately with clean water and antiseptic to prevent waterborne infections (Leptospirosis, Cholera).</li>
+              <li><strong>Beware of Wildlife &amp; Snakes:</strong> Flooding forces snakes and reptiles to seek shelter in houses. Check shoes, bedding, and corners carefully.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tab 3: Hotlines & Emergency Contacts -->
+        <div class="safety-tab-content" id="safety-tab-3">
+          <div class="safety-guide-section">
+            <div class="safety-guide-title"><i class="fa-solid fa-phone-volume" style="color:#38bdf8;"></i> OFFICIAL ASSAM EMERGENCY DIRECTORY</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.4rem;">
+              <div class="safety-contact-box">
+                <div style="font-weight:800; color:#ef4444; font-size:0.75rem;">🚨 National Emergency Response</div>
+                <div style="font-size:1.15rem; font-weight:800; color:#fff;">Dial 112</div>
+                <div style="font-size:0.625rem; color:#cbd5e1;">Toll-free 24/7 Dispatch</div>
+              </div>
+              <div class="safety-contact-box">
+                <div style="font-weight:800; color:#f59e0b; font-size:0.75rem;">🌊 Assam Disaster Management (ASDMA)</div>
+                <div style="font-size:1.15rem; font-weight:800; color:#fff;">Dial 1078 / 0361-2237011</div>
+                <div style="font-size:0.625rem; color:#cbd5e1;">State Emergency Control Room</div>
+              </div>
+              <div class="safety-contact-box">
+                <div style="font-weight:800; color:#10b981; font-size:0.75rem;">🚑 Medical Ambulance Service</div>
+                <div style="font-size:1.15rem; font-weight:800; color:#fff;">Dial 108</div>
+                <div style="font-size:0.625rem; color:#cbd5e1;">Mrityunjoy Emergency Service</div>
+              </div>
+              <div class="safety-contact-box">
+                <div style="font-weight:800; color:#38bdf8; font-size:0.75rem;">🚤 NDRF 1st Battalion Command</div>
+                <div style="font-size:1.15rem; font-weight:800; color:#fff;">+91 94350 12345</div>
+                <div style="font-size:0.625rem; color:#cbd5e1;">Golaghat &amp; Upper Assam Division</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div style="display:flex; gap:0.5rem;">
-        <button onclick="saveGeminiApiKey()" style="flex:1; background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border:none; color:#fff; font-size:0.8rem; font-weight:800; padding:0.55rem; border-radius:6px; cursor:pointer; box-shadow:0 0 15px rgba(37,99,235,0.4);">
-          Save Key &amp; Enable Live Gemini
+      <div class="safety-modal-footer">
+        <button class="btn btn-outline" style="border-color:#10b981; color:#10b981; font-size:0.72rem; padding:0.35rem 0.75rem;" onclick="closeSafetyGuideModal(); location.href='citizen-shelters.html'">
+          <i class="fa-solid fa-campground"></i> Find Nearest Shelter
         </button>
-        <button onclick="clearGeminiApiKey()" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; font-size:0.8rem; font-weight:700; padding:0.55rem 0.85rem; border-radius:6px; cursor:pointer;">
-          Clear Key
+        <button class="btn btn-primary" style="background:#ef4444; font-size:0.72rem; padding:0.35rem 0.75rem;" onclick="closeSafetyGuideModal(); location.href='citizen-sos.html'">
+          <i class="fa-solid fa-triangle-exclamation"></i> Send Instant SOS
+        </button>
+        <button class="btn btn-outline" style="font-size:0.72rem; padding:0.35rem 0.75rem; margin-left:auto;" onclick="closeSafetyGuideModal()">
+          Close Guide
         </button>
       </div>
     </div>
   </div>
+
+  <!-- Safety Guide Modal Logic -->
+  <script>
+    function openSafetyGuideModal() {
+      const modal = document.getElementById('safety-guide-modal-backdrop');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeSafetyGuideModal() {
+      const modal = document.getElementById('safety-guide-modal-backdrop');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchSafetyTab(tabIndex) {
+      const btns = document.querySelectorAll('.safety-tab-btn');
+      const contents = document.querySelectorAll('.safety-tab-content');
+
+      btns.forEach((btn, i) => {
+        if (i === tabIndex) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      contents.forEach((content, i) => {
+        if (i === tabIndex) {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>

@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile & Settings - AEGIS</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Profile & Settings - AEGIS Emergency System</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -25,24 +30,42 @@
   <script src="js/firebase-auth.js?v=3.0"></script>
 
   <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-sidebar: #060b18;
+      --bg-card: #070d1d;
+      --border-subtle: rgba(59, 130, 246, 0.18);
+      --border-card: rgba(59, 130, 246, 0.22);
+      --primary-blue: #2563eb;
+      --primary-blue-hover: #1d4ed8;
+      --accent-cyan: #38bdf8;
+      --danger-red: #ef4444;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --purple-accent: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html, body {
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      background-color: #030712;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #f1f5f9;
-      font-size: 14px;
-      line-height: 1.45;
       -webkit-font-smoothing: antialiased;
     }
 
+    html,
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+    }
+
+    /* Master Layout Grid */
     .prof-layout-container {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -51,46 +74,92 @@
       overflow: hidden;
     }
 
-    /* Left Sidebar */
+    /* Left Navigation Sidebar - Standardized & Proportioned */
     .prof-sidebar {
-      background: #060b18;
-      border-right: 1px solid rgba(59, 130, 246, 0.18);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      padding: 0.85rem 0.75rem;
+      padding: 0.25rem 0.38rem;
       height: 100vh;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      gap: 0.04rem;
+    }
+
+    .prof-sidebar::-webkit-scrollbar {
+      width: 3px;
+    }
+    .prof-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 3px;
     }
 
     .prof-sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.2rem 0.4rem 0.75rem 0.4rem;
+      gap: 0.45rem;
+      padding: 0.02rem 0.1rem 0.16rem 0.1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.02rem;
+      flex-shrink: 0;
+    }
+
+    .prof-logo-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prof-brand-name {
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .prof-brand-sub {
+      font-size: 0.52rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .prof-nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
-      flex: 1;
-      overflow: hidden;
+      gap: 0.02rem;
+      flex-shrink: 0;
     }
 
     .prof-nav-item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.5rem 0.75rem;
+      gap: 0.45rem;
+      padding: 0.12rem 0.38rem;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.85rem;
-      border-radius: 8px;
-      transition: all 0.18s ease;
+      font-size: 0.69rem;
+      border-radius: 5px;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+      line-height: 1.2;
+    }
+
+    .prof-nav-item i {
+      width: 13px;
+      font-size: 0.74rem;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .prof-nav-item:hover {
@@ -99,633 +168,1266 @@
     }
 
     .prof-nav-item.active {
-      background: #2563eb;
+      background: var(--primary-blue);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .prof-emergency-card {
-      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.22) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 10px;
-      padding: 0.65rem;
+    .prof-nav-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0.04rem 0.15rem;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger-red);
+      color: #ffffff;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 9999px;
+      min-width: 14px;
       text-align: center;
-      margin-top: 0.45rem;
-      position: relative;
     }
 
-    /* Main Area */
+    .prof-nav-item.nav-logout {
+      color: #ef4444;
+      margin-top: 0.02rem;
+    }
+
+    .prof-nav-item.nav-logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Sidebar Emergency Box */
+    .prof-emergency-card {
+      background: rgba(11, 20, 38, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 7px;
+      padding: 0.18rem 0.35rem;
+      text-align: center;
+      margin-top: 0.15rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    @media (min-height: 620px) {
+      .prof-emergency-card {
+        margin-top: auto;
+      }
+    }
+
+    .emergency-card-title {
+      font-size: 0.48rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .emergency-card-call {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0.01rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .emergency-card-desc {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      margin-bottom: 0.14rem;
+    }
+
+    .emergency-card-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.18rem 0.5rem;
+      font-weight: 700;
+      font-size: 0.65rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .emergency-card-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* Main Area Container */
     .prof-main-area {
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background: #030712;
+      background: var(--bg-dark);
     }
 
-    /* Top Bar */
+    /* Top Bar (Exact Dashboard Match) */
     .prof-topbar {
-      height: 48px;
+      height: 42px;
       background: #070d1d;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.25rem;
+      padding: 0 0.85rem;
+      gap: 0.65rem;
       flex-shrink: 0;
     }
 
-    .district-select-box {
+    .district-select-pill {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #f1f5f9;
-      font-size: 0.825rem;
+      color: #ffffff;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .district-select-pill:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .topbar-alert-banner {
+      flex: 1;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 0.18rem 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.69rem;
+      color: #fca5a5;
+      min-width: 0;
+    }
+
+    .topbar-guide-btn {
+      background: #3b1419;
+      color: #ffffff;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 0.16rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-left: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .topbar-guide-btn:hover {
+      background: #541920;
+      border-color: #ef4444;
+    }
+
+    /* Sub-Header Row */
+    .prof-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 1rem 0.2rem 1rem;
+      flex-shrink: 0;
+    }
+
+    .prof-title-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .prof-header-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+
+    .prof-header-title {
+      font-weight: 800;
+      font-size: 1.08rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .prof-header-subtitle {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .change-pwd-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 0.35rem 0.85rem;
+      padding: 0.24rem 0.7rem;
       border-radius: 6px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .district-select-box select {
-      background: transparent;
-      border: none;
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.825rem;
-      outline: none;
+      gap: 0.35rem;
       cursor: pointer;
-      font-family: inherit;
-    }
-    .district-select-box select option {
-      background: #070d1d;
-      color: #fff;
+      transition: all 0.2s ease;
     }
 
-    /* Top Tab Navigation */
-    .prof-tab-bar {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      padding: 0 1.15rem 0.45rem 1.15rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      flex-shrink: 0;
-      overflow-x: auto;
-    }
-
-    .prof-tab-link {
-      font-size: 0.825rem;
-      font-weight: 700;
-      color: #94a3b8;
-      cursor: pointer;
-      padding-bottom: 0.4rem;
-      border-bottom: 2px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      transition: all 0.18s;
-      white-space: nowrap;
-    }
-    .prof-tab-link:hover {
-      color: #fff;
-    }
-    .prof-tab-link.active {
-      color: #38bdf8;
-      border-bottom-color: #38bdf8;
+    .change-pwd-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      color: #ffffff;
     }
 
     /* Master Workspace 2-Column Grid */
     .prof-workspace-grid {
       display: grid;
-      grid-template-columns: 1fr 330px;
-      gap: 0.85rem;
-      padding: 0.55rem 1.15rem 0.55rem 1.15rem;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 0.55rem;
+      padding: 0.2rem 1.15rem 0.35rem 1.15rem;
       flex: 1;
-      overflow: hidden;
       min-height: 0;
+      overflow: hidden;
     }
 
-    /* Left Console */
+    /* Left Console: Personal Info, Emergency Contacts, Preferences */
     .prof-left-console {
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      overflow-y: auto;
+      gap: 0.5rem;
+      height: 100%;
       min-height: 0;
-      padding-right: 0.25rem;
-    }
-
-    .prof-left-console::-webkit-scrollbar {
-      width: 5px;
-    }
-    .prof-left-console::-webkit-scrollbar-thumb {
-      background: rgba(59, 130, 246, 0.3);
-      border-radius: 3px;
     }
 
     .prof-card {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 10px;
-      padding: 0.75rem 0.95rem;
-    }
-
-    /* Right Column */
-    .prof-right-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      padding: 0.5rem 0.8rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      overflow: hidden;
+      justify-content: space-between;
+      min-height: 0;
     }
 
-    .prof-panel-box {
-      background: #060c1c;
+    .prof-card-info {
+      flex: 1.25;
+    }
+
+    .prof-card-contacts {
+      flex: 1;
+    }
+
+    .prof-card-prefs {
+      flex: 1.45;
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .card-title-text {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+    }
+
+    .card-subtext {
+      font-size: 0.6rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .action-outline-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 0.18rem 0.6rem;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .action-outline-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* Personal Information Inner Layout */
+    .personal-info-layout {
+      display: flex;
+      gap: 0.95rem;
+      align-items: center;
+      flex: 1;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+      flex-shrink: 0;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .avatar-cam-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.52rem;
+      border: 1.5px solid #070d1d;
+      cursor: pointer;
+    }
+
+    .photo-change-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #cbd5e1;
+      font-size: 0.54rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 2px;
+      display: block;
+      text-align: center;
+    }
+
+    .details-matrix-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.22rem 0.85rem;
+      font-size: 0.72rem;
+    }
+
+    .matrix-label {
+      font-size: 0.58rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 1px;
+    }
+
+    .matrix-val {
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.38rem;
+    }
+
+    .verified-pill {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    /* Contacts 2-Column Row */
+    .contacts-split-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .contact-item-box {
+      background: rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 10px;
-      padding: 0.75rem 0.95rem;
+      border-radius: 7px;
+      padding: 0.35rem 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .contact-left-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .contact-avatar-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.22);
+      color: #a78bfa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      flex-shrink: 0;
+    }
+
+    .contact-primary-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .contact-sec-badge {
+      background: rgba(139, 92, 246, 0.2);
+      color: #a78bfa;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* 3x2 Preferences Grid */
+    .pref-3x2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.45rem;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .pref-tile-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      border-radius: 7px;
+      padding: 0.32rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.35rem;
+      height: 100%;
+    }
+
+    .pref-tile-left {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .pref-tile-icon {
+      font-size: 0.78rem;
+      flex-shrink: 0;
+    }
+
+    .pref-tile-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pref-tile-desc {
+      font-size: 0.52rem;
+      color: #94a3b8;
+      line-height: 1.15;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     /* Toggle Switch */
     .toggle-switch {
       position: relative;
       display: inline-block;
-      width: 36px;
-      height: 20px;
+      width: 26px;
+      height: 14px;
       flex-shrink: 0;
     }
+
     .toggle-switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+
     .toggle-slider {
       position: absolute;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-color: #1e293b;
       transition: .3s;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
+
     .toggle-slider:before {
       position: absolute;
       content: "";
-      height: 14px;
-      width: 14px;
+      height: 8px;
+      width: 8px;
       left: 2px;
       bottom: 2px;
       background-color: white;
       transition: .3s;
       border-radius: 50%;
     }
-    input:checked + .toggle-slider {
+
+    input:checked+.toggle-slider {
       background-color: #10b981;
-    }
-    input:checked + .toggle-slider:before {
-      transform: translateX(16px);
+      border-color: #10b981;
     }
 
-    /* Sticky Footer */
+    input:checked+.toggle-slider:before {
+      transform: translateX(12px);
+    }
+
+    /* Right Column: Account Security, Aegis Activity, Privacy, Need Help */
+    .prof-right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .right-card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      padding: 0.5rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .right-card-sec {
+      flex: 1.25;
+    }
+
+    .right-card-act {
+      flex: 1;
+    }
+
+    .right-card-priv {
+      flex: 0.9;
+    }
+
+    .right-card-help {
+      flex: 1;
+    }
+
+    .security-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .security-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .sec-badge-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 52px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .sec-badge-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* 3 Activity Metric Tiles */
+    .activity-metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.4rem;
+      flex: 1;
+      align-items: stretch;
+      margin-top: 0.1rem;
+    }
+
+    .activity-tile {
+      border-radius: 7px;
+      padding: 0.35rem 0.4rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .contact-support-btn {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border: none;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 0.35rem;
+      border-radius: 6px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-top: 0.2rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .contact-support-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
     .prof-footer-bar {
-      height: 32px;
+      height: 28px;
       background: #040813;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.15rem;
-      font-size: 0.7rem;
+      padding: 0 1rem;
+      font-size: 0.63rem;
       color: #64748b;
       flex-shrink: 0;
     }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(6, 12, 28, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-dialog-box {
+      background: #0b1426;
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .safety-tab-btn {
+      padding: 0.35rem 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .safety-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="prof-layout-container">
+
     <!-- Left Navigation Sidebar -->
     <aside class="prof-sidebar">
+
+      <!-- Brand Header -->
       <div class="prof-sidebar-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.25)"/>
-          <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
-        </svg>
+        <div class="prof-logo-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#3b82f6" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.28)" />
+            <path d="M12 8v8M8 12h8" stroke-linecap="round" />
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 1.15rem; color: #fff; line-height: 1;">AEGIS</div>
-          <div style="font-size: 0.58rem; color: #94a3b8; font-weight: 500;">Stronger Together, Safer Together.</div>
+          <div class="prof-brand-name">AEGIS</div>
+          <div class="prof-brand-sub">Stronger Together, Safer Together.</div>
         </div>
       </div>
 
+      <!-- Nav Items -->
       <nav class="prof-nav-menu">
-        <a class="prof-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Command Center</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> Safe Routes</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> Shelter Network</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> SOS Reports</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> My SOS / Rescue Tracking</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-notifications.html'"><i class="fa-solid fa-bell"></i> Notifications & Updates <span style="background:#ef4444; color:#fff; font-size:0.58rem; padding:1.5px 6px; border-radius:50%; margin-left:auto; font-weight:800;">3</span></a>
-        <a class="prof-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> Emergency Contacts</a>
-        <a class="prof-nav-item active" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> Profile & Settings</a>
-        <a class="prof-nav-item" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        <a class="prof-nav-item" onclick="location.href='index.html'" style="margin-top:auto; color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <a class="prof-nav-item" onclick="location.href='citizen-dashboard.html'">
+          <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-ai.html'">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Assistant</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-sos.html'">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> <span>SOS</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-intel.html'">
+          <i class="fa-solid fa-route"></i> <span>Safe Routes</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-shelters.html'">
+          <i class="fa-solid fa-campground"></i> <span>Shelters</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-tracking.html'">
+          <i class="fa-solid fa-location-crosshairs"></i> <span>My SOS / Tracking</span>
+        </a>
+
+        <div class="prof-nav-divider"></div>
+
+        <a class="prof-nav-item" onclick="location.href='citizen-notifications.html'">
+          <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-contacts.html'">
+          <i class="fa-solid fa-phone"></i> <span>Emergency Contacts</span>
+        </a>
+
+        <div class="prof-nav-divider"></div>
+
+        <a class="prof-nav-item active" onclick="location.href='citizen-profile.html'">
+          <i class="fa-solid fa-gear"></i> <span>Profile & Settings</span>
+        </a>
+        <a class="prof-nav-item" onclick="location.href='citizen-help.html'">
+          <i class="fa-solid fa-circle-question"></i> <span>Help & Support</span>
+        </a>
+        <a class="prof-nav-item nav-logout" onclick="location.href='index.html'">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </a>
       </nav>
 
-      <!-- Emergency Hotline Card -->
+      <!-- Sidebar Bottom Emergency Box -->
       <div class="prof-emergency-card">
-        <div style="font-size: 0.65rem; color: #fca5a5; font-weight: 700;">In case of emergency</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
-        <div style="font-size: 0.625rem; color: #cbd5e1; margin-bottom: 0.25rem;">or send SOS instantly</div>
-        
-        <div style="display:flex; justify-content:center; margin-top:0.35rem;">
-          <svg width="110" height="32" viewBox="0 0 120 35" fill="none">
-            <path d="M10 25 Q35 15 60 25 T110 25" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
-            <path d="M25 22 L95 22 L85 30 L35 30 Z" fill="#ea580c"/>
-            <circle cx="45" cy="14" r="4" fill="#fbbf24"/>
-            <circle cx="60" cy="13" r="4" fill="#60a5fa"/>
-            <circle cx="75" cy="14" r="4" fill="#34d399"/>
-            <path d="M45 18 L45 22 M60 17 L60 22 M75 18 L75 22" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="emergency-card-title">IN CASE OF EMERGENCY</div>
+        <div class="emergency-card-call"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
+        <div class="emergency-card-desc">or send SOS instantly</div>
+        <button class="emergency-card-btn" onclick="location.href='citizen-sos.html'">
+          <span style="font-size:0.85rem;">✦</span> Send SOS Now
+        </button>
       </div>
     </aside>
 
     <!-- Main Workspace Area -->
     <main class="prof-main-area">
-      <!-- Top Bar -->
+
+      <!-- Top Bar (Exact Dashboard Match) -->
       <header class="prof-topbar">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="district-select-box">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:1rem; cursor:pointer;"
+            title="Toggle Sidebar"></i>
+          <div class="district-select-pill">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <select id="prof-district-select" onchange="renderProfileForDistrict(this.value)">
-              <!-- Upper Assam -->
-              <option value="Golaghat" selected>Golaghat District, Assam</option>
-              <option value="Jorhat">Jorhat District, Assam</option>
-              <option value="Dibrugarh">Dibrugarh District, Assam</option>
-              <option value="Sivasagar">Sivasagar District, Assam</option>
-              <option value="Tinsukia">Tinsukia District, Assam</option>
-              <option value="Dhemaji">Dhemaji District, Assam</option>
-              <option value="Lakhimpur">Lakhimpur District, Assam</option>
-              <!-- Central Assam -->
-              <option value="Nagaon">Nagaon District, Assam</option>
-              <option value="Hojai">Hojai District, Assam</option>
-              <option value="Morigaon">Morigaon District, Assam</option>
-              <option value="Dima Hasao">Dima Hasao District, Assam</option>
-              <option value="East Karbi Anglong">East Karbi Anglong District, Assam</option>
-              <!-- Lower & North Assam -->
-              <option value="Kamrup Metropolitan">Kamrup Metropolitan (Guwahati), Assam</option>
-              <option value="Darrang">Darrang District, Assam</option>
-              <option value="Barpeta">Barpeta District, Assam</option>
-              <option value="Sonitpur">Sonitpur District, Assam</option>
-              <option value="Dhubri">Dhubri District, Assam</option>
-              <option value="Goalpara">Goalpara District, Assam</option>
-              <!-- Barak Valley -->
-              <option value="Cachar">Cachar District, Assam</option>
-              <option value="Hailakandi">Hailakandi District, Assam</option>
-              <option value="Karimganj">Karimganj District, Assam</option>
-            </select>
+            <span id="topbar-dist-name">Golaghat</span>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:1rem;">
-          <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
-            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
-            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.58rem; font-weight:800; padding:1px 5px; border-radius:50%;">3</span>
+        <div class="topbar-alert-banner">
+          <div
+            style="display:flex; align-items:center; gap:0.45rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.9rem; flex-shrink:0;"></i>
+            <span><strong style="color:#f87171;">HIGH FLOOD RISK</strong> in <span
+                id="topbar-dist-name">Golaghat</span> District. Heavy rainfall and rising water levels. Stay alert and
+              avoid flooded areas.</span>
           </div>
+          <button class="topbar-guide-btn" onclick="openSafetyGuideModal()">
+            Stay Safe Guide &rarr;
+          </button>
+        </div>
 
-          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
-            <div style="position:relative;">
-              <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #38bdf8;" alt="Avatar">
-              <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#10b981; border:2px solid #070d1d; border-radius:50%;"></span>
-            </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
+            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.1rem;"></i>
+            <span
+              style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;"
+            onclick="location.href='citizen-profile.html'">
+            <img class="citizen-user-avatar"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+              style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid rgba(59,130,246,0.4);"
+              alt="Avatar">
             <div style="text-align:left;">
-              <div class="citizen-user-name" style="font-size:0.8rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div class="citizen-user-email" style="font-size:0.625rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.76rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div style="font-size:0.6rem; color:#94a3b8;">ravi.das@email.com</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Page Header Banner -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 1.15rem 0.35rem 1.15rem;">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div style="width:34px; height:34px; border-radius:50%; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:1rem; border:1px solid rgba(59,130,246,0.4);">
-            <i class="fa-solid fa-user-gear"></i>
+      <!-- Sub-Header Row -->
+      <div class="prof-header-row">
+        <div class="prof-title-left">
+          <div class="prof-header-icon">
+            <i class="fa-solid fa-gear"></i>
           </div>
           <div>
-            <div style="font-weight:800; font-size:1.1rem; color:#fff; line-height:1.1;">PROFILE & ACCOUNT SETTINGS</div>
-            <div style="font-size:0.75rem; color:#94a3b8;">Manage your personal profile and account credentials.</div>
+            <div class="prof-header-title">Profile & Settings</div>
+            <div class="prof-header-subtitle">Manage your personal profile, emergency contacts and preferences.</div>
           </div>
         </div>
-        <button class="btn btn-outline" style="font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; color:#cbd5e1; border-color:rgba(255,255,255,0.18);" onclick="showCustomAlert('🔒 Password Reset', 'Password reset link sent to your registered email.', 'info')">
-          <i class="fa-solid fa-lock"></i> Change Password
-        </button>
-      </div>
 
-      <!-- Tab Navigation Bar -->
-      <div class="prof-tab-bar">
-        <div class="prof-tab-link active"><i class="fa-solid fa-user"></i> My Profile & Account Details</div>
+        <button class="change-pwd-btn" onclick="openPasswordModal()">
+          <i class="fa-solid fa-lock" style="color:#38bdf8;"></i> Change Password
+        </button>
       </div>
 
       <!-- Master Workspace 2-Column Grid -->
       <div class="prof-workspace-grid">
-        
-        <!-- Left: Main Profile & Info Console -->
+
+        <!-- Left Column: Personal Info, Emergency Contacts, Preferences -->
         <div class="prof-left-console">
-          
+
           <!-- 1. Personal Information Card -->
-          <div class="prof-card">
-            <div style="display:flex; gap:1.25rem; align-items:flex-start;">
-              
+          <div class="prof-card prof-card-info">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <i class="fa-solid fa-user" style="color:#38bdf8;"></i>
+                <span class="card-title-text">Personal Information</span>
+              </div>
+              <button class="action-outline-btn" onclick="openEditProfileModal()">
+                Edit Profile &rarr;
+              </button>
+            </div>
+
+            <div class="personal-info-layout">
               <!-- Avatar Column -->
-              <div style="display:flex; flex-direction:column; align-items:center; gap:0.45rem; flex-shrink:0;">
-                <div style="position:relative; width:88px; height:88px; border-radius:50%; overflow:hidden; border:2.5px solid #38bdf8; box-shadow:0 0 16px rgba(56,189,248,0.3);">
-                  <img id="prof-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" style="width:100%; height:100%; object-fit:cover;" alt="Avatar">
-                  <div style="position:absolute; bottom:2px; right:2px; width:22px; height:22px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.6rem; border:1.5px solid #fff;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:0.25rem;">
+                <div class="avatar-wrapper">
+                  <img id="profile-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+                    alt="Ravi Das">
+                  <div class="avatar-cam-badge" onclick="changePhotoPrompt()">
                     <i class="fa-solid fa-camera"></i>
                   </div>
                 </div>
-                <button class="btn btn-outline" style="font-size:0.7rem; font-weight:700; padding:0.2rem 0.65rem; color:#cbd5e1; border-color:rgba(255,255,255,0.18);" onclick="showCustomAlert('📷 Edit Photo', 'Choose a photo to upload as your profile picture.', 'info')">
-                  Edit Photo
-                </button>
+                <button class="photo-change-btn" onclick="changePhotoPrompt()">Change Photo</button>
               </div>
 
-              <!-- Details Grid -->
-              <div style="flex:1;">
-                <div style="display:flex; align-items:center; gap:0.55rem; margin-bottom:0.45rem;">
-                  <span style="font-weight:800; font-size:1.15rem; color:#fff;" id="prof-name-text">Ravi Das</span>
-                  <span style="background:rgba(16,185,129,0.2); color:#10b981; font-weight:800; font-size:0.685rem; padding:2px 7px; border-radius:4px; display:flex; align-items:center; gap:0.3rem;">
-                    <i class="fa-solid fa-circle-check"></i> Verified
-                  </span>
-                </div>
-
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem 1.25rem; font-size:0.8rem;">
-                  <!-- Phone -->
-                  <div>
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-phone" style="color:#38bdf8;"></i> Phone Number</div>
-                    <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.45rem; margin-top:1px;">
-                      <span id="prof-phone-text">+91 98765 43210</span>
-                      <span style="background:rgba(16,185,129,0.15); color:#10b981; font-size:0.6rem; font-weight:800; padding:1px 5px; border-radius:3px;">Verified</span>
-                    </div>
-                  </div>
-
-                  <!-- Email -->
-                  <div>
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-envelope" style="color:#38bdf8;"></i> Email Address</div>
-                    <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.45rem; margin-top:1px;">
-                      <span id="prof-email-text">ravi.das@email.com</span>
-                      <span style="background:rgba(16,185,129,0.15); color:#10b981; font-size:0.6rem; font-weight:800; padding:1px 5px; border-radius:3px;">Verified</span>
-                    </div>
-                  </div>
-
-                  <!-- Address -->
-                  <div style="grid-column: span 2;">
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i> Address</div>
-                    <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.45rem; margin-top:1px;">
-                      <span id="prof-address-text">Golaghat Town, Golaghat District, Assam - 785621</span>
-                      <span style="background:rgba(16,185,129,0.15); color:#10b981; font-size:0.6rem; font-weight:800; padding:1px 5px; border-radius:3px;">Verified</span>
-                    </div>
-                  </div>
-
-                  <!-- DOB -->
-                  <div>
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-calendar" style="color:#38bdf8;"></i> Date of Birth</div>
-                    <div style="font-weight:700; color:#fff; margin-top:1px;">14 March 1995</div>
-                  </div>
-
-                  <!-- Aadhaar -->
-                  <div>
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-id-card" style="color:#38bdf8;"></i> Aadhaar (Last 4 digits)</div>
-                    <div style="font-weight:700; color:#fff; margin-top:1px;">•••• 5678</div>
-                  </div>
-
-                  <!-- Occupation -->
-                  <div>
-                    <div style="font-size:0.685rem; color:#94a3b8;"><i class="fa-solid fa-briefcase" style="color:#38bdf8;"></i> Occupation</div>
-                    <div style="font-weight:700; color:#fff; margin-top:1px;">Private Employee</div>
+              <!-- Information Grid -->
+              <div class="details-matrix-grid">
+                <div>
+                  <div class="matrix-label">Full Name</div>
+                  <div class="matrix-val">
+                    <span id="profile-name-text" style="font-size:0.85rem; font-weight:800;">Ravi Das</span>
+                    <span class="verified-pill"><i class="fa-solid fa-check"></i> Verified</span>
                   </div>
                 </div>
 
-              </div>
+                <div>
+                  <div class="matrix-label">Phone Number</div>
+                  <div class="matrix-val">
+                    <span id="profile-phone-text"><i class="fa-solid fa-phone" style="color:#38bdf8; font-size:0.6rem;"></i> +91 98765 43210</span>
+                    <span class="verified-pill"><i class="fa-solid fa-check"></i> Verified</span>
+                  </div>
+                </div>
 
+                <div>
+                  <div class="matrix-label">Email Address</div>
+                  <div class="matrix-val">
+                    <span id="profile-email-text"><i class="fa-solid fa-envelope" style="color:#38bdf8; font-size:0.6rem;"></i> ravi.das@email.com</span>
+                    <span class="verified-pill"><i class="fa-solid fa-check"></i> Verified</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="matrix-label">Occupation</div>
+                  <div class="matrix-val">
+                    <span id="profile-occ-text"><i class="fa-solid fa-briefcase" style="color:#38bdf8; font-size:0.6rem;"></i> Private Employee</span>
+                  </div>
+                </div>
+
+                <div style="grid-column:span 2;">
+                  <div class="matrix-label">Permanent Residential Address</div>
+                  <div class="matrix-val" id="profile-address-text" style="font-size:0.72rem; font-weight:600; color:#cbd5e1;">
+                    <i class="fa-solid fa-location-dot" style="color:#38bdf8; font-size:0.6rem;"></i> Golaghat Town, Golaghat District, Assam &ndash; 785621
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- 2. Emergency Contacts Card -->
-          <div class="prof-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem;">
+          <div class="prof-card prof-card-contacts">
+            <div class="card-header-bar">
               <div>
-                <div style="font-weight:800; font-size:0.875rem; color:#fff; display:flex; align-items:center; gap:0.45rem;">
-                  <i class="fa-solid fa-phone" style="color:#10b981;"></i> Emergency Contacts
+                <div class="card-title-group">
+                  <i class="fa-solid fa-phone" style="color:#38bdf8;"></i>
+                  <span class="card-title-text">Emergency Contacts</span>
                 </div>
-                <div style="font-size:0.685rem; color:#94a3b8;">Your emergency contacts will be notified during SOS or critical situations.</div>
+                <div class="card-subtext">People who can be contacted during an SOS or critical emergency.</div>
               </div>
-
-              <button class="btn btn-outline" style="font-size:0.72rem; font-weight:700; padding:0.25rem 0.65rem; color:#38bdf8; border-color:rgba(56,189,248,0.3);" onclick="showCustomAlert('➕ Add Emergency Contact', 'Emergency Contact form ready. Enter contact details.', 'info')">
-                <i class="fa-solid fa-plus"></i> Add Contact
+              <button class="action-outline-btn" onclick="openAddContactModal()">
+                + Add Emergency Contact
               </button>
             </div>
 
-            <!-- 2 Contacts Grid -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.55rem;">
-              
+            <div class="contacts-split-row" id="contacts-container-row">
               <!-- Contact 1 -->
-              <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.22); border-radius:8px; padding:0.55rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
-                <div style="display:flex; align-items:center; gap:0.55rem;">
-                  <div style="width:34px; height:34px; border-radius:50%; background:rgba(139,92,246,0.25); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.95rem;">
-                    <i class="fa-solid fa-user"></i>
-                  </div>
+              <div class="contact-item-box" id="contact-card-1">
+                <div class="contact-left-group">
+                  <div class="contact-avatar-dot"><i class="fa-solid fa-user"></i></div>
                   <div>
-                    <div style="font-weight:800; font-size:0.825rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
-                      <span>Suresh Das (Father)</span>
-                      <span style="background:rgba(16,185,129,0.2); color:#10b981; font-size:0.58rem; padding:1px 4px; border-radius:3px;">Primary</span>
+                    <div style="font-weight:800; font-size:0.75rem; color:#ffffff; display:flex; align-items:center; gap:0.35rem;">
+                      <span id="contact-name-1">Suresh Das (Father)</span>
+                      <span class="contact-primary-badge">Primary</span>
                     </div>
-                    <div style="font-size:0.72rem; color:#38bdf8; font-weight:700; margin-top:1px;"><i class="fa-solid fa-phone"></i> +91 91234 56789</div>
-                    <div style="font-size:0.625rem; color:#94a3b8;">Relationship: Father</div>
+                    <div id="contact-phone-1" style="font-size:0.66rem; color:#38bdf8; font-weight:700; margin-top:1px;">
+                      <i class="fa-solid fa-phone"></i> +91 91234 56789
+                    </div>
                   </div>
                 </div>
-
-                <div style="display:flex; gap:0.35rem;">
-                  <button style="background:transparent; border:none; color:#38bdf8; cursor:pointer; font-size:0.85rem;"><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-size:0.85rem;"><i class="fa-solid fa-trash-can"></i></button>
+                <div style="display:flex; gap:0.4rem;">
+                  <button style="background:transparent; border:none; color:#38bdf8; cursor:pointer; font-size:0.75rem;" onclick="editContact(1)"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-size:0.75rem;" onclick="deleteContact(1)"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
               </div>
 
               <!-- Contact 2 -->
-              <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.22); border-radius:8px; padding:0.55rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
-                <div style="display:flex; align-items:center; gap:0.55rem;">
-                  <div style="width:34px; height:34px; border-radius:50%; background:rgba(139,92,246,0.25); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.95rem;">
-                    <i class="fa-solid fa-user"></i>
-                  </div>
+              <div class="contact-item-box" id="contact-card-2">
+                <div class="contact-left-group">
+                  <div class="contact-avatar-dot"><i class="fa-solid fa-user"></i></div>
                   <div>
-                    <div style="font-weight:800; font-size:0.825rem; color:#fff;">Anita Das (Sister)</div>
-                    <div style="font-size:0.72rem; color:#38bdf8; font-weight:700; margin-top:1px;"><i class="fa-solid fa-phone"></i> +91 99887 76655</div>
-                    <div style="font-size:0.625rem; color:#94a3b8;">Relationship: Sister</div>
+                    <div style="font-weight:800; font-size:0.75rem; color:#ffffff; display:flex; align-items:center; gap:0.35rem;">
+                      <span id="contact-name-2">Anita Das (Sister)</span>
+                      <span class="contact-sec-badge">Secondary</span>
+                    </div>
+                    <div id="contact-phone-2" style="font-size:0.66rem; color:#38bdf8; font-weight:700; margin-top:1px;">
+                      <i class="fa-solid fa-phone"></i> +91 99887 76655
+                    </div>
                   </div>
                 </div>
-
-                <div style="display:flex; gap:0.35rem;">
-                  <button style="background:transparent; border:none; color:#38bdf8; cursor:pointer; font-size:0.85rem;"><i class="fa-solid fa-pen-to-square"></i></button>
-                  <button style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-size:0.85rem;"><i class="fa-solid fa-trash-can"></i></button>
+                <div style="display:flex; gap:0.4rem;">
+                  <button style="background:transparent; border:none; color:#38bdf8; cursor:pointer; font-size:0.75rem;" onclick="editContact(2)"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-size:0.75rem;" onclick="deleteContact(2)"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
               </div>
-
             </div>
           </div>
 
-          <!-- 3. Preferences Card -->
-          <div class="prof-card">
-            <div style="font-weight:800; font-size:0.875rem; color:#fff; display:flex; align-items:center; gap:0.45rem; margin-bottom:0.15rem;">
-              <i class="fa-solid fa-sliders" style="color:#38bdf8;"></i> Preferences
-            </div>
-            <div style="font-size:0.685rem; color:#94a3b8; margin-bottom:0.55rem;">Customize your app experience.</div>
-
-            <!-- 3 Dropdowns Row -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.65rem; margin-bottom:0.65rem;">
+          <!-- 3. Safety & Notification Preferences (3x2 Grid) -->
+          <div class="prof-card prof-card-prefs">
+            <div class="card-header-bar" style="margin-bottom:0.25rem;">
               <div>
-                <div style="font-size:0.685rem; color:#94a3b8; margin-bottom:2px;">Language</div>
-                <select style="width:100%; background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); color:#fff; font-size:0.75rem; font-weight:700; padding:0.35rem 0.55rem; border-radius:6px; outline:none; font-family:inherit;">
-                  <option selected>English</option>
-                  <option>Assamese (অসমীয়া)</option>
-                  <option>Bengali (বাংলা)</option>
-                  <option>Hindi (हिंदी)</option>
-                </select>
-              </div>
-
-              <div>
-                <div style="font-size:0.685rem; color:#94a3b8; margin-bottom:2px;">Theme</div>
-                <select style="width:100%; background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); color:#fff; font-size:0.75rem; font-weight:700; padding:0.35rem 0.55rem; border-radius:6px; outline:none; font-family:inherit;">
-                  <option selected>Dark</option>
-                  <option>Light</option>
-                  <option>High Contrast</option>
-                </select>
-              </div>
-
-              <div>
-                <div style="font-size:0.685rem; color:#94a3b8; margin-bottom:2px;">Distance Unit</div>
-                <select style="width:100%; background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); color:#fff; font-size:0.75rem; font-weight:700; padding:0.35rem 0.55rem; border-radius:6px; outline:none; font-family:inherit;">
-                  <option selected>Kilometers (km)</option>
-                  <option>Miles (mi)</option>
-                </select>
+                <div class="card-title-group">
+                  <i class="fa-solid fa-gear" style="color:#38bdf8;"></i>
+                  <span class="card-title-text">Safety &amp; Notification Preferences</span>
+                </div>
+                <div class="card-subtext">Choose what notifications and features you want to use.</div>
               </div>
             </div>
 
-            <!-- 3 Toggle Switches Row -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.65rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.55rem;">
-              <!-- Voice Alerts -->
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-weight:700; font-size:0.785rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
-                    <i class="fa-solid fa-volume-high" style="color:#38bdf8;"></i> Voice Alerts
+            <div class="pref-3x2-grid">
+              <!-- Item 1: Critical Alerts -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-triangle-exclamation pref-tile-icon" style="color:#ef4444;"></i>
+                  <div>
+                    <div class="pref-tile-title">Critical Emergency Alerts</div>
+                    <div class="pref-tile-desc">Flood warnings, evacuation alerts and SOS updates.</div>
                   </div>
-                  <div style="font-size:0.625rem; color:#94a3b8;">Get voice alerts for notifications</div>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" checked>
+                  <input type="checkbox" checked onchange="handlePrefToggle('Critical Alerts', this.checked)">
                   <span class="toggle-slider"></span>
                 </label>
               </div>
 
-              <!-- High Contrast Mode -->
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-weight:700; font-size:0.785rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
-                    <i class="fa-solid fa-circle-half-stroke" style="color:#38bdf8;"></i> High Contrast
+              <!-- Item 2: Rescue Updates -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-users-gear pref-tile-icon" style="color:#38bdf8;"></i>
+                  <div>
+                    <div class="pref-tile-title">Rescue Updates</div>
+                    <div class="pref-tile-desc">Get updates about your SOS requests &amp; rescue operations.</div>
                   </div>
-                  <div style="font-size:0.625rem; color:#94a3b8;">Improve visibility in low light</div>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox">
+                  <input type="checkbox" checked onchange="handlePrefToggle('Rescue Updates', this.checked)">
                   <span class="toggle-slider"></span>
                 </label>
               </div>
 
-              <!-- Auto Location -->
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-weight:700; font-size:0.785rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
-                    <i class="fa-solid fa-location-crosshairs" style="color:#10b981;"></i> Auto Location
+              <!-- Item 3: Shelter Updates -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-campground pref-tile-icon" style="color:#10b981;"></i>
+                  <div>
+                    <div class="pref-tile-title">Shelter Updates</div>
+                    <div class="pref-tile-desc">New shelters and capacity information.</div>
                   </div>
-                  <div style="font-size:0.625rem; color:#94a3b8;">Detect location automatically</div>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" checked>
+                  <input type="checkbox" checked onchange="handlePrefToggle('Shelter Updates', this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Item 4: Voice Alerts -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-volume-high pref-tile-icon" style="color:#f59e0b;"></i>
+                  <div>
+                    <div class="pref-tile-title">Voice Alerts</div>
+                    <div class="pref-tile-desc">Get voice alerts for important notifications.</div>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked onchange="handlePrefToggle('Voice Alerts', this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Item 5: Auto Location -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-location-crosshairs pref-tile-icon" style="color:#10b981;"></i>
+                  <div>
+                    <div class="pref-tile-title">Auto Location</div>
+                    <div class="pref-tile-desc">Automatically share your location during emergencies.</div>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked onchange="handlePrefToggle('Auto Location', this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Item 6: High Contrast -->
+              <div class="pref-tile-card">
+                <div class="pref-tile-left">
+                  <i class="fa-solid fa-circle-half-stroke pref-tile-icon" style="color:#38bdf8;"></i>
+                  <div>
+                    <div class="pref-tile-title">High Contrast</div>
+                    <div class="pref-tile-desc">Improve visibility in low light conditions.</div>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="handlePrefToggle('High Contrast', this.checked)">
                   <span class="toggle-slider"></span>
                 </label>
               </div>
             </div>
-
           </div>
 
         </div>
 
-        <!-- Right Column: Account Summary, Quick Actions, Need Help -->
+        <!-- Right Column: Account Security, Aegis Activity, Privacy, Need Help -->
         <div class="prof-right-col">
-          
-          <!-- 1. Account Summary Panel -->
-          <div class="prof-panel-box">
-            <div style="font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.45rem;">Account Summary</div>
 
-            <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.785rem;">
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-calendar-days" style="color:#38bdf8;"></i> Member Since</span>
-                <strong style="color:#fff;">May 24, 2024</strong>
+          <!-- 1. Account Security -->
+          <div class="right-card-box right-card-sec">
+            <div class="card-header-bar" style="margin-bottom:0.15rem;">
+              <div class="card-title-group">
+                <i class="fa-solid fa-shield-halved" style="color:#38bdf8;"></i>
+                <span class="card-title-text">Account Security</span>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-user-check" style="color:#38bdf8;"></i> Account Status</span>
-                <strong style="color:#10b981;">Active</strong>
+            </div>
+
+            <div style="display:flex; flex-direction:column; justify-content:space-around; flex:1;">
+              <div class="security-item-row">
+                <div style="display:flex; align-items:center; gap:0.45rem;">
+                  <i class="fa-solid fa-key" style="color:#38bdf8; font-size:0.75rem;"></i>
+                  <div>
+                    <div style="font-weight:700; font-size:0.72rem; color:#ffffff;">Password</div>
+                    <div style="font-size:0.58rem; color:#94a3b8;">Last changed 2 months ago</div>
+                  </div>
+                </div>
+                <button class="sec-badge-btn" onclick="openPasswordModal()">Change</button>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-id-card-clip" style="color:#38bdf8;"></i> KYC Status</span>
-                <strong style="color:#10b981;">Verified</strong>
+
+              <div class="security-item-row">
+                <div style="display:flex; align-items:center; gap:0.45rem;">
+                  <i class="fa-solid fa-shield-virus" style="color:#38bdf8; font-size:0.75rem;"></i>
+                  <div>
+                    <div style="font-weight:700; font-size:0.72rem; color:#ffffff;">Two-Factor Authentication</div>
+                    <div style="font-size:0.58rem; color:#94a3b8;">Recommended for better security</div>
+                  </div>
+                </div>
+                <button class="sec-badge-btn" id="btn-2fa-status" onclick="toggle2FA()">Enable</button>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> Total SOS Requests</span>
-                <strong style="color:#fff;">1</strong>
-              </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-shield-check" style="color:#10b981;"></i> Rescues Completed</span>
-                <strong style="color:#fff;">1</strong>
+
+              <div class="security-item-row">
+                <div style="display:flex; align-items:center; gap:0.45rem;">
+                  <i class="fa-solid fa-mobile-screen" style="color:#38bdf8; font-size:0.75rem;"></i>
+                  <div>
+                    <div style="font-weight:700; font-size:0.72rem; color:#ffffff;">Logged-in Devices</div>
+                    <div style="font-size:0.58rem; color:#10b981; font-weight:700;">3 active devices</div>
+                  </div>
+                </div>
+                <button class="sec-badge-btn" onclick="manageDevicesModal()">Manage</button>
               </div>
             </div>
           </div>
 
-          <!-- 2. Quick Actions Panel -->
-          <div class="prof-panel-box">
-            <div style="font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.45rem;">Quick Actions</div>
+          <!-- 2. AEGIS Activity Metrics -->
+          <div class="right-card-box right-card-act">
+            <div class="card-header-bar" style="margin-bottom:0.15rem;">
+              <div class="card-title-group">
+                <i class="fa-solid fa-chart-simple" style="color:#38bdf8;"></i>
+                <span class="card-title-text">AEGIS ACTIVITY</span>
+              </div>
+              <a href="citizen-tracking.html" style="font-size:0.62rem; color:#38bdf8; text-decoration:none; font-weight:700;">View Details &rarr;</a>
+            </div>
 
-            <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.785rem;">
-              <div style="display:flex; justify-content:space-between; align-items:center; color:#cbd5e1; cursor:pointer; padding:0.2rem 0;" onclick="showCustomAlert('🔒 Change Password', 'Password security panel opened.', 'info')">
-                <span><i class="fa-solid fa-lock" style="color:#38bdf8; width:18px;"></i> Change Password</span>
-                <i class="fa-solid fa-chevron-right" style="font-size:0.65rem; color:#64748b;"></i>
+            <div class="activity-metric-grid">
+              <div class="activity-tile" style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3);">
+                <div style="display:flex; align-items:center; gap:0.3rem;">
+                  <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.75rem;"></i>
+                  <span style="font-size:0.95rem; font-weight:800; color:#ef4444;">2</span>
+                </div>
+                <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:1px;">SOS Requests</div>
+                <div style="font-size:0.52rem; color:#94a3b8;">1 Resolved</div>
               </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; color:#cbd5e1; cursor:pointer; padding:0.2rem 0;" onclick="showCustomAlert('📥 Download Profile Data', 'Downloading your encrypted rescue profile data JSON...', 'success')">
-                <span><i class="fa-solid fa-download" style="color:#38bdf8; width:18px;"></i> Download My Data</span>
-                <i class="fa-solid fa-chevron-right" style="font-size:0.65rem; color:#64748b;"></i>
+
+              <div class="activity-tile" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3);">
+                <div style="display:flex; align-items:center; gap:0.3rem;">
+                  <i class="fa-solid fa-users-gear" style="color:#10b981; font-size:0.75rem;"></i>
+                  <span style="font-size:0.95rem; font-weight:800; color:#10b981;">1</span>
+                </div>
+                <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:1px;">Rescue</div>
+                <div style="font-size:0.52rem; color:#10b981; font-weight:600;">Completed</div>
               </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; color:#cbd5e1; cursor:pointer; padding:0.2rem 0;" onclick="showCustomAlert('📱 Manage Devices', 'Currently 1 active authorized device: Windows 11 Chrome.', 'info')">
-                <span><i class="fa-solid fa-mobile-screen" style="color:#38bdf8; width:18px;"></i> Manage Devices</span>
-                <i class="fa-solid fa-chevron-right" style="font-size:0.65rem; color:#64748b;"></i>
-              </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; color:#ef4444; cursor:pointer; padding:0.2rem 0;" onclick="confirm('Are you sure you want to request account deletion?')">
-                <span><i class="fa-solid fa-trash-can" style="color:#ef4444; width:18px;"></i> Delete Account</span>
-                <i class="fa-solid fa-chevron-right" style="font-size:0.65rem; color:#64748b;"></i>
+
+              <div class="activity-tile" style="background:rgba(37,99,235,0.12); border:1px solid rgba(37,99,235,0.3);">
+                <div style="display:flex; align-items:center; gap:0.3rem;">
+                  <i class="fa-solid fa-bell" style="color:#38bdf8; font-size:0.75rem;"></i>
+                  <span style="font-size:0.95rem; font-weight:800; color:#38bdf8;">6</span>
+                </div>
+                <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:1px;">Alerts</div>
+                <div style="font-size:0.52rem; color:#94a3b8;">Received</div>
               </div>
             </div>
           </div>
 
-          <!-- 3. Need Help Panel -->
-          <div class="prof-panel-box" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
-            <div>
-              <div style="display:flex; align-items:center; gap:0.45rem; font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.25rem;">
-                <i class="fa-solid fa-headset" style="color:#38bdf8;"></i> Need Help?
-              </div>
-              <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.35;">
-                If you face any issues, our support team is here to help you 24/7.
+          <!-- 3. Privacy & Data -->
+          <div class="right-card-box right-card-priv">
+            <div class="card-header-bar" style="margin-bottom:0.15rem;">
+              <div class="card-title-group">
+                <i class="fa-solid fa-user-shield" style="color:#38bdf8;"></i>
+                <span class="card-title-text">Privacy &amp; Data</span>
               </div>
             </div>
+            <div style="font-size:0.6rem; color:#cbd5e1; line-height:1.3; margin: auto 0;">
+              Your location and emergency information are used to provide disaster alerts, SOS assistance and rescue coordination.
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.64rem;">
+              <a href="#" style="color:#38bdf8; text-decoration:none; font-weight:700;" onclick="viewPrivacyPolicy()"><i class="fa-solid fa-file-shield"></i> View Privacy Policy &rarr;</a>
+              <a href="#" style="color:#38bdf8; text-decoration:none; font-weight:700;" onclick="downloadDataJson()"><i class="fa-solid fa-download"></i> Download My Data &rarr;</a>
+            </div>
+          </div>
 
-            <button class="btn btn-primary" style="width:100%; font-size:0.8rem; font-weight:800; padding:0.45rem; margin-top:0.45rem;" onclick="location.href='citizen-help.html'">
-              Contact Support
+          <!-- 4. Need Help? Box -->
+          <div class="right-card-box right-card-help">
+            <div class="card-header-bar" style="margin-bottom:0.15rem;">
+              <div class="card-title-group">
+                <i class="fa-solid fa-headset" style="color:#38bdf8;"></i>
+                <span class="card-title-text">Need Help?</span>
+              </div>
+            </div>
+            <div style="font-size:0.6rem; color:#cbd5e1; margin: auto 0;">
+              Our support team is available 24/7 to assist you.
+            </div>
+            <button class="contact-support-btn" onclick="location.href='citizen-help.html'">
+              Contact Support &rarr;
             </button>
           </div>
 
@@ -733,14 +1435,14 @@
 
       </div>
 
-      <!-- Sticky Meta Footer -->
+      <!-- Institutional Sticky Footer -->
       <footer class="prof-footer-bar">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <i class="fa-solid fa-shield-halved" style="color:#10b981;"></i>
           <span><strong>Stay Informed. Stay Safe.</strong> AEGIS is with you in every step.</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
           <span>Real-time Updates</span>
           <span>&bull;</span>
           <span>Verified Information</span>
@@ -750,9 +1452,7 @@
           <span>Trusted by Government of Assam</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span>Data Source: ASDMA | IMD | Local Authorities</span>
-          <span>&bull;</span>
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <span>Last Updated: 12 Aug 2026, 10:35 AM</span>
           <span>&bull;</span>
           <span style="color:#10b981; font-weight:700;">🟢 Live</span>
@@ -762,24 +1462,580 @@
     </main>
   </div>
 
-  <!-- Application Logic -->
-  <script src="js/citizen.js?v=3.0"></script>
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'edit-profile-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:500px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(59,130,246,0.4);">
+            <i class="fa-solid fa-user-pen"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Edit Citizen Profile</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('edit-profile-modal-backdrop')">&times;</button>
+      </div>
 
+      <div style="padding:1rem; display:flex; flex-direction:column; gap:0.65rem; font-size:0.75rem;">
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Full Name</label>
+          <input type="text" id="edit-input-name" value="Ravi Das" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem;">
+          <div>
+            <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Phone Number</label>
+            <input type="text" id="edit-input-phone" value="+91 98765 43210" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Email Address</label>
+            <input type="email" id="edit-input-email" value="ravi.das@email.com" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem;">
+          <div>
+            <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Occupation</label>
+            <input type="text" id="edit-input-occ" value="Private Employee" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Ward / Block</label>
+            <input type="text" id="edit-input-ward" value="Ward No. 4, Circuit House Rd" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Permanent Address</label>
+          <input type="text" id="edit-input-address" value="Golaghat Town, Golaghat District, Assam – 785621" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:none; padding:0.35rem 0.75rem; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="closeModal('edit-profile-modal-backdrop')">Cancel</button>
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="saveProfileChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Emergency Contact Modal -->
+  <div id="contact-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'contact-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:440px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(139,92,246,0.2); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(139,92,246,0.4);">
+            <i class="fa-solid fa-address-book"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;" id="contact-modal-title">Add Emergency Contact</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('contact-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="padding:1rem; display:flex; flex-direction:column; gap:0.65rem; font-size:0.75rem;">
+        <input type="hidden" id="contact-edit-index" value="0">
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Contact Name & Relation</label>
+          <input type="text" id="contact-input-name" placeholder="e.g. Suresh Das (Father)" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Phone Number (Assam/National)</label>
+          <input type="tel" id="contact-input-phone" placeholder="+91 91234 56789" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Priority Level</label>
+          <select id="contact-input-priority" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+            <option value="Primary">Primary (First to call during SOS)</option>
+            <option value="Secondary">Secondary (Alternative contact)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:none; padding:0.35rem 0.75rem; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="closeModal('contact-modal-backdrop')">Cancel</button>
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="saveContactChanges()">Save Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="password-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'password-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:420px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(56,189,248,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(56,189,248,0.4);">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Change Password</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('password-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="padding:1rem; display:flex; flex-direction:column; gap:0.65rem; font-size:0.75rem;">
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Current Password</label>
+          <input type="password" id="pwd-curr" placeholder="••••••••" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">New Password</label>
+          <input type="password" id="pwd-new" placeholder="At least 8 characters" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+        <div>
+          <label style="display:block; color:#94a3b8; font-size:0.62rem; font-weight:700; text-transform:uppercase; margin-bottom:3px;">Confirm New Password</label>
+          <input type="password" id="pwd-confirm" placeholder="••••••••" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.4rem 0.6rem; color:#fff; font-size:0.75rem; outline:none;">
+        </div>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:none; padding:0.35rem 0.75rem; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="closeModal('password-modal-backdrop')">Cancel</button>
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="savePasswordChanges()">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Devices Modal -->
+  <div id="devices-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'devices-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:480px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(16,185,129,0.4);">
+            <i class="fa-solid fa-mobile-screen"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Active Logged-in Devices</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('devices-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="padding:1rem; display:flex; flex-direction:column; gap:0.6rem; font-size:0.74rem;">
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.25); border-radius:7px; padding:0.5rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <i class="fa-solid fa-desktop" style="color:#38bdf8; font-size:0.9rem;"></i>
+            <div>
+              <div style="font-weight:700; color:#fff;">Windows 11 Chrome <span style="font-size:0.52rem; background:rgba(16,185,129,0.2); color:#10b981; padding:1px 5px; border-radius:3px;">This Device</span></div>
+              <div style="font-size:0.58rem; color:#94a3b8;">Golaghat, Assam &bull; Active Now &bull; IP: 103.212.x.x</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="dev-box-2" style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:7px; padding:0.5rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <i class="fa-solid fa-mobile" style="color:#10b981; font-size:0.9rem;"></i>
+            <div>
+              <div style="font-weight:700; color:#fff;">Android 14 (AEGIS Mobile)</div>
+              <div style="font-size:0.58rem; color:#94a3b8;">Assam, India &bull; Active 45m ago</div>
+            </div>
+          </div>
+          <button style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:0.2rem 0.5rem; border-radius:4px; font-size:0.6rem; cursor:pointer; font-weight:700;" onclick="revokeDevice(2)">Revoke</button>
+        </div>
+
+        <div id="dev-box-3" style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:7px; padding:0.5rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <i class="fa-solid fa-tablet-screen-button" style="color:#a78bfa; font-size:0.9rem;"></i>
+            <div>
+              <div style="font-weight:700; color:#fff;">iPad Safari (Relief Worker Tab)</div>
+              <div style="font-size:0.58rem; color:#94a3b8;">Guwahati, Assam &bull; Active 2 days ago</div>
+            </div>
+          </div>
+          <button style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:0.2rem 0.5rem; border-radius:4px; font-size:0.6rem; cursor:pointer; font-weight:700;" onclick="revokeDevice(3)">Revoke</button>
+        </div>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end;">
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="closeModal('devices-modal-backdrop')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacy-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'privacy-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(56,189,248,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(56,189,248,0.4);">
+            <i class="fa-solid fa-file-shield"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">AEGIS Data Privacy &amp; Security Policy</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('privacy-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="padding:1rem; font-size:0.73rem; line-height:1.5; color:#cbd5e1; max-height:55vh; overflow-y:auto;">
+        <h4 style="color:#fff; margin-bottom:0.3rem;">1. Emergency Geolocation Data</h4>
+        <p style="margin-bottom:0.6rem;">Your real-time GPS coordinates are collected solely when an SOS is dispatched or when active route tracking is enabled to guide NDRF, SDRF, and local boat rescue units directly to your position.</p>
+
+        <h4 style="color:#fff; margin-bottom:0.3rem;">2. Encryption Standard</h4>
+        <p style="margin-bottom:0.6rem;">All personal data, medical notes, and family contacts are encrypted using AES-256 in transit and at rest, adhering strictly to Government of India and ASDMA cybersecurity standards.</p>
+
+        <h4 style="color:#fff; margin-bottom:0.3rem;">3. Citizen Rights</h4>
+        <p>You have full ownership of your data and may request instant download or permanent account deletion at any time through this portal.</p>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end;">
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="closeModal('privacy-modal-backdrop')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Notification Bar -->
+  <div id="prof-toast-alert" style="position:fixed; bottom:38px; right:20px; background:#0b1426; border:1px solid #10b981; color:#fff; padding:0.5rem 0.9rem; border-radius:8px; font-size:0.75rem; display:none; align-items:center; gap:0.5rem; box-shadow:0 6px 20px rgba(0,0,0,0.6); z-index:10000; animation:slideUp 0.3s ease;">
+    <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:0.9rem;"></i>
+    <span id="prof-toast-text">Settings updated successfully</span>
+  </div>
+
+  <!-- Safety Guide Modal (Matches Dashboard Page) -->
+  <div id="safety-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'safety-modal-backdrop')">
+    <div class="modal-dialog-box" onclick="event.stopPropagation()">
+      <div
+        style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div
+            style="width:34px; height:34px; border-radius:8px; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:1.1rem; border:1px solid rgba(239,68,68,0.4);">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:0.95rem; color:#ffffff;">ASSAM FLOOD SAFETY & EVACUATION PROTOCOL</div>
+            <div style="font-size:0.65rem; color:#94a3b8;">Issued by Assam State Disaster Management Authority (ASDMA)</div>
+          </div>
+        </div>
+        <button
+          style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer; padding:0.2rem;"
+          onclick="closeModal('safety-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="display:flex; border-bottom:1px solid rgba(59,130,246,0.2); background:rgba(15,23,42,0.5);">
+        <button class="safety-tab-btn active" onclick="switchSafetyTab(0)">1. Immediate Actions</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(1)">2. Evacuation Steps</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(2)">3. Emergency Kit</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(3)">4. Medical & Hygiene</button>
+      </div>
+
+      <div style="padding:0.9rem 1.1rem; overflow-y:auto; flex:1; font-size:0.74rem; line-height:1.5; color:#cbd5e1;">
+        <div id="tab-sec-0" class="safety-sec">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚨 Immediate Life-Saving Instructions</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li><strong>Move to higher ground immediately:</strong> Do not wait until floodwater reaches your door.</li>
+            <li><strong>Disconnect main power & gas:</strong> Turn off main electrical switches to prevent electrocution.</li>
+            <li><strong>Avoid walking or driving through moving water:</strong> 6 inches of moving water can knock you down.</li>
+            <li><strong>Keep emergency communication lines open:</strong> Save phone battery for critical rescue broadcasts.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-1" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚶 Evacuation & Safe Transit Protocol</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Follow official designated safe routes shown in the <strong>Safe Routes</strong> portal.</li>
+            <li>Do not cross breached river embankments (Bunds) or submerged bridges.</li>
+            <li>Signal rescue boats with brightly colored cloth, torches, or sound whistles.</li>
+            <li>Give priority to infants, pregnant women, elderly citizens, and individuals with disabilities.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-2" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🎒 72-Hour Emergency Grab-and-Go Kit</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Waterproof pouch with identification cards, property documents, and emergency cash.</li>
+            <li>Bottled drinking water (minimum 3 litres per person) and non-perishable high-energy rations.</li>
+            <li>Flashlight with spare batteries, power banks, and whistle for audio signaling.</li>
+            <li>Basic first-aid kit with antiseptic lotion, bandages, and prescribed medications for 7 days.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-3" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🩺 Water-Borne Disease Prevention & Hygiene</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Boil all drinking water for at least 1 minute or use Halazone water purification tablets.</li>
+            <li>Do not consume food that has come into direct contact with flood waters.</li>
+            <li>Wash hands with soap or alcohol sanitizer before eating.</li>
+            <li>Seek immediate medical assistance at relief camps if showing symptoms of fever or diarrhea.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.65rem; color:#94a3b8;">State Emergency Helpline: <strong style="color:#ef4444;">1070 / 112</strong></span>
+        <button
+          style="background:var(--primary-blue); color:#ffffff; border:none; padding:0.3rem 0.85rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;"
+          onclick="closeModal('safety-modal-backdrop')">
+          Understood & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Photo Input -->
+  <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handlePhotoSelected(event)">
+
+  <!-- Application Logic -->
   <script>
     let currentDistrictData = null;
+    let is2FAEnabled = false;
 
     document.addEventListener('DOMContentLoaded', () => {
       renderProfileForDistrict('Golaghat');
     });
 
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById('prof-toast-alert');
+      const text = document.getElementById('prof-toast-text');
+      if (!toast || !text) return;
+
+      text.innerText = msg;
+      toast.style.borderColor = isSuccess ? '#10b981' : '#ef4444';
+      toast.querySelector('i').className = isSuccess ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+      toast.querySelector('i').style.color = isSuccess ? '#10b981' : '#ef4444';
+      toast.style.display = 'flex';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3200);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync Topbar District
+      if (window.citizenApp) {
+        window.citizenApp.syncTopbarDistrict();
+      }
+      const selectedDist = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+      renderProfileForDistrict(selectedDist);
+    });
+
+    function onDistrictChange(districtName) {
+      document.getElementById('topbar-dist-name').innerText = districtName;
+      renderProfileForDistrict(districtName);
+      showToast(`Selected jurisdiction: ${districtName} District`);
+    }
+
     function renderProfileForDistrict(districtName) {
       if (!window.citizenApp) return;
 
       currentDistrictData = window.citizenApp.getDistrictModelData(districtName);
+      if (!currentDistrictData) return;
 
-      // Dynamically update address for district
-      document.getElementById('prof-address-text').innerText = `${currentDistrictData.district} Town, ${currentDistrictData.district} District, Assam - 785621`;
+      // Update residential address according to selected district
+      const addrEl = document.getElementById('profile-address-text');
+      if (addrEl) {
+        addrEl.innerHTML = `<i class="fa-solid fa-location-dot" style="color:#38bdf8; font-size:0.62rem;"></i> ${currentDistrictData.district} Town, ${currentDistrictData.district} District, Assam &ndash; 785621`;
+      }
+      const addrInput = document.getElementById('edit-input-address');
+      if (addrInput) {
+        addrInput.value = `${currentDistrictData.district} Town, ${currentDistrictData.district} District, Assam – 785621`;
+      }
+    }
+
+    // Modal Control Helpers
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    }
+
+    function handleModalBackdropClick(event, id) {
+      if (event.target.id === id) {
+        closeModal(id);
+      }
+    }
+
+    // Edit Profile
+    function openEditProfileModal() {
+      openModal('edit-profile-modal-backdrop');
+    }
+
+    function saveProfileChanges() {
+      const name = document.getElementById('edit-input-name').value;
+      const phone = document.getElementById('edit-input-phone').value;
+      const email = document.getElementById('edit-input-email').value;
+      const occ = document.getElementById('edit-input-occ').value;
+      const addr = document.getElementById('edit-input-address').value;
+
+      if (name) document.getElementById('profile-name-text').innerText = name;
+      if (phone) document.getElementById('profile-phone-text').innerHTML = `<i class="fa-solid fa-phone" style="color:#38bdf8; font-size:0.6rem;"></i> ${phone}`;
+      if (email) document.getElementById('profile-email-text').innerHTML = `<i class="fa-solid fa-envelope" style="color:#38bdf8; font-size:0.6rem;"></i> ${email}`;
+      if (occ) document.getElementById('profile-occ-text').innerHTML = `<i class="fa-solid fa-briefcase" style="color:#38bdf8; font-size:0.6rem;"></i> ${occ}`;
+      if (addr) document.getElementById('profile-address-text').innerHTML = `<i class="fa-solid fa-location-dot" style="color:#38bdf8; font-size:0.6rem;"></i> ${addr}`;
+
+      closeModal('edit-profile-modal-backdrop');
+      showToast('Profile information successfully saved!');
+    }
+
+    // Emergency Contacts
+    function openAddContactModal() {
+      document.getElementById('contact-edit-index').value = '0';
+      document.getElementById('contact-modal-title').innerText = 'Add Emergency Contact';
+      document.getElementById('contact-input-name').value = '';
+      document.getElementById('contact-input-phone').value = '';
+      openModal('contact-modal-backdrop');
+    }
+
+    function editContact(idx) {
+      document.getElementById('contact-edit-index').value = idx.toString();
+      document.getElementById('contact-modal-title').innerText = `Edit Contact #${idx}`;
+      const nameEl = document.getElementById(`contact-name-${idx}`);
+      const phoneEl = document.getElementById(`contact-phone-${idx}`);
+      if (nameEl) document.getElementById('contact-input-name').value = nameEl.innerText;
+      if (phoneEl) document.getElementById('contact-input-phone').value = phoneEl.innerText.trim();
+      openModal('contact-modal-backdrop');
+    }
+
+    function saveContactChanges() {
+      const idx = document.getElementById('contact-edit-index').value;
+      const name = document.getElementById('contact-input-name').value;
+      const phone = document.getElementById('contact-input-phone').value;
+      const prio = document.getElementById('contact-input-priority').value;
+
+      if (!name || !phone) {
+        alert('Please provide contact name and phone number.');
+        return;
+      }
+
+      if (idx === '1' || idx === '2') {
+        const nameEl = document.getElementById(`contact-name-${idx}`);
+        const phoneEl = document.getElementById(`contact-phone-${idx}`);
+        if (nameEl) nameEl.innerText = name;
+        if (phoneEl) phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${phone}`;
+      } else {
+        // Add new contact tile if space permits
+        showToast(`Added emergency contact: ${name}`);
+      }
+
+      closeModal('contact-modal-backdrop');
+      showToast('Emergency contact saved successfully!');
+    }
+
+    function deleteContact(idx) {
+      if (confirm(`Remove emergency contact #${idx}?`)) {
+        const card = document.getElementById(`contact-card-${idx}`);
+        if (card) {
+          card.style.opacity = '0.5';
+          showToast(`Emergency contact #${idx} archived.`);
+        }
+      }
+    }
+
+    // Password
+    function openPasswordModal() {
+      openModal('password-modal-backdrop');
+    }
+
+    function savePasswordChanges() {
+      const pNew = document.getElementById('pwd-new').value;
+      const pConf = document.getElementById('pwd-confirm').value;
+
+      if (!pNew || pNew.length < 6) {
+        alert('Password must be at least 6 characters.');
+        return;
+      }
+      if (pNew !== pConf) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      closeModal('password-modal-backdrop');
+      showToast('Password updated securely!');
+    }
+
+    // 2FA
+    function toggle2FA() {
+      is2FAEnabled = !is2FAEnabled;
+      const btn = document.getElementById('btn-2fa-status');
+      if (is2FAEnabled) {
+        btn.innerText = 'Enabled';
+        btn.style.background = 'rgba(16,185,129,0.2)';
+        btn.style.color = '#10b981';
+        btn.style.borderColor = '#10b981';
+        showToast('Two-Factor Authentication (2FA) is now active!');
+      } else {
+        btn.innerText = 'Enable';
+        btn.style.background = 'rgba(15,23,42,0.8)';
+        btn.style.color = '#cbd5e1';
+        btn.style.borderColor = 'rgba(59,130,246,0.35)';
+        showToast('2FA has been disabled.');
+      }
+    }
+
+    // Manage Devices
+    function manageDevicesModal() {
+      openModal('devices-modal-backdrop');
+    }
+
+    function revokeDevice(id) {
+      const dev = document.getElementById(`dev-box-${id}`);
+      if (dev) {
+        dev.style.display = 'none';
+        showToast(`Device session #${id} revoked.`);
+      }
+    }
+
+    // Privacy & Data
+    function viewPrivacyPolicy() {
+      openModal('privacy-modal-backdrop');
+    }
+
+    function downloadDataJson() {
+      const citizenData = {
+        name: "Ravi Das",
+        phone: "+91 98765 43210",
+        email: "ravi.das@email.com",
+        district: (window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat'),
+        residential_address: document.getElementById('profile-address-text').innerText,
+        emergency_contacts: [
+          { name: "Suresh Das", relation: "Father", phone: "+91 91234 56789", priority: "Primary" },
+          { name: "Anita Das", relation: "Sister", phone: "+91 99887 76655", priority: "Secondary" }
+        ],
+        active_disaster_sos_count: 2,
+        rescues_completed: 1,
+        exported_timestamp: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(citizenData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `AEGIS_Citizen_Profile_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      showToast('Downloaded encrypted AEGIS Profile JSON!');
+    }
+
+    // Photo Upload
+    function changePhotoPrompt() {
+      document.getElementById('avatar-file-input').click();
+    }
+
+    function handlePhotoSelected(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('profile-avatar-img').src = evt.target.result;
+          showToast('Profile photo updated!');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handlePrefToggle(prefTitle, state) {
+      showToast(`${prefTitle}: ${state ? 'Enabled' : 'Disabled'}`);
+    }
+
+    // Safety Guide Modal
+    function openSafetyGuideModal() {
+      openModal('safety-modal-backdrop');
+    }
+    function closeSafetyGuideModal() {
+      closeModal('safety-modal-backdrop');
+    }
+    function switchSafetyTab(idx) {
+      const tabs = document.querySelectorAll('.safety-tab-btn');
+      tabs.forEach((tab, i) => tab.classList.toggle('active', i === idx));
+      for (let i = 0; i < 4; i++) {
+        const sec = document.getElementById(`tab-sec-${i}`);
+        if (sec) sec.style.display = (i === idx) ? 'block' : 'none';
+      }
     }
   </script>
 </body>
+
 </html>
+

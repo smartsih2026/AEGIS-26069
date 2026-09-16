@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>My SOS & Rescue Tracking - AEGIS</title>
+  <title>My SOS / Rescue Tracking - AEGIS Emergency System</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -23,7 +25,7 @@
   <!-- Master Citizen Stylesheet -->
   <link rel="stylesheet" href="citizen-styles.css">
 
-  <!-- Master Citizen Script -->
+  <!-- Master Citizen Data Script -->
   <script src="js/citizen.js?v=3.0"></script>
 
   <!-- Firebase SDK (Compat Version) & Auth Module -->
@@ -32,71 +34,127 @@
   <script src="js/firebase-auth.js?v=3.0"></script>
 
   <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-sidebar: #060b18;
+      --bg-card: #070d1d;
+      --border-subtle: rgba(59, 130, 246, 0.18);
+      --border-card: rgba(59, 130, 246, 0.22);
+      --primary-blue: #2563eb;
+      --primary-blue-hover: #1d4ed8;
+      --accent-cyan: #38bdf8;
+      --danger-red: #ef4444;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --purple-accent: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    html, body {
+    html,
+    body {
       height: 100vh;
       width: 100vw;
       overflow: hidden;
-      background-color: #030712;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #f1f5f9;
-      font-size: 14px;
-      line-height: 1.4;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
     }
 
+    /* Master Zero-Scroll Grid Layout */
     .track-layout-container {
       display: grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 230px 1fr;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
     }
 
-    /* Left Sidebar */
+    /* Left Navigation Sidebar */
     .track-sidebar {
-      background: #060b18;
-      border-right: 1px solid rgba(59, 130, 246, 0.18);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      padding: 0.85rem 0.75rem;
+      padding: 0.35rem 0.45rem;
       height: 100vh;
       overflow: hidden;
+      flex-shrink: 0;
+      justify-content: flex-start;
+      gap: 0.15rem;
     }
 
     .track-sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.2rem 0.4rem 0.75rem 0.4rem;
+      gap: 0.5rem;
+      padding: 0.02rem 0.1rem 0.2rem 0.1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.05rem;
+      flex-shrink: 0;
+    }
+
+    .track-logo-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .track-brand-name {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .track-brand-sub {
+      font-size: 0.54rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .track-nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.18rem;
-      flex: 1;
-      overflow: hidden;
+      gap: 0.02rem;
+      flex-shrink: 0;
     }
 
     .track-nav-item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.48rem 0.75rem;
+      gap: 0.5rem;
+      padding: 0.17rem 0.4rem;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.825rem;
-      border-radius: 8px;
-      transition: all 0.18s ease;
+      font-size: 0.72rem;
+      border-radius: 6px;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .track-nav-item i {
+      width: 14px;
+      font-size: 0.76rem;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .track-nav-item:hover {
@@ -105,654 +163,1285 @@
     }
 
     .track-nav-item.active {
-      background: #2563eb;
+      background: var(--primary-blue);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .track-emergency-card {
-      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.22) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 10px;
-      padding: 0.65rem;
+    .track-nav-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0.06rem 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger-red);
+      color: #ffffff;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 9999px;
+      min-width: 14px;
       text-align: center;
-      margin-top: 0.45rem;
-      position: relative;
     }
 
-    /* Main Workspace */
+    .track-nav-item.nav-logout {
+      color: #ef4444;
+      margin-top: 0.02rem;
+    }
+
+    .track-nav-item.nav-logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Sidebar Emergency Box */
+    .track-emergency-card {
+      background: rgba(11, 20, 38, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 8px;
+      padding: 0.25rem 0.4rem;
+      text-align: center;
+      margin-top: auto;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    .emergency-card-title {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .emergency-card-call {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0.02rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .emergency-card-desc {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      margin-bottom: 0.15rem;
+    }
+
+    .emergency-card-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.24rem 0.45rem;
+      font-weight: 700;
+      font-size: 0.65rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .emergency-card-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* Main Area Container */
     .track-main-area {
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background: #030712;
+      background: var(--bg-dark);
     }
 
     /* Top Bar */
     .track-topbar {
-      height: 48px;
-      background: #070d1d;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+      height: 44px;
+      background: #070d1c;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.25rem;
+      padding: 0 1rem;
+      gap: 0.75rem;
       flex-shrink: 0;
     }
 
-    .district-select-box {
+    .district-select-pill {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #f1f5f9;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 0.3rem 0.85rem;
+      color: #ffffff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+    }
+
+    .district-select-pill:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .topbar-alert-banner {
+      flex: 1;
+      max-width: 760px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 0.2rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #fca5a5;
+      min-width: 0;
+    }
+
+    .topbar-guide-btn {
+      background: #3b1419;
+      color: #ffffff;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 0.16rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-left: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    .topbar-guide-btn:hover {
+      background: #541920;
+      border-color: #ef4444;
+    }
+
+    /* Sub-Header Area */
+    .track-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0.9rem 0.2rem 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .track-title-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .track-header-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+
+    .track-header-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .track-header-subtitle {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .track-support-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.22rem 0.65rem;
       border-radius: 6px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .district-select-box select {
-      background: transparent;
-      border: none;
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.8rem;
-      outline: none;
+      gap: 0.4rem;
       cursor: pointer;
-      font-family: inherit;
-    }
-    .district-select-box select option {
-      background: #070d1d;
-      color: #fff;
+      transition: all 0.2s ease;
     }
 
-    /* Ticket Header Bar */
-    .track-ticket-bar {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
+    .track-support-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* Top Master Ticket & Stepper Card */
+    .track-stepper-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
       border-radius: 8px;
-      padding: 0.45rem 1.15rem;
-      margin: 0.35rem 1.15rem 0.3rem 1.15rem;
+      padding: 0.4rem 0.85rem;
+      margin: 0 0.9rem 0.35rem 0.9rem;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 0.45rem;
       flex-shrink: 0;
     }
 
-    /* 6-Step Timeline Bar */
-    .timeline-container {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 0.55rem 1.25rem;
-      margin: 0 1.15rem 0.45rem 1.15rem;
+    .ticket-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.35rem;
+    }
+
+    .ticket-meta-fields {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .meta-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .meta-field-label {
+      font-size: 0.58rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .meta-field-value {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .cancel-sos-btn {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #ef4444;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.18rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .cancel-sos-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #ffffff;
+    }
+
+    .cancel-subtext {
+      font-size: 0.52rem;
+      color: #64748b;
+      margin-top: 1px;
+      text-align: right;
+    }
+
+    /* 6-Step Stepper Timeline */
+    .stepper-timeline {
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: relative;
-      flex-shrink: 0;
+      padding: 0 0.5rem;
     }
 
-    .timeline-step {
+    .stepper-line-bg {
+      position: absolute;
+      top: 12px;
+      left: 3%;
+      right: 3%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.12);
+      z-index: 1;
+    }
+
+    .stepper-line-progress {
+      position: absolute;
+      top: 12px;
+      left: 3%;
+      width: 76%;
+      height: 2px;
+      background: #10b981;
+      z-index: 1;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+
+    .stepper-step {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       position: relative;
       z-index: 2;
+      min-width: 80px;
     }
 
-    .step-icon-circle {
-      width: 28px;
-      height: 28px;
+    .stepper-dot {
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.785rem;
+      font-size: 0.68rem;
       font-weight: 800;
       margin-bottom: 2px;
+      border: 1.5px solid transparent;
+      transition: all 0.25s ease;
     }
-    .step-done {
+
+    .stepper-dot.done {
       background: #10b981;
-      color: #fff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+      color: #ffffff;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
     }
-    .step-active {
+
+    .stepper-dot.active {
       background: #2563eb;
-      color: #fff;
-      border: 2px solid #fff;
-      box-shadow: 0 0 14px #2563eb;
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 12px #38bdf8;
       animation: pulseGlow 1.8s infinite;
     }
-    .step-pending {
+
+    .stepper-dot.pending {
       background: #1e293b;
       color: #64748b;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+    }
+
+    .step-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .step-title.active-title {
+      color: #38bdf8;
+      font-weight: 800;
+    }
+
+    .step-title.pending-title {
+      color: #64748b;
+    }
+
+    .step-time {
+      font-size: 0.54rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .step-time.eta-time {
+      color: #10b981;
+      font-weight: 800;
     }
 
     @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); box-shadow: 0 0 18px #38bdf8; }
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 8px #38bdf8;
+      }
+      50% {
+        transform: scale(1.12);
+        box-shadow: 0 0 16px #38bdf8;
+      }
     }
 
-    /* Master Workspace 2-Column Grid */
+    /* Workspace 3-Column Grid */
     .track-workspace-grid {
       display: grid;
-      grid-template-columns: 1fr 310px;
-      gap: 0.85rem;
-      padding: 0 1.15rem 0.55rem 1.15rem;
+      grid-template-columns: 1.45fr 0.85fr 0.9fr;
+      gap: 0.6rem;
+      padding: 0 0.9rem;
       flex: 1;
-      overflow: hidden;
       min-height: 0;
-    }
-
-    /* Left Console Split */
-    .track-left-console {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
       overflow: hidden;
     }
 
-    /* Top Map + Rescue Team Details Split */
-    .map-team-split {
-      display: grid;
-      grid-template-columns: 1fr 260px;
-      gap: 0.75rem;
-      flex: 1;
-      min-height: 0;
-    }
-
-    /* Live Map Box */
-    .track-map-box {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 9px;
+    /* Column 1: Live Leaflet Map Box */
+    .map-card-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       height: 100%;
     }
 
-    #track-leaflet-map {
+    #track-map-view {
       width: 100%;
       height: 100%;
+      flex: 1;
+      background: #091122;
     }
 
-    /* Rescue Team Details Card */
-    .rescue-team-card {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 9px;
-      padding: 0.65rem 0.85rem;
+    .map-top-badge {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(6, 11, 24, 0.92);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 6px;
+      padding: 0.22rem 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .live-dot-pulse {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    .map-legend-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(6, 11, 24, 0.92);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.58rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      flex-wrap: wrap;
+    }
+
+    /* Column 2: Rescue Team Details Card */
+    .team-details-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-header-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .status-pill-green {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      font-size: 0.58rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 9999px;
+    }
+
+    .team-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.45rem;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .team-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.22);
+      color: #a78bfa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .team-info-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      font-size: 0.68rem;
+    }
+
+    .team-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-label {
+      color: #94a3b8;
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .members-chips-row {
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+      margin-top: 0.25rem;
+    }
+
+    .member-chip {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.56rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .msg-team-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.38rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s ease;
+      width: 100%;
+      margin-top: 0.35rem;
+    }
+
+    .msg-team-btn:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      transform: translateY(-1px);
+    }
+
+    /* Column 3: Right Stack (Estimated Details & Shelter Allocation) */
+    .right-stack-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .stack-panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    /* Lower 2 Panels (Updates Feed + Helpful Actions) */
-    .track-lower-split {
+    .est-details-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.24rem;
+      font-size: 0.68rem;
+    }
+
+    .facility-icons-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      padding: 0.15rem 0.2rem;
+    }
+
+    .view-shelter-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      width: 100%;
+      margin-top: 0.3rem;
+    }
+
+    .view-shelter-btn:hover {
+      background: rgba(37, 99, 235, 0.22);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* Bottom 3-Column Split Row */
+    .track-bottom-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      height: 120px;
+      grid-template-columns: 1.45fr 0.85fr 0.9fr;
+      gap: 0.6rem;
+      padding: 0.35rem 0.9rem 0.35rem 0.9rem;
+      height: 114px;
       flex-shrink: 0;
     }
 
-    .track-subcard {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 9px;
-      padding: 0.6rem 0.85rem;
+    .bottom-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 0.45rem 0.7rem;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       overflow: hidden;
     }
 
-    /* Right Column (Estimated Details, Shelter Allocation, Instructions) */
-    .track-right-col {
+    .feed-list-scroll {
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      overflow: hidden;
+      gap: 0.2rem;
+      font-size: 0.64rem;
+      color: #cbd5e1;
+      overflow-y: auto;
     }
 
-    .track-panel-box {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 9px;
-      padding: 0.65rem 0.85rem;
+    .feed-list-scroll::-webkit-scrollbar {
+      width: 3px;
     }
 
-    /* Sticky Footer */
+    .feed-list-scroll::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    /* Helpful Actions 4-Grid */
+    .actions-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.3rem;
+    }
+
+    .action-square-btn {
+      border-radius: 6px;
+      padding: 0.3rem 0.15rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+    }
+
+    .action-square-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
     .track-footer-bar {
-      height: 32px;
+      height: 28px;
       background: #040813;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.15rem;
-      font-size: 0.685rem;
+      padding: 0 1rem;
+      font-size: 0.62rem;
       color: #64748b;
       flex-shrink: 0;
     }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(6, 12, 28, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-dialog-box {
+      background: #0b1426;
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .safety-tab-btn {
+      padding: 0.35rem 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .safety-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="track-layout-container">
+
     <!-- Left Navigation Sidebar -->
     <aside class="track-sidebar">
+
+      <!-- Brand Header -->
       <div class="track-sidebar-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.25)"/>
-          <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
-        </svg>
+        <div class="track-logo-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3b82f6" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.28)" />
+            <path d="M12 8v8M8 12h8" stroke-linecap="round" />
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 1.15rem; color: #fff; line-height: 1;">AEGIS</div>
-          <div style="font-size: 0.58rem; color: #94a3b8; font-weight: 500;">Stronger Together, Safer Together.</div>
+          <div class="track-brand-name">AEGIS</div>
+          <div class="track-brand-sub">Stronger Together, Safer Together.</div>
         </div>
       </div>
 
+      <!-- Nav Items -->
       <nav class="track-nav-menu">
-        <a class="track-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a class="track-nav-item" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Command Center</a>
-        <a class="track-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> Safe Routes</a>
-        <a class="track-nav-item" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> Shelter Network</a>
-        <a class="track-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> SOS Reports</a>
-        <a class="track-nav-item active" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> My SOS / Rescue Tracking</a>
-        <a class="track-nav-item" onclick="location.href='citizen-notifications.html'"><i class="fa-solid fa-bell"></i> Notifications <span style="background:#ef4444; color:#fff; font-size:0.55rem; padding:1px 5px; border-radius:50%; margin-left:auto;">4</span></a>
-        <a class="track-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> Emergency Contacts</a>
-        <a class="track-nav-item" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> Profile & Settings</a>
-        <a class="track-nav-item" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        <a class="track-nav-item" onclick="location.href='index.html'" style="margin-top:auto; color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <a class="track-nav-item" onclick="location.href='citizen-dashboard.html'">
+          <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-ai.html'">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Assistant</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-sos.html'">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> <span>SOS</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-intel.html'">
+          <i class="fa-solid fa-route"></i> <span>Safe Routes</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-shelters.html'">
+          <i class="fa-solid fa-campground"></i> <span>Shelters</span>
+        </a>
+        <a class="track-nav-item active" onclick="location.href='citizen-tracking.html'">
+          <i class="fa-solid fa-location-crosshairs"></i> <span>My SOS / Tracking</span>
+        </a>
+
+        <div class="track-nav-divider"></div>
+
+        <a class="track-nav-item" onclick="location.href='citizen-notifications.html'">
+          <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-contacts.html'">
+          <i class="fa-solid fa-phone"></i> <span>Emergency Contacts</span>
+        </a>
+
+        <div class="track-nav-divider"></div>
+
+        <a class="track-nav-item" onclick="location.href='citizen-profile.html'">
+          <i class="fa-solid fa-gear"></i> <span>Profile & Settings</span>
+        </a>
+        <a class="track-nav-item" onclick="location.href='citizen-help.html'">
+          <i class="fa-solid fa-circle-question"></i> <span>Help & Support</span>
+        </a>
+        <a class="track-nav-item track-nav-logout" onclick="location.href='index.html'">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </a>
       </nav>
 
-      <!-- Emergency Hotline Card -->
+      <!-- Sidebar Bottom Emergency Box -->
       <div class="track-emergency-card">
-        <div style="font-size: 0.65rem; color: #fca5a5; font-weight: 700;">In case of life threatening emergency</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
-        <div style="font-size: 0.625rem; color: #cbd5e1; margin-bottom: 0.25rem;">or send SOS instantly</div>
-        
-        <div style="display:flex; justify-content:center; margin-top:0.35rem;">
-          <svg width="110" height="32" viewBox="0 0 120 35" fill="none">
-            <path d="M10 25 Q35 15 60 25 T110 25" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
-            <path d="M25 22 L95 22 L85 30 L35 30 Z" fill="#ea580c"/>
-            <circle cx="45" cy="14" r="4" fill="#fbbf24"/>
-            <circle cx="60" cy="13" r="4" fill="#60a5fa"/>
-            <circle cx="75" cy="14" r="4" fill="#34d399"/>
-            <path d="M45 18 L45 22 M60 17 L60 22 M75 18 L75 22" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="emergency-card-title">IN CASE OF EMERGENCY</div>
+        <div class="emergency-card-call"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
+        <div class="emergency-card-desc">or send SOS instantly</div>
+        <button class="emergency-card-btn" onclick="location.href='citizen-sos.html'">
+          <span style="font-size:0.8rem;">✦</span> Send SOS Now
+        </button>
       </div>
     </aside>
 
-    <!-- Main Workspace Area -->
+    <!-- Main Workspace Container -->
     <main class="track-main-area">
-      <!-- Top Bar -->
+
+      <!-- Top Alert Bar -->
       <header class="track-topbar">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="district-select-box">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:0.95rem; cursor:pointer;"
+            title="Toggle Sidebar"></i>
+          <div class="district-select-pill">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <select id="track-district-select" onchange="renderTrackingForDistrict(this.value)">
-              <!-- Upper Assam -->
-              <option value="Golaghat" selected>Golaghat District, Assam</option>
-              <option value="Jorhat">Jorhat District, Assam</option>
-              <option value="Dibrugarh">Dibrugarh District, Assam</option>
-              <option value="Sivasagar">Sivasagar District, Assam</option>
-              <option value="Tinsukia">Tinsukia District, Assam</option>
-              <option value="Dhemaji">Dhemaji District, Assam</option>
-              <option value="Lakhimpur">Lakhimpur District, Assam</option>
-              <!-- Central Assam -->
-              <option value="Nagaon">Nagaon District, Assam</option>
-              <option value="Hojai">Hojai District, Assam</option>
-              <option value="Morigaon">Morigaon District, Assam</option>
-              <option value="Dima Hasao">Dima Hasao District, Assam</option>
-              <option value="East Karbi Anglong">East Karbi Anglong District, Assam</option>
-              <!-- Lower & North Assam -->
-              <option value="Kamrup Metropolitan">Kamrup Metropolitan (Guwahati), Assam</option>
-              <option value="Darrang">Darrang District, Assam</option>
-              <option value="Barpeta">Barpeta District, Assam</option>
-              <option value="Sonitpur">Sonitpur District, Assam</option>
-              <option value="Dhubri">Dhubri District, Assam</option>
-              <option value="Goalpara">Goalpara District, Assam</option>
-              <!-- Barak Valley -->
-              <option value="Cachar">Cachar District, Assam</option>
-              <option value="Hailakandi">Hailakandi District, Assam</option>
-              <option value="Karimganj">Karimganj District, Assam</option>
-            </select>
+            <span id="topbar-dist-name">Golaghat</span>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:1rem;">
+        <div class="topbar-alert-banner">
+          <div
+            style="display:flex; align-items:center; gap:0.45rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.88rem; flex-shrink:0;"></i>
+            <span><strong style="color:#f87171;">HIGH FLOOD RISK</strong> in <span
+                id="topbar-dist-name">Golaghat</span> District. Heavy rainfall and rising water levels. Stay alert and
+              avoid flooded areas.</span>
+          </div>
+          <button class="topbar-guide-btn" onclick="openSafetyGuideModal()">
+            Stay Safe Guide &rarr;
+          </button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.95rem;">
           <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
             <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
-            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
+            <span
+              style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.52rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
           </div>
-
-          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
-            <div style="position:relative;">
-              <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #38bdf8;" alt="Avatar">
-              <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#10b981; border:2px solid #070d1d; border-radius:50%;"></span>
-            </div>
+          <div style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;"
+            onclick="location.href='citizen-profile.html'">
+            <img class="citizen-user-avatar"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+              style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid rgba(59,130,246,0.4);"
+              alt="Avatar">
             <div style="text-align:left;">
-              <div class="citizen-user-name" style="font-size:0.785rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div class="citizen-user-email" style="font-size:0.625rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.74rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div style="font-size:0.58rem; color:#94a3b8;">ravi.das@email.com</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Page Header Banner -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 1.15rem 0.25rem 1.15rem;">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.95rem; border:1px solid rgba(59,130,246,0.4);">
-            <i class="fa-solid fa-life-ring"></i>
+      <!-- Sub-Header Row -->
+      <div class="track-header-row">
+        <div class="track-title-left">
+          <div class="track-header-icon">
+            <i class="fa-solid fa-location-crosshairs"></i>
           </div>
           <div>
-            <div style="font-weight:800; font-size:1.05rem; color:#fff; line-height:1.1;">MY SOS / RESCUE TRACKING</div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Track your SOS status and live rescue updates in real-time.</div>
+            <div class="track-header-title">MY SOS / RESCUE TRACKING</div>
+            <div class="track-header-subtitle">Track your SOS status and live rescue updates in real-time.</div>
           </div>
         </div>
-        <button class="btn btn-outline" style="font-size:0.72rem; padding:0.25rem 0.65rem; color:#cbd5e1; border-color:rgba(255,255,255,0.18);" onclick="showCustomAlert('📞 Emergency Escalation', 'Support helpline connecting: Call 1070 (State Disaster Control) or 112 for immediate field escalation.', 'danger')">
-          <i class="fa-solid fa-headset"></i> Need Help? Contact Support
+
+        <button class="track-support-btn" onclick="openSupportHelplineModal()">
+          <i class="fa-solid fa-headset" style="color:#38bdf8;"></i> Need Help? Contact Support
         </button>
       </div>
 
-      <!-- Ticket Summary Bar -->
-      <div class="track-ticket-bar">
-        <div style="display:flex; gap:1.5rem; font-size:0.75rem;">
-          <div>
-            <span style="color:#94a3b8; font-size:0.625rem;">SOS ID</span>
-            <div style="font-weight:800; color:#ef4444; font-size:0.9rem;" id="ticket-id">SOS-1087</div>
+      <!-- Top Master Ticket & 6-Step Stepper Card -->
+      <div class="track-stepper-card">
+        <!-- Top Meta Row -->
+        <div class="ticket-meta-row">
+          <div class="ticket-meta-fields">
+            <div class="meta-field-group">
+              <span class="meta-field-label">SOS ID</span>
+              <span class="meta-field-value" style="color:#ef4444;" id="ticket-sos-id">SOS-1087</span>
+            </div>
+            <div class="meta-field-group">
+              <span class="meta-field-label">Status</span>
+              <span class="meta-field-value" style="color:#10b981;" id="ticket-status-text">Rescue On The Way</span>
+            </div>
+            <div class="meta-field-group">
+              <span class="meta-field-label">Requested On</span>
+              <span class="meta-field-value">12 Aug 2026, 10:25 AM</span>
+            </div>
+            <div class="meta-field-group">
+              <span class="meta-field-label">Emergency Type</span>
+              <span class="meta-field-value">Trapped in Water</span>
+            </div>
           </div>
+
           <div>
-            <span style="color:#94a3b8; font-size:0.625rem;">Status</span>
-            <div style="font-weight:800; color:#10b981; font-size:0.9rem;">Rescue On The Way</div>
-          </div>
-          <div>
-            <span style="color:#94a3b8; font-size:0.625rem;">Requested On</span>
-            <div style="font-weight:700; color:#fff;">12 Aug 2026, 10:25 AM</div>
-          </div>
-          <div>
-            <span style="color:#94a3b8; font-size:0.625rem;">Emergency Type</span>
-            <div style="font-weight:700; color:#fff;">Trapped in Water</div>
+            <button class="cancel-sos-btn" onclick="cancelSosPrompt()">
+              <i class="fa-solid fa-xmark"></i> Cancel SOS
+            </button>
+            <div class="cancel-subtext">You can cancel if help is no longer needed</div>
           </div>
         </div>
 
-        <div style="text-align:right;">
-          <button class="btn btn-outline" style="font-size:0.72rem; padding:0.25rem 0.65rem; color:#ef4444; border-color:rgba(239,68,68,0.4);" onclick="confirm('Are you sure you want to cancel SOS ticket SOS-1087?')">
-            &times; Cancel SOS
-          </button>
-          <div style="font-size:0.58rem; color:#64748b; margin-top:2px;">You can cancel if help is no longer needed</div>
+        <!-- 6-Step Stepper Timeline -->
+        <div class="stepper-timeline">
+          <div class="stepper-line-bg"></div>
+          <div class="stepper-line-progress" id="stepper-progress-bar"></div>
+
+          <!-- Step 1 -->
+          <div class="stepper-step">
+            <div class="stepper-dot done"><i class="fa-solid fa-check"></i></div>
+            <div class="step-title">SOS Submitted</div>
+            <div class="step-time">10:25 AM &bull; 12 Aug</div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="stepper-step">
+            <div class="stepper-dot done"><i class="fa-solid fa-check"></i></div>
+            <div class="step-title">Received by System</div>
+            <div class="step-time">10:26 AM &bull; 12 Aug</div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="stepper-step">
+            <div class="stepper-dot done"><i class="fa-solid fa-check"></i></div>
+            <div class="step-title">Rescue Team Assigned</div>
+            <div class="step-time">10:28 AM &bull; 12 Aug</div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="stepper-step">
+            <div class="stepper-dot done"><i class="fa-solid fa-check"></i></div>
+            <div class="step-title">Rescue Team Dispatched</div>
+            <div class="step-time">10:30 AM &bull; 12 Aug</div>
+          </div>
+
+          <!-- Step 5 (Active) -->
+          <div class="stepper-step">
+            <div class="stepper-dot active"><i class="fa-solid fa-sailboat"></i></div>
+            <div class="step-title active-title">Rescue On The Way</div>
+            <div class="step-time eta-time" id="stepper-eta">ETA: 18 mins</div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="stepper-step">
+            <div class="stepper-dot pending"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="step-title pending-title">Reached Location</div>
+            <div class="step-time">Pending</div>
+          </div>
         </div>
       </div>
 
-      <!-- 6-Step Timeline -->
-      <div class="timeline-container">
-        <!-- Connecting Background Line -->
-        <div style="position:absolute; top:21px; left:5%; right:5%; height:2.5px; background:rgba(255,255,255,0.1); z-index:1;"></div>
-        <div style="position:absolute; top:21px; left:5%; width:72%; height:2.5px; background:#10b981; z-index:1;"></div>
-
-        <!-- Step 1 -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-done"><i class="fa-solid fa-check"></i></div>
-          <div style="font-weight:800; font-size:0.72rem; color:#fff;">SOS Submitted</div>
-          <div style="font-size:0.58rem; color:#94a3b8;">10:25 AM &bull; 12 Aug</div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-done"><i class="fa-solid fa-check"></i></div>
-          <div style="font-weight:800; font-size:0.72rem; color:#fff;">Received by System</div>
-          <div style="font-size:0.58rem; color:#94a3b8;">10:26 AM &bull; 12 Aug</div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-done"><i class="fa-solid fa-check"></i></div>
-          <div style="font-weight:800; font-size:0.72rem; color:#fff;">Rescue Team Assigned</div>
-          <div style="font-size:0.58rem; color:#94a3b8;">10:28 AM &bull; 12 Aug</div>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-done"><i class="fa-solid fa-check"></i></div>
-          <div style="font-weight:800; font-size:0.72rem; color:#fff;">Rescue Team Dispatched</div>
-          <div style="font-size:0.58rem; color:#94a3b8;">10:30 AM &bull; 12 Aug</div>
-        </div>
-
-        <!-- Step 5 (Active) -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-active"><i class="fa-solid fa-sailboat"></i></div>
-          <div style="font-weight:800; font-size:0.72rem; color:#38bdf8;">Rescue On The Way</div>
-          <div style="font-size:0.58rem; color:#10b981; font-weight:700;">ETA: 18 mins</div>
-        </div>
-
-        <!-- Step 6 -->
-        <div class="timeline-step">
-          <div class="step-icon-circle step-pending"><i class="fa-solid fa-location-dot"></i></div>
-          <div style="font-weight:700; font-size:0.72rem; color:#64748b;">Reached Location</div>
-          <div style="font-size:0.58rem; color:#64748b;">Pending</div>
-        </div>
-      </div>
-
-      <!-- Master Workspace 2-Column Grid -->
+      <!-- Workspace 3-Column Grid -->
       <div class="track-workspace-grid">
-        
-        <!-- Left: Map + Team Details + Updates Feed -->
-        <div class="track-left-console">
-          
-          <!-- Upper Split: Map (Left) + Rescue Team Details (Right) -->
-          <div class="map-team-split">
-            
-            <!-- Live Map Box -->
-            <div class="track-map-box">
-              <div style="position:absolute; top:8px; left:10px; z-index:1000; background:rgba(6,12,28,0.92); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.25rem 0.65rem; font-size:0.72rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:0.4rem;">
-                <span>LIVE RESCUE TRACKING</span>
-                <span style="color:#10b981; font-size:0.625rem;"><span class="pulse-dot" style="background:#10b981; width:5px; height:5px;"></span> Live</span>
-              </div>
 
-              <!-- OpenStreetMap Container (Default Street View) -->
-              <div id="track-leaflet-map"></div>
-
-              <!-- Bottom Legend -->
-              <div style="position:absolute; bottom:8px; left:10px; z-index:1000; background:rgba(6,12,28,0.92); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.25rem 0.6rem; font-size:0.625rem; color:#cbd5e1; display:flex; align-items:center; gap:0.65rem;">
-                <span>🟢 Rescue Team</span>
-                <span>🔴 Your Location</span>
-                <span>🔵 Shelter</span>
-                <span>🟠 Road</span>
-                <span>🔴 Blocked Road</span>
-              </div>
-            </div>
-
-            <!-- Rescue Team Details Card -->
-            <div class="rescue-team-card">
-              <div>
-                <div style="font-weight:800; font-size:0.825rem; color:#fff; margin-bottom:0.45rem;">RESCUE TEAM DETAILS</div>
-
-                <div style="display:flex; align-items:center; gap:0.55rem; margin-bottom:0.45rem;">
-                  <div style="width:34px; height:34px; border-radius:50%; background:rgba(139,92,246,0.25); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0;">
-                    <i class="fa-solid fa-users-gear"></i>
-                  </div>
-                  <div>
-                    <div style="font-size:0.625rem; color:#94a3b8;">Team Name</div>
-                    <div style="font-weight:800; font-size:0.85rem; color:#fff;" id="team-name">NDRF Team-4</div>
-                  </div>
-                </div>
-
-                <div style="font-size:0.72rem; display:flex; flex-direction:column; gap:0.3rem;">
-                  <div style="display:flex; justify-content:space-between;">
-                    <span style="color:#94a3b8;">Team Leader</span>
-                    <strong style="color:#fff;" id="team-leader">R. Sharma</strong>
-                  </div>
-                  <div style="display:flex; justify-content:space-between;">
-                    <span style="color:#94a3b8;">Contact</span>
-                    <a href="tel:+919876543210" style="color:#38bdf8; text-decoration:none; font-weight:700;" id="team-phone"><i class="fa-solid fa-phone"></i> +91 98765 43210</a>
-                  </div>
-                  <div style="display:flex; justify-content:space-between;">
-                    <span style="color:#94a3b8;">Vehicle / Boat</span>
-                    <strong style="color:#fff;" id="team-boat">Rescue Boat-2</strong>
-                  </div>
-                </div>
-
-                <div style="font-size:0.65rem; color:#94a3b8; margin:0.5rem 0 0.3rem 0;">Team Members</div>
-                <div style="display:flex; align-items:center; gap:0.35rem;">
-                  <div style="width:24px; height:24px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700;">VK</div>
-                  <div style="width:24px; height:24px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700;">PS</div>
-                  <div style="width:24px; height:24px; border-radius:50%; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700;">AB</div>
-                  <div style="width:24px; height:24px; border-radius:50%; background:#a78bfa; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700;">MD</div>
-                  <span style="font-size:0.65rem; color:#94a3b8; font-weight:700;">+1</span>
-                </div>
-              </div>
-
-              <button class="btn btn-primary" style="background:linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); width:100%; font-size:0.75rem; font-weight:800; padding:0.4rem; margin-top:0.45rem;" onclick="showCustomAlert('📻 Live Radio Comms', 'Live Radio Comms Channel Open: Connected to NDRF Rescue Boat Unit-4.', 'info')">
-                <i class="fa-solid fa-comments"></i> Message Team
-              </button>
-            </div>
-
+        <!-- Column 1: Live Map Box -->
+        <div class="map-card-container">
+          <div class="map-top-badge">
+            <span>LIVE RESCUE TRACKING</span>
+            <span style="color:#10b981; font-size:0.62rem; display:flex; align-items:center; gap:0.25rem;">
+              <span class="live-dot-pulse"></span> Live
+            </span>
           </div>
 
-          <!-- Lower 2 Split Panels (Updates Feed + Helpful Actions) -->
-          <div class="track-lower-split">
-            
-            <!-- Live Status Updates Feed -->
-            <div class="track-subcard">
-              <div style="font-weight:800; font-size:0.785rem; color:#fff; margin-bottom:0.3rem;">LIVE STATUS UPDATES</div>
-              <div style="display:flex; flex-direction:column; gap:0.25rem; font-size:0.685rem; color:#cbd5e1; overflow-y:auto;">
-                <div><span style="color:#10b981; font-weight:700;">● 10:30 AM</span> <span id="feed-msg-1">Rescue team NDRF Team-4 has been dispatched.</span></div>
-                <div><span style="color:#38bdf8; font-weight:700;">● 10:28 AM</span> <span id="feed-msg-2">Your SOS has been assigned to NDRF Team-4.</span></div>
-                <div><span style="color:#94a3b8;">● 10:26 AM</span> Your SOS request has been received successfully.</div>
-                <div><span style="color:#64748b;">● 10:25 AM</span> SOS request submitted.</div>
-              </div>
-            </div>
+          <!-- Leaflet Map Element -->
+          <div id="track-map-view"></div>
 
-            <!-- Helpful Actions (4 Quick Buttons) -->
-            <div class="track-subcard">
-              <div style="font-weight:800; font-size:0.785rem; color:#fff; margin-bottom:0.3rem;">HELPFUL ACTIONS</div>
-              <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.35rem;">
-                <div style="background:rgba(37,99,235,0.18); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.35rem 0.2rem; text-align:center; cursor:pointer;" onclick="showCustomAlert('📡 Location Broadcasted', 'GPS Location link broadcasted to active rescue squad!', 'success')">
-                  <i class="fa-solid fa-location-crosshairs" style="color:#38bdf8; font-size:0.85rem;"></i>
-                  <div style="font-size:0.625rem; font-weight:700; color:#fff; margin-top:2px;">Share Location</div>
-                </div>
-                <div style="background:rgba(239,68,68,0.18); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:0.35rem 0.2rem; text-align:center; cursor:pointer;" onclick="location.href='tel:112'">
-                  <i class="fa-solid fa-phone" style="color:#ef4444; font-size:0.85rem;"></i>
-                  <div style="font-size:0.625rem; font-weight:700; color:#fff; margin-top:2px;">Call 112</div>
-                </div>
-                <div style="background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.3); border-radius:6px; padding:0.35rem 0.2rem; text-align:center; cursor:pointer;" onclick="location.href='citizen-intel.html'">
-                  <i class="fa-solid fa-route" style="color:#10b981; font-size:0.85rem;"></i>
-                  <div style="font-size:0.625rem; font-weight:700; color:#fff; margin-top:2px;">Safe Routes</div>
-                </div>
-                <div style="background:rgba(245,158,11,0.18); border:1px solid rgba(245,158,11,0.3); border-radius:6px; padding:0.35rem 0.2rem; text-align:center; cursor:pointer;" onclick="location.href='citizen-sos.html'">
-                  <i class="fa-solid fa-pen-to-square" style="color:#f59e0b; font-size:0.85rem;"></i>
-                  <div style="font-size:0.625rem; font-weight:700; color:#fff; margin-top:2px;">Update SOS</div>
-                </div>
-              </div>
-              <div style="font-size:0.58rem; color:#64748b; text-align:center; margin-top:0.25rem;">
-                <i class="fa-solid fa-circle-info"></i> Sharing location helps rescue team reach you faster.
-              </div>
-            </div>
-
+          <!-- Map Legend Bar -->
+          <div class="map-legend-bar">
+            <span>🟢 Rescue Team</span>
+            <span>🔴 Your Location</span>
+            <span>🛣️ Safe Route</span>
+            <span>🚨 Flooded Area</span>
+            <span>🔵 Shelter</span>
+            <span>⛔ Blocked Road</span>
           </div>
-
         </div>
 
-        <!-- Right Column: Estimated Details, Shelter Allocation, Instructions -->
-        <div class="track-right-col">
-          
+        <!-- Column 2: Rescue Team Details Card -->
+        <div class="team-details-card">
+          <div>
+            <div class="card-header-bar">
+              <span class="card-header-title">RESCUE TEAM DETAILS</span>
+              <span class="status-pill-green">On The Way</span>
+            </div>
+
+            <div class="team-badge-row">
+              <div class="team-icon-circle">
+                <i class="fa-solid fa-users-gear"></i>
+              </div>
+              <div>
+                <div style="font-size:0.58rem; color:#94a3b8;">Team Name</div>
+                <div style="font-weight:800; font-size:0.82rem; color:#ffffff;" id="team-name-display">NDRF Team-4</div>
+              </div>
+            </div>
+
+            <div class="team-info-table">
+              <div class="team-info-row">
+                <span class="info-label">Team Leader</span>
+                <span class="info-value" id="team-leader-display">R. Sharma</span>
+              </div>
+              <div class="team-info-row">
+                <span class="info-label">Contact</span>
+                <a href="tel:+919876543210" style="color:#38bdf8; text-decoration:none; font-weight:800;"
+                  id="team-phone-display">
+                  <i class="fa-solid fa-phone"></i> +91 98765 43210
+                </a>
+              </div>
+              <div class="team-info-row">
+                <span class="info-label">Vehicle / Boat</span>
+                <span class="info-value" id="team-vehicle-display">Rescue Boat-2</span>
+              </div>
+            </div>
+
+            <div style="font-size:0.62rem; color:#94a3b8; margin:0.35rem 0 0.2rem 0; font-weight:600;">Team Members
+            </div>
+            <div class="members-chips-row">
+              <div class="member-chip" style="background:#2563eb;">VK</div>
+              <div class="member-chip" style="background:#10b981;">PS</div>
+              <div class="member-chip" style="background:#f59e0b;">AB</div>
+              <div class="member-chip" style="background:#8b5cf6;">MD</div>
+              <span style="font-size:0.62rem; color:#94a3b8; font-weight:700;">+1</span>
+            </div>
+          </div>
+
+          <button class="msg-team-btn" onclick="openMessageTeamModal()">
+            <i class="fa-solid fa-comments"></i> Message Team
+          </button>
+        </div>
+
+        <!-- Column 3: Stacked Right Panels (Estimated Details & Shelter Allocation) -->
+        <div class="right-stack-col">
+
           <!-- 1. Estimated Details -->
-          <div class="track-panel-box">
-            <div style="font-weight:800; font-size:0.825rem; color:#fff; margin-bottom:0.45rem;">ESTIMATED DETAILS</div>
-            <div style="display:flex; flex-direction:column; gap:0.3rem; font-size:0.75rem;">
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-clock"></i> Estimated Arrival Time</span>
-                <strong style="color:#10b981;" id="est-eta">18 mins</strong>
+          <div class="stack-panel-box" style="flex:1;">
+            <div class="card-header-bar" style="margin-bottom:0.25rem;">
+              <span class="card-header-title">ESTIMATED DETAILS</span>
+            </div>
+
+            <div class="est-details-grid">
+              <div class="team-info-row">
+                <span class="info-label"><i class="fa-solid fa-clock" style="color:#38bdf8;"></i> Estimated Arrival
+                  Time</span>
+                <strong style="color:#10b981;" id="est-eta-display">18 mins</strong>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-route"></i> Distance from you</span>
-                <strong style="color:#fff;" id="est-dist">2.4 km</strong>
+              <div class="team-info-row">
+                <span class="info-label"><i class="fa-solid fa-route" style="color:#38bdf8;"></i> Distance from
+                  you</span>
+                <strong style="color:#ffffff;" id="est-dist-display">2.4 km</strong>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-signs-post"></i> Best Route</span>
-                <strong style="color:#fff;">Via Relief Camp Road</strong>
+              <div class="team-info-row">
+                <span class="info-label"><i class="fa-solid fa-signs-post" style="color:#38bdf8;"></i> Best Route</span>
+                <strong style="color:#ffffff;">Via Relief Camp Road</strong>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-gauge-high"></i> Current Speed</span>
-                <strong style="color:#fff;">38 km/h</strong>
+              <div class="team-info-row">
+                <span class="info-label"><i class="fa-solid fa-gauge-high" style="color:#38bdf8;"></i> Current
+                  Speed</span>
+                <strong style="color:#ffffff;">38 km/h</strong>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;"><i class="fa-solid fa-cloud-rain"></i> Weather</span>
-                <strong style="color:#fff;">Heavy Rain</strong>
+              <div class="team-info-row">
+                <span class="info-label"><i class="fa-solid fa-cloud-showers-heavy" style="color:#38bdf8;"></i>
+                  Weather</span>
+                <strong style="color:#ffffff;">Heavy Rain</strong>
               </div>
             </div>
           </div>
 
-          <!-- 2. Shelter Allocation -->
-          <div class="track-panel-box">
-            <div style="font-weight:800; font-size:0.825rem; color:#fff; margin-bottom:0.35rem;">
-              SHELTER ALLOCATION <span style="font-size:0.625rem; color:#94a3b8; font-weight:400;">(After Rescue)</span>
+          <!-- 2. Shelter Allocation (After Rescue) -->
+          <div class="stack-panel-box" style="flex:1;">
+            <div class="card-header-bar" style="margin-bottom:0.2rem;">
+              <span class="card-header-title">SHELTER ALLOCATION <span
+                  style="font-size:0.56rem; color:#94a3b8; font-weight:500;">(After Rescue)</span></span>
             </div>
 
-            <div style="display:flex; align-items:center; gap:0.55rem; margin-bottom:0.4rem;">
-              <div style="width:30px; height:30px; border-radius:6px; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">
+            <div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.2rem;">
+              <div
+                style="width:26px; height:26px; border-radius:6px; background:rgba(37,99,235,0.22); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.75rem; flex-shrink:0;">
                 <i class="fa-solid fa-campground"></i>
               </div>
-              <div>
-                <div style="font-weight:800; font-size:0.8rem; color:#fff;" id="alloc-shelter-name">Golaghat Relief Camp</div>
-                <div style="font-size:0.65rem; color:#94a3b8;"><span id="alloc-shelter-dist">2.4 km</span> away &bull; <strong style="color:#10b981;" id="alloc-shelter-avail">182 people</strong> capacity</div>
+              <div style="min-width:0;">
+                <div
+                  style="font-weight:800; font-size:0.74rem; color:#ffffff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
+                  id="shelter-name-display">
+                  Golaghat Relief Camp
+                </div>
+                <div style="font-size:0.6rem; color:#94a3b8;">
+                  <span id="shelter-dist-display">2.4 km</span> away &bull; <strong style="color:#10b981;"
+                    id="shelter-cap-display">182 people</strong> capacity
+                </div>
               </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:0.45rem;">
-              <i class="fa-solid fa-utensils" title="Food"></i>
-              <i class="fa-solid fa-bed" title="Bedding"></i>
-              <i class="fa-solid fa-kit-medical" title="Medical"></i>
-              <i class="fa-solid fa-bottle-water" title="Water"></i>
-              <i class="fa-solid fa-restroom" title="Toilet"></i>
+            <div class="facility-icons-row">
+              <i class="fa-solid fa-utensils" title="Hot Food Available" style="color:#f59e0b;"></i>
+              <i class="fa-solid fa-bed" title="Dry Bedding" style="color:#38bdf8;"></i>
+              <i class="fa-solid fa-kit-medical" title="Medical Doctor" style="color:#ef4444;"></i>
+              <i class="fa-solid fa-bottle-water" title="Clean Drinking Water" style="color:#06b6d4;"></i>
+              <i class="fa-solid fa-restroom" title="Sanitation Facilities" style="color:#a78bfa;"></i>
             </div>
 
-            <button class="btn btn-outline" style="width:100%; font-size:0.72rem; padding:0.3rem;" onclick="location.href='citizen-shelters.html'">
-              View Shelter Details
+            <button class="view-shelter-btn" onclick="location.href='citizen-shelters.html'">
+              View Shelter Details &rarr;
             </button>
           </div>
 
-          <!-- 3. Important Instructions -->
-          <div class="track-panel-box" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
-            <div style="font-weight:800; font-size:0.825rem; color:#fff; margin-bottom:0.35rem;">IMPORTANT INSTRUCTIONS</div>
-            <div style="display:flex; flex-direction:column; gap:0.25rem; font-size:0.72rem; color:#cbd5e1;">
-              <div><i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i> Stay calm and follow the instructions.</div>
-              <div><i class="fa-solid fa-mobile-screen" style="color:#38bdf8;"></i> Keep your phone charged.</div>
-              <div><i class="fa-solid fa-person-walking-dashed-line-arrow-right" style="color:#ef4444;"></i> Do not try to move to unsafe areas.</div>
-              <div><i class="fa-solid fa-heart" style="color:#ef4444;"></i> Help is on the way. You are safe.</div>
-            </div>
-          </div>
-
         </div>
 
       </div>
 
-      <!-- Sticky Meta Footer -->
+      <!-- Bottom 3-Column Split Row -->
+      <div class="track-bottom-row">
+
+        <!-- Column 1: Live Status Updates Feed -->
+        <div class="bottom-card">
+          <div class="card-header-bar" style="margin-bottom:0.2rem;">
+            <span class="card-header-title">LIVE STATUS UPDATES</span>
+          </div>
+
+          <div class="feed-list-scroll">
+            <div><span style="color:#10b981; font-weight:800;">● 10:32 AM</span> <span id="feed-msg-1">Rescue team is
+                on the way to your location.</span></div>
+            <div><span style="color:#f59e0b; font-weight:800;">● 10:30 AM</span> <span id="feed-msg-2">WAITING FOR
+                RESCUE TEAM APPROVAL &bull; Distress report received at NDRF Desk.</span></div>
+            <div><span style="color:#38bdf8; font-weight:800;">● 10:28 AM</span> Rescue Commander reviewing request
+              SOS-1087. Standby...</div>
+            <div><span style="color:#94a3b8;">● 10:26 AM</span> Your SOS request has been received successfully.</div>
+            <div><span style="color:#64748b;">● 10:25 AM</span> SOS request submitted.</div>
+          </div>
+        </div>
+
+        <!-- Column 2: Helpful Actions -->
+        <div class="bottom-card">
+          <div class="card-header-bar" style="margin-bottom:0.2rem;">
+            <span class="card-header-title">HELPFUL ACTIONS</span>
+          </div>
+
+          <div class="actions-grid-4">
+            <div class="action-square-btn"
+              style="background:rgba(37,99,235,0.18); border-color:rgba(59,130,246,0.35);"
+              onclick="broadcastLocationToTeam()">
+              <i class="fa-solid fa-location-crosshairs" style="color:#38bdf8; font-size:0.8rem;"></i>
+              <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:2px;">Share Location</div>
+            </div>
+            <div class="action-square-btn" style="background:rgba(239,68,68,0.18); border-color:rgba(239,68,68,0.35);"
+              onclick="location.href='tel:112'">
+              <i class="fa-solid fa-phone" style="color:#ef4444; font-size:0.8rem;"></i>
+              <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:2px;">Call 112</div>
+            </div>
+            <div class="action-square-btn"
+              style="background:rgba(16,185,129,0.18); border-color:rgba(16,185,129,0.35);"
+              onclick="location.href='citizen-intel.html'">
+              <i class="fa-solid fa-route" style="color:#10b981; font-size:0.8rem;"></i>
+              <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:2px;">Safe Routes</div>
+            </div>
+            <div class="action-square-btn"
+              style="background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.35);"
+              onclick="location.href='citizen-sos.html'">
+              <i class="fa-solid fa-pen-to-square" style="color:#f59e0b; font-size:0.8rem;"></i>
+              <div style="font-size:0.56rem; font-weight:700; color:#ffffff; margin-top:2px;">Update SOS</div>
+            </div>
+          </div>
+
+          <div style="font-size:0.52rem; color:#64748b; text-align:center; margin-top:0.2rem;">
+            <i class="fa-solid fa-circle-info"></i> Sharing location helps rescue team reach you faster.
+          </div>
+        </div>
+
+        <!-- Column 3: Important Instructions -->
+        <div class="bottom-card">
+          <div class="card-header-bar" style="margin-bottom:0.2rem;">
+            <span class="card-header-title">IMPORTANT INSTRUCTIONS</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:0.2rem; font-size:0.64rem; color:#cbd5e1;">
+            <div><i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i> Stay calm and follow the
+              instructions.</div>
+            <div><i class="fa-solid fa-mobile-screen" style="color:#38bdf8;"></i> Keep your phone charged.</div>
+            <div><i class="fa-solid fa-ban" style="color:#ef4444;"></i> Do not try to move to unsafe areas.</div>
+            <div><i class="fa-solid fa-heart" style="color:#ec4899;"></i> Help is on the way. You are safe.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Institutional Sticky Footer -->
       <footer class="track-footer-bar">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <i class="fa-solid fa-shield-halved" style="color:#10b981;"></i>
           <span><strong>Every Second Counts. Every Life Matters.</strong> AEGIS is with you in every step.</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
           <span>Trusted by:</span>
           <span>🏛️ Government of Assam</span>
           <span>|</span>
-          <span>🚨 ASDMA</span>
+          <span>🔺 ASDMA</span>
           <span>|</span>
           <span>🚤 NDRF</span>
           <span>|</span>
           <span>🛡️ SDRF Assam</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <span>Data Source: ASDMA | IMD | Local Authorities</span>
           <span>&bull;</span>
           <span>Last Updated: 12 Aug 2026, 10:35 AM</span>
@@ -764,76 +1453,218 @@
     </main>
   </div>
 
-  <!-- Application Logic -->
-  <script src="js/citizen.js?v=3.0"></script>
+  <!-- Safety Guide Modal (Matches Dashboard Page) -->
+  <div id="safety-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event)">
+    <div class="modal-dialog-box" onclick="event.stopPropagation()">
+      <div
+        style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div
+            style="width:34px; height:34px; border-radius:8px; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:1.1rem; border:1px solid rgba(239,68,68,0.4);">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:0.95rem; color:#ffffff;">ASSAM FLOOD SAFETY & EVACUATION PROTOCOL
+            </div>
+            <div style="font-size:0.65rem; color:#94a3b8;">Issued by Assam State Disaster Management Authority (ASDMA)
+            </div>
+          </div>
+        </div>
+        <button
+          style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer; padding:0.2rem;"
+          onclick="closeSafetyGuideModal()">&times;</button>
+      </div>
 
+      <div style="display:flex; border-bottom:1px solid rgba(59,130,246,0.2); background:rgba(15,23,42,0.5);">
+        <button class="safety-tab-btn active" onclick="switchSafetyTab(0)">1. Immediate Actions</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(1)">2. Evacuation Steps</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(2)">3. Emergency Kit</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(3)">4. Medical & Hygiene</button>
+      </div>
+
+      <div style="padding:0.9rem 1.1rem; overflow-y:auto; flex:1; font-size:0.74rem; line-height:1.5; color:#cbd5e1;"
+        id="safety-tab-body">
+        <div id="tab-sec-0" class="safety-sec">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚨 Immediate Life-Saving Instructions</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li><strong>Move to higher ground immediately:</strong> Do not wait until floodwater reaches your door.
+            </li>
+            <li><strong>Disconnect main power & gas:</strong> Turn off main electrical switches to prevent
+              electrocution.</li>
+            <li><strong>Avoid walking or driving through moving water:</strong> 6 inches of moving water can knock you
+              down; 12 inches can carry away a vehicle.</li>
+            <li><strong>Keep emergency communication lines open:</strong> Save phone battery for critical rescue
+              broadcasts.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-1" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚶 Evacuation & Safe Transit Protocol</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Follow official designated safe routes shown in the <strong>Safe Routes</strong> portal.</li>
+            <li>Do not cross breached river embankments (Bunds) or submerged bridges.</li>
+            <li>Signal rescue boats with brightly colored cloth, torches, or sound whistles.</li>
+            <li>Give priority to infants, pregnant women, elderly citizens, and individuals with disabilities.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-2" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🎒 72-Hour Emergency Grab-and-Go Kit</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Waterproof pouch with identification cards, property documents, and emergency cash.</li>
+            <li>Bottled drinking water (minimum 3 litres per person) and non-perishable high-energy rations.</li>
+            <li>Flashlight with spare batteries, power banks, and whistle for audio signaling.</li>
+            <li>Basic first-aid kit with antiseptic lotion, bandages, and prescribed medications for 7 days.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-3" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🩺 Water-Borne Disease Prevention &
+            Hygiene</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Boil all drinking water for at least 1 minute or use Halazone water purification tablets.</li>
+            <li>Do not consume food that has come into direct contact with flood waters.</li>
+            <li>Wash hands with soap or alcohol sanitizer before eating to prevent cholera and gastrointestinal
+              infections.</li>
+            <li>Seek immediate medical assistance at relief camps if showing symptoms of fever, diarrhea, or rash.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.65rem; color:#94a3b8;">State Emergency Helpline: <strong style="color:#ef4444;">1070 /
+            112</strong></span>
+        <button
+          style="background:var(--primary-blue); color:#ffffff; border:none; padding:0.3rem 0.85rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;"
+          onclick="closeSafetyGuideModal()">
+          Understood & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Team Modal -->
+  <div id="message-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="closeMessageTeamModal()">
+    <div class="modal-dialog-box" style="max-width:480px;" onclick="event.stopPropagation()">
+      <div
+        style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-radio" style="color:#a78bfa; font-size:1rem;"></i>
+          <span style="font-weight:800; font-size:0.88rem; color:#ffffff;">Radio Comms: NDRF Team-4</span>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.1rem; cursor:pointer;"
+          onclick="closeMessageTeamModal()">&times;</button>
+      </div>
+
+      <div style="padding:0.85rem 1rem; display:flex; flex-direction:column; gap:0.65rem;">
+        <div
+          style="background:rgba(15,23,42,0.6); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.6rem; font-size:0.72rem; color:#cbd5e1; max-height:160px; overflow-y:auto;"
+          id="comms-chat-box">
+          <div style="color:#94a3b8; font-size:0.62rem; margin-bottom:0.25rem;">[10:32 AM] Control Room: Channel
+            opened with Rescue Boat Unit-2.</div>
+          <div style="margin-bottom:0.35rem;"><strong style="color:#38bdf8;">Commander Sharma:</strong> We are
+            approaching Ward 4 bypass road. Please wave torch or stay in open view.</div>
+        </div>
+
+        <div>
+          <label style="font-size:0.65rem; color:#94a3b8; font-weight:700;">SEND QUICK BROADCAST TO BOAT CREW:</label>
+          <div style="display:flex; gap:0.4rem; margin-top:0.3rem;">
+            <input type="text" id="comms-input-msg" placeholder="e.g. 3 people on rooftop with flashlight..."
+              style="flex:1; background:rgba(15,23,42,0.9); border:1px solid rgba(59,130,246,0.35); border-radius:6px; color:#ffffff; padding:0.35rem 0.6rem; font-size:0.72rem; outline:none;">
+            <button
+              style="background:linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color:#ffffff; border:none; border-radius:6px; padding:0.35rem 0.75rem; font-size:0.72rem; font-weight:800; cursor:pointer;"
+              onclick="sendMessageToBoatCrew()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support Helpline Modal -->
+  <div id="support-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="closeSupportHelplineModal()">
+    <div class="modal-dialog-box" style="max-width:480px;" onclick="event.stopPropagation()">
+      <div
+        style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-headset" style="color:#38bdf8; font-size:1rem;"></i>
+          <span style="font-weight:800; font-size:0.88rem; color:#ffffff;">Emergency Support & Escalation</span>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.1rem; cursor:pointer;"
+          onclick="closeSupportHelplineModal()">&times;</button>
+      </div>
+
+      <div style="padding:0.85rem 1rem; font-size:0.72rem; display:flex; flex-direction:column; gap:0.55rem;">
+        <div style="color:#cbd5e1;">If you require urgent medical evacuation or water levels are rapidly rising above
+          safe threshold, contact direct dispatch:</div>
+        <div
+          style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); border-radius:6px; padding:0.55rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#ef4444;">National Emergency Helpline</div>
+            <div style="font-size:0.6rem; color:#94a3b8;">All-India Police / Fire / Medical</div>
+          </div>
+          <a href="tel:112"
+            style="background:#ef4444; color:#ffffff; font-weight:800; font-size:0.75rem; padding:0.25rem 0.65rem; border-radius:4px; text-decoration:none;">Call
+            112</a>
+        </div>
+        <div
+          style="background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.35); border-radius:6px; padding:0.55rem 0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#38bdf8;">ASDMA State Control Room</div>
+            <div style="font-size:0.6rem; color:#94a3b8;">Assam Flood Operations Desk</div>
+          </div>
+          <a href="tel:1078"
+            style="background:#2563eb; color:#ffffff; font-weight:800; font-size:0.75rem; padding:0.25rem 0.65rem; border-radius:4px; text-decoration:none;">Call
+            1078</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map and Dynamic Application Logic -->
   <script>
     let trackMap = null;
     let trackLayers = [];
     let currentDistrictData = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Initialize Map with Default OpenStreetMap Tiles
-      trackMap = L.map('track-leaflet-map', {
+      // Sync Topbar District
+      if (window.citizenApp) {
+        window.citizenApp.syncTopbarDistrict();
+      }
+
+      const selectedDist = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+
+      // 1. Initialize Leaflet Map
+      trackMap = L.map('track-map-view', {
         center: [26.4049, 94.0321],
         zoom: 12,
-        zoomControl: false
+        zoomControl: false,
+        attributionControl: false
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap'
-      }).addTo(trackMap);
+      L.control.zoom({ position: 'topleft' }).addTo(trackMap);
 
-      // Check current SOS status
+      // Setup high-clarity street map tiles with place names, satellite, and terrain switcher
+      if (window.citizenApp && citizenApp.setupMapTileLayers) {
+        citizenApp.setupMapTileLayers(trackMap, 'street');
+      } else {
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19,
+          attribution: '&copy; Esri World Street Map'
+        }).addTo(trackMap);
+      }
+
+      // Render Initial Tracking for Selected District
+      renderTrackingForDistrict(selectedDist);
+
+      // Check Real-time SOS Storage state
       checkCitizenSosStatus();
-      
-      // Listen for approval state change across tabs
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'AEGIS_ACTIVE_CITIZEN_SOS_STATUS' || e.key === 'AEGIS_SOS_APPROVED_EVENT') {
-          checkCitizenSosStatus();
-        }
-      });
-      setInterval(checkCitizenSosStatus, 1000);
+      setInterval(checkCitizenSosStatus, 1500);
 
-      setTimeout(() => trackMap.invalidateSize(), 300);
+      setTimeout(() => trackMap.invalidateSize(), 350);
     });
 
-    function checkCitizenSosStatus() {
-      const status = localStorage.getItem('AEGIS_ACTIVE_CITIZEN_SOS_STATUS');
-      const feedMsg1 = document.getElementById('feed-msg-1');
-      const feedMsg2 = document.getElementById('feed-msg-2');
-
-      if (status === 'PENDING_APPROVAL') {
-        if (feedMsg1) feedMsg1.innerHTML = `<span style="color:#f59e0b; font-weight:800;"><i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR RESCUE TEAM APPROVAL</span> &bull; Distress report received at NDRF Desk.`;
-        if (feedMsg2) feedMsg2.innerHTML = `Rescue Commander reviewing request SOS-1088. Standby...`;
-      } else {
-        renderTrackingForDistrict('Golaghat');
-      }
-    }
-
-    // Custom POI Icon Builders
-    function createBoatMarker() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: `<div style="background:#10b981; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2.5px solid #fff; box-shadow:0 0 16px rgba(16,185,129,0.9);"><i class="fa-solid fa-sailboat"></i></div>`,
-        iconSize: [32, 32]
-      });
-    }
-
-    function createSosOriginMarker() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: `<div style="background:#ef4444; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2.5px solid #fff; box-shadow:0 0 16px rgba(239,68,68,0.9);"><i class="fa-solid fa-location-dot"></i></div>`,
-        iconSize: [32, 32]
-      });
-    }
-
-    function createShelterPoiMarker() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: `<div style="background:#2563eb; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 10px rgba(37,99,235,0.8);"><i class="fa-solid fa-campground"></i></div>`,
-        iconSize: [28, 28]
-      });
+    function onDistrictChange(districtName) {
+      document.getElementById('topbar-dist-name').innerText = districtName;
+      renderTrackingForDistrict(districtName);
     }
 
     // Dynamic Render for Selected District
@@ -841,20 +1672,41 @@
       if (!window.citizenApp) return;
 
       currentDistrictData = window.citizenApp.getDistrictModelData(districtName);
+      if (!currentDistrictData) return;
 
       // 1. Clear Map Layers
-      trackLayers.forEach(l => trackMap.removeLayer(l));
+      trackLayers.forEach(layer => trackMap.removeLayer(layer));
       trackLayers = [];
 
-      const userLoc = currentDistrictData.citizenOrigin;
-      const rescueBoatLoc = currentDistrictData.rescueCamp || [userLoc[0] - 0.02, userLoc[1] - 0.02];
-      const shelterLoc = currentDistrictData.shelter;
+      const userLoc = currentDistrictData.citizenOrigin || currentDistrictData.coordinates;
+      const rescueBoatLoc = currentDistrictData.rescueCamp || [userLoc[0] - 0.018, userLoc[1] - 0.022];
+      const shelterLoc = currentDistrictData.shelter || [userLoc[0] + 0.02, userLoc[1] + 0.015];
+      const floodedZone = currentDistrictData.floodedArea || [userLoc[0] + 0.008, userLoc[1] + 0.008];
+      const roadBlockLoc = currentDistrictData.roadBlock || [userLoc[0] - 0.008, userLoc[1] + 0.006];
 
-      // 2. Animated / Dashed Route between Rescue Boat & User
+      // 2. Add Flooded Area Polygon Overlay
+      const floodPolygon = L.polygon([
+        [floodedZone[0] + 0.012, floodedZone[1] - 0.015],
+        [floodedZone[0] + 0.018, floodedZone[1] + 0.012],
+        [floodedZone[0] - 0.006, floodedZone[1] + 0.020],
+        [floodedZone[0] - 0.015, floodedZone[1] - 0.005],
+        [floodedZone[0] - 0.002, floodedZone[1] - 0.022]
+      ], {
+        color: '#ef4444',
+        weight: 2,
+        dashArray: '6, 6',
+        fillColor: '#ef4444',
+        fillOpacity: 0.28
+      }).addTo(trackMap).bindTooltip("🚨 Flooded Inundation Zone (High Danger)", { sticky: true });
+      trackLayers.push(floodPolygon);
+
+      // 3. Add Safe Dispatch Polyline
       const rescuePath = [
         rescueBoatLoc,
-        [(rescueBoatLoc[0] + userLoc[0]) / 2 + 0.005, (rescueBoatLoc[1] + userLoc[1]) / 2 - 0.008],
-        userLoc
+        [(rescueBoatLoc[0] + userLoc[0]) / 2 + 0.004, (rescueBoatLoc[1] + userLoc[1]) / 2 - 0.006],
+        userLoc,
+        [(userLoc[0] + shelterLoc[0]) / 2 + 0.003, (userLoc[1] + shelterLoc[1]) / 2 + 0.004],
+        shelterLoc
       ];
 
       const dashedRoute = L.polyline(rescuePath, {
@@ -863,32 +1715,58 @@
         dashArray: '8, 8',
         opacity: 0.95,
         lineCap: 'round'
-      }).addTo(trackMap).bindTooltip("🟢 Rescue Boat Active Dispatch Route", { sticky: true });
+      }).addTo(trackMap).bindTooltip("🟢 Safe Route: Active Rescue Dispatch Path", { sticky: true });
       trackLayers.push(dashedRoute);
 
-      // 3. Add Rescue Boat Marker
-      const boatMarker = L.marker(rescueBoatLoc, { icon: createBoatMarker() })
+      // 4. Add Rescue Boat Marker
+      const boatIcon = L.divIcon({
+        className: 'custom-boat-icon',
+        html: `<div style="background:#10b981; color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 14px rgba(16,185,129,0.9); font-size:0.8rem;"><i class="fa-solid fa-sailboat"></i></div>`,
+        iconSize: [30, 30]
+      });
+      const boatMarker = L.marker(rescueBoatLoc, { icon: boatIcon })
         .addTo(trackMap)
-        .bindPopup(`<b>Rescue Team (On the way)</b><br>${currentDistrictData.rescueInfo ? currentDistrictData.rescueInfo.name : 'NDRF Unit'}`);
+        .bindTooltip(`<b>Rescue Team (On the way)</b><br>ETA: 18 mins &bull; 2.4 km`, { permanent: true, direction: 'top', className: 'aegis-map-tip' });
       trackLayers.push(boatMarker);
 
-      // 4. Add User SOS Location Marker
-      const userMarker = L.marker(userLoc, { icon: createSosOriginMarker() })
+      // 5. Add User SOS Marker (Pulsing Dot)
+      const userIcon = L.divIcon({
+        className: 'custom-user-icon',
+        html: `<div style="background:#2563eb; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 14px #38bdf8; font-size:0.75rem;"><i class="fa-solid fa-location-dot"></i></div>`,
+        iconSize: [28, 28]
+      });
+      const userMarker = L.marker(userLoc, { icon: userIcon })
         .addTo(trackMap)
-        .bindPopup(`<b>SOS Location</b><br>${currentDistrictData.district} Ward 4 (Trapped in Water)`);
+        .bindTooltip(`<b>Your Location</b> (Trapped in Water)`, { permanent: true, direction: 'bottom', className: 'aegis-map-tip' });
       trackLayers.push(userMarker);
 
-      // 5. Add Shelter Marker
-      const shelterMarker = L.marker(shelterLoc, { icon: createShelterPoiMarker() })
+      // 6. Add Shelter Marker
+      const shelterIcon = L.divIcon({
+        className: 'custom-shelter-icon',
+        html: `<div style="background:#0284c7; color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid #fff; box-shadow:0 0 10px rgba(2,132,199,0.8); font-size:0.7rem;"><i class="fa-solid fa-campground"></i></div>`,
+        iconSize: [26, 26]
+      });
+      const shelterMarker = L.marker(shelterLoc, { icon: shelterIcon })
         .addTo(trackMap)
-        .bindPopup(`<b>${currentDistrictData.shelterInfo ? currentDistrictData.shelterInfo.name : 'Assigned Relief Shelter'}</b>`);
+        .bindPopup(`<b>${currentDistrictData.shelterInfo ? currentDistrictData.shelterInfo.name : 'Assigned Relief Camp'}</b><br>Capacity: ${currentDistrictData.shelterInfo ? currentDistrictData.shelterInfo.available : '182'} spots open`);
       trackLayers.push(shelterMarker);
 
-      // 6. Auto-fit Bounds
-      const bounds = L.latLngBounds([rescueBoatLoc, userLoc, shelterLoc]);
-      trackMap.fitBounds(bounds.pad(0.3), { animate: true, duration: 0.8 });
+      // 7. Add Blocked Road Marker
+      const blockIcon = L.divIcon({
+        className: 'custom-block-icon',
+        html: `<div style="background:#dc2626; color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid #fff; font-size:0.6rem;"><i class="fa-solid fa-ban"></i></div>`,
+        iconSize: [22, 22]
+      });
+      const blockMarker = L.marker(roadBlockLoc, { icon: blockIcon })
+        .addTo(trackMap)
+        .bindTooltip(`<b>Blocked Road:</b> High Water Depth`, { sticky: true });
+      trackLayers.push(blockMarker);
 
-      // 7. Update UI Telemetry & Cards
+      // 8. Auto-fit bounds
+      const bounds = L.latLngBounds([rescueBoatLoc, userLoc, shelterLoc, floodedZone]);
+      trackMap.fitBounds(bounds.pad(0.25), { animate: true, duration: 0.8 });
+
+      // 9. Update UI Data Binding
       const rescueInfo = currentDistrictData.rescueInfo || {
         name: "NDRF Team-4",
         commander: "R. Sharma",
@@ -896,22 +1774,90 @@
         vehicle: "Rescue Boat-2"
       };
 
-      document.getElementById('team-name').innerText = rescueInfo.name;
-      document.getElementById('team-leader').innerText = rescueInfo.commander;
-      document.getElementById('team-phone').innerHTML = `<i class="fa-solid fa-phone"></i> ${rescueInfo.phone}`;
-      document.getElementById('team-phone').href = `tel:${rescueInfo.phone.replace(/\s+/g, '')}`;
-      document.getElementById('team-boat').innerText = rescueInfo.vehicle;
-
-      document.getElementById('feed-msg-1').innerText = `Rescue team ${rescueInfo.name} has been dispatched.`;
-      document.getElementById('feed-msg-2').innerText = `Your SOS has been assigned to ${rescueInfo.name}.`;
+      document.getElementById('team-name-display').innerText = rescueInfo.name;
+      document.getElementById('team-leader-display').innerText = rescueInfo.commander;
+      document.getElementById('team-phone-display').innerHTML = `<i class="fa-solid fa-phone"></i> ${rescueInfo.phone}`;
+      document.getElementById('team-phone-display').href = `tel:${rescueInfo.phone.replace(/\s+/g, '')}`;
+      document.getElementById('team-vehicle-display').innerText = rescueInfo.vehicle;
 
       if (currentDistrictData.shelterInfo) {
-        document.getElementById('alloc-shelter-name').innerText = currentDistrictData.shelterInfo.name;
-        document.getElementById('alloc-shelter-dist').innerText = currentDistrictData.shelterInfo.distance;
-        document.getElementById('alloc-shelter-avail').innerText = `${currentDistrictData.shelterInfo.available} people`;
-        document.getElementById('est-dist').innerText = currentDistrictData.shelterInfo.distance;
+        document.getElementById('shelter-name-display').innerText = currentDistrictData.shelterInfo.name;
+        document.getElementById('shelter-dist-display').innerText = currentDistrictData.shelterInfo.distance;
+        document.getElementById('shelter-cap-display').innerText = `${currentDistrictData.shelterInfo.available} people`;
+        document.getElementById('est-dist-display').innerText = currentDistrictData.shelterInfo.distance;
       }
+    }
+
+    // Storage Status Check
+    function checkCitizenSosStatus() {
+      const status = localStorage.getItem('AEGIS_ACTIVE_CITIZEN_SOS_STATUS');
+      const feedMsg1 = document.getElementById('feed-msg-1');
+      const feedMsg2 = document.getElementById('feed-msg-2');
+
+      if (status === 'PENDING_APPROVAL') {
+        if (feedMsg1) feedMsg1.innerHTML = `<span style="color:#f59e0b; font-weight:800;"><i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR RESCUE TEAM APPROVAL</span> &bull; Distress report received at NDRF Desk.`;
+        if (feedMsg2) feedMsg2.innerHTML = `Rescue Commander reviewing request SOS-1087. Standby...`;
+        document.getElementById('ticket-status-text').innerHTML = `<span style="color:#f59e0b;">Waiting Approval</span>`;
+      } else {
+        document.getElementById('ticket-status-text').innerHTML = `<span style="color:#10b981;">Rescue On The Way</span>`;
+      }
+    }
+
+    // Modal Triggers
+    function openSafetyGuideModal() {
+      document.getElementById('safety-modal-backdrop').style.display = 'flex';
+    }
+    function closeSafetyGuideModal() {
+      document.getElementById('safety-modal-backdrop').style.display = 'none';
+    }
+    function handleModalBackdropClick(event) {
+      if (event.target.id === 'safety-modal-backdrop') {
+        closeSafetyGuideModal();
+      }
+    }
+    function switchSafetyTab(idx) {
+      const tabs = document.querySelectorAll('.safety-tab-btn');
+      tabs.forEach((tab, i) => tab.classList.toggle('active', i === idx));
+      for (let i = 0; i < 4; i++) {
+        const sec = document.getElementById(`tab-sec-${i}`);
+        if (sec) sec.style.display = (i === idx) ? 'block' : 'none';
+      }
+    }
+
+    function openMessageTeamModal() {
+      document.getElementById('message-modal-backdrop').style.display = 'flex';
+    }
+    function closeMessageTeamModal() {
+      document.getElementById('message-modal-backdrop').style.display = 'none';
+    }
+    function sendMessageToBoatCrew() {
+      const input = document.getElementById('comms-input-msg');
+      if (!input || !input.value.trim()) return;
+      const chat = document.getElementById('comms-chat-box');
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      chat.innerHTML += `<div style="margin-top:0.35rem;"><strong style="color:#10b981;">You (${time}):</strong> ${input.value.trim()}</div>`;
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function openSupportHelplineModal() {
+      document.getElementById('support-modal-backdrop').style.display = 'flex';
+    }
+    function closeSupportHelplineModal() {
+      document.getElementById('support-modal-backdrop').style.display = 'none';
+    }
+
+    function cancelSosPrompt() {
+      if (confirm('Are you sure you want to cancel SOS ticket SOS-1087? If you are still in danger, please keep this ticket active.')) {
+        alert('SOS Ticket SOS-1087 cancellation submitted.');
+        location.href = 'citizen-dashboard.html';
+      }
+    }
+
+    function broadcastLocationToTeam() {
+      alert('📡 High-Precision GPS Coordinates Broadcasted to active NDRF Boat Unit-2! Coordinates locked.');
     }
   </script>
 </body>
+
 </html>

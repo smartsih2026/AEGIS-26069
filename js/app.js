@@ -45,18 +45,17 @@ class AegisApp {
     );
     this.landingMap.setMaxBounds(assamBounds);
 
-    // 1. Base Layer Definitions
     // Dark View (Default on Landing Page)
-    const darkTile = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; CartoDB',
-      subdomains: 'abcd',
-      maxZoom: 19
+    const darkTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      className: 'dark-tiles',
+      attribution: '&copy; Esri World Street Map',
+      maxZoom: 18
     });
 
     // Default Street Lanes View
-    const streetTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-      maxZoom: 19
+    const streetTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; Esri World Street Map',
+      maxZoom: 18
     });
 
     // Satellite View (Esri World Imagery)

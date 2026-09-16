@@ -152,6 +152,17 @@ function acceptCitizenSosRescue(sosId) {
     timestamp: Date.now()
   }));
 
+  // Async fetch to FastAPI Backend Core & PostgreSQL
+  fetch('http://localhost:8000/api/sos/1/approve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ team_id: 1 })
+  }).then(r => r.json()).then(res => {
+    console.log('[AEGIS Backend API] Squad dispatch approved in PostgreSQL:', res);
+  }).catch(err => {
+    console.warn('[AEGIS Backend Offline Fallback] Using local state:', err);
+  });
+
   const modal = document.getElementById('incoming-sos-rescue-modal');
   if (modal) modal.remove();
 

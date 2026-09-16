@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Help, Safety Guidelines & FAQs - AEGIS</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Help, Safety Guidelines & FAQs - AEGIS Emergency System</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -25,24 +30,43 @@
   <script src="js/firebase-auth.js?v=3.0"></script>
 
   <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-sidebar: #060b18;
+      --bg-card: #070d1d;
+      --border-subtle: rgba(59, 130, 246, 0.18);
+      --border-card: rgba(59, 130, 246, 0.22);
+      --primary-blue: #2563eb;
+      --primary-blue-hover: #1d4ed8;
+      --accent-cyan: #38bdf8;
+      --danger-red: #ef4444;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --purple-accent: #8b5cf6;
+      --teal-accent: #14b8a6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html, body {
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      background-color: #030712;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #f1f5f9;
-      font-size: 14px;
-      line-height: 1.45;
       -webkit-font-smoothing: antialiased;
     }
 
+    html,
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+    }
+
+    /* Master Layout Grid */
     .help-layout-container {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -51,46 +75,93 @@
       overflow: hidden;
     }
 
-    /* Left Sidebar */
+    /* Left Navigation Sidebar - Standardized & Proportioned */
     .help-sidebar {
-      background: #060b18;
-      border-right: 1px solid rgba(59, 130, 246, 0.18);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      padding: 0.85rem 0.75rem;
+      padding: 0.25rem 0.38rem;
       height: 100vh;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      gap: 0.04rem;
+    }
+
+    .help-sidebar::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .help-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 3px;
     }
 
     .help-sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.2rem 0.4rem 0.75rem 0.4rem;
+      gap: 0.45rem;
+      padding: 0.02rem 0.1rem 0.16rem 0.1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.02rem;
+      flex-shrink: 0;
+    }
+
+    .help-logo-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .help-brand-name {
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .help-brand-sub {
+      font-size: 0.52rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .help-nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
-      flex: 1;
-      overflow: hidden;
+      gap: 0.02rem;
+      flex-shrink: 0;
     }
 
     .help-nav-item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.5rem 0.75rem;
+      gap: 0.45rem;
+      padding: 0.12rem 0.38rem;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.85rem;
-      border-radius: 8px;
-      transition: all 0.18s ease;
+      font-size: 0.69rem;
+      border-radius: 5px;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+      line-height: 1.2;
+    }
+
+    .help-nav-item i {
+      width: 13px;
+      font-size: 0.74rem;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .help-nav-item:hover {
@@ -99,328 +170,811 @@
     }
 
     .help-nav-item.active {
-      background: #2563eb;
+      background: var(--primary-blue);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .help-emergency-card {
-      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.22) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 10px;
-      padding: 0.65rem;
+    .help-nav-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0.04rem 0.15rem;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger-red);
+      color: #ffffff;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 9999px;
+      min-width: 14px;
       text-align: center;
-      margin-top: 0.45rem;
-      position: relative;
     }
 
-    /* Main Area */
+    .help-nav-item.nav-logout {
+      color: #ef4444;
+      margin-top: 0.02rem;
+    }
+
+    .help-nav-item.nav-logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Sidebar Emergency Box */
+    .help-emergency-card {
+      background: rgba(11, 20, 38, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 7px;
+      padding: 0.18rem 0.35rem;
+      text-align: center;
+      margin-top: 0.15rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    @media (min-height: 620px) {
+      .help-emergency-card {
+        margin-top: auto;
+      }
+    }
+
+    .emergency-card-title {
+      font-size: 0.48rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .emergency-card-call {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0.01rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .emergency-card-desc {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      margin-bottom: 0.14rem;
+    }
+
+    .emergency-card-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.18rem 0.5rem;
+      font-weight: 700;
+      font-size: 0.65rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .emergency-card-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* Main Area Container */
     .help-main-area {
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background: #030712;
+      background: var(--bg-dark);
     }
 
-    /* Top Bar */
+    /* Top Bar (Exact Unified Match) */
     .help-topbar {
-      height: 48px;
+      height: 42px;
       background: #070d1d;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.25rem;
+      padding: 0 0.85rem;
+      gap: 0.65rem;
       flex-shrink: 0;
     }
 
-    .district-select-box {
+    .district-select-pill {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #f1f5f9;
-      font-size: 0.825rem;
+      color: #ffffff;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .district-select-pill:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .topbar-alert-banner {
+      flex: 1;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 0.18rem 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.69rem;
+      color: #fca5a5;
+      min-width: 0;
+    }
+
+    .topbar-guide-btn {
+      background: #3b1419;
+      color: #ffffff;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 0.16rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-left: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .topbar-guide-btn:hover {
+      background: #541920;
+      border-color: #ef4444;
+    }
+
+    /* Sub-Header Row */
+    .help-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 1rem 0.2rem 1rem;
+      flex-shrink: 0;
+    }
+
+    .help-title-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .help-header-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+
+    .help-header-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .help-header-subtitle {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      margin-top: 1px;
+    }
+
+    .pdf-guide-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 0.35rem 0.85rem;
+      padding: 0.24rem 0.7rem;
       border-radius: 6px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .district-select-box select {
-      background: transparent;
-      border: none;
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.825rem;
-      outline: none;
+      gap: 0.35rem;
       cursor: pointer;
-      font-family: inherit;
-    }
-    .district-select-box select option {
-      background: #070d1d;
-      color: #fff;
+      transition: all 0.2s ease;
     }
 
-    /* Search & Category Filter Bar */
+    .pdf-guide-btn:hover {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* Filter & Search Bar */
     .help-filter-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
-      padding: 0 1.15rem 0.45rem 1.15rem;
+      gap: 0.65rem;
+      padding: 0.15rem 1rem 0.35rem 1rem;
       flex-shrink: 0;
     }
 
     .help-search-box {
       background: #060c1c;
       border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 8px;
-      padding: 0.35rem 0.75rem;
+      border-radius: 7px;
+      padding: 0.24rem 0.65rem;
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.45rem;
       flex: 1;
-      max-width: 340px;
+      max-width: 380px;
     }
+
     .help-search-box input {
       background: transparent;
       border: none;
       outline: none;
-      color: #fff;
-      font-size: 0.825rem;
+      color: #ffffff;
+      font-size: 0.72rem;
       width: 100%;
-      font-family: inherit;
+    }
+
+    .help-search-box input::placeholder {
+      color: #64748b;
+    }
+
+    .filter-chips-container {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      overflow-x: auto;
     }
 
     .filter-chip {
-      font-size: 0.785rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 0.35rem 0.85rem;
+      padding: 0.22rem 0.65rem;
       border-radius: 20px;
       cursor: pointer;
       background: #060c1c;
       border: 1px solid rgba(59, 130, 246, 0.22);
-      color: #cbd5e1;
+      color: #94a3b8;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      transition: all 0.18s;
+      gap: 0.35rem;
+      transition: all 0.18s ease;
       white-space: nowrap;
+      user-select: none;
     }
-    .filter-chip:hover, .filter-chip.active {
-      background: #2563eb;
-      border-color: #2563eb;
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+
+    .filter-chip:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #ffffff;
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .filter-chip.active {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.45);
     }
 
     /* Master Workspace 2-Column Grid */
     .help-workspace-grid {
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 0.85rem;
-      padding: 0 1.15rem 0.55rem 1.15rem;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 0.55rem;
+      padding: 0.15rem 1rem 0.35rem 1rem;
       flex: 1;
-      overflow: hidden;
       min-height: 0;
+      overflow: hidden;
     }
 
-    /* Left Content Console */
+    /* Left Console: Checklist + FAQs */
     .help-left-console {
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      overflow-y: auto;
+      gap: 0.45rem;
+      height: 100%;
       min-height: 0;
+      overflow-y: auto;
       padding-right: 0.25rem;
     }
 
     .help-left-console::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
     }
+
     .help-left-console::-webkit-scrollbar-thumb {
-      background: rgba(59, 130, 246, 0.3);
-      border-radius: 3px;
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 4px;
     }
 
-    .help-panel-box {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 10px;
-      padding: 0.75rem 0.95rem;
+    /* Checklist Panel */
+    .help-checklist-panel {
+      background: rgba(6, 24, 18, 0.9);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 9px;
+      padding: 0.45rem 0.75rem;
+      flex-shrink: 0;
     }
 
-    /* FAQ Item */
+    .checklist-title-bar {
+      font-weight: 800;
+      font-size: 0.78rem;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem 0.75rem;
+      font-size: 0.69rem;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 0.28rem 0.45rem;
+      border-radius: 5px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      accent-color: #10b981;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    /* FAQ Section */
+    .faq-section-header {
+      font-weight: 800;
+      font-size: 0.8rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
     .faq-card {
-      background: rgba(11, 20, 38, 0.85);
-      border: 1px solid rgba(59, 130, 246, 0.2);
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
       border-radius: 8px;
-      padding: 0.65rem 0.85rem;
-      margin-bottom: 0.5rem;
-      transition: all 0.18s;
+      padding: 0.45rem 0.7rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
+
     .faq-card:hover {
       border-color: #38bdf8;
       background: rgba(15, 23, 42, 0.95);
     }
 
-    /* Right Column (Emergency Kit, Dos & Don'ts, Helpdesk) */
+    .faq-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+    }
+
+    .faq-title {
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .faq-chevron {
+      color: #94a3b8;
+      font-size: 0.65rem;
+      transition: transform 0.2s ease;
+    }
+
+    .faq-body {
+      font-size: 0.67rem;
+      color: #cbd5e1;
+      margin-top: 0.35rem;
+      line-height: 1.45;
+      padding-top: 0.35rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Right Column: Go-Bag Kit, Do's & Don'ts, Helpdesk Support */
     .help-right-col {
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      overflow: hidden;
+      gap: 0.5rem;
+      height: 100%;
+      min-height: 0;
     }
 
-    /* Sticky Footer */
+    .help-side-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      padding: 0.5rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .side-card-gobag {
+      flex: 1.15;
+    }
+
+    .side-card-dos {
+      flex: 1.15;
+    }
+
+    .side-card-desk {
+      flex: 1.25;
+    }
+
+    .side-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .side-card-title {
+      font-weight: 800;
+      font-size: 0.78rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Go-Bag 6-Tile Grid */
+    .gobag-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.32rem;
+      font-size: 0.66rem;
+      flex: 1;
+      align-items: center;
+    }
+
+    .gobag-tile {
+      background: rgba(15, 23, 42, 0.85);
+      padding: 0.3rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .gobag-tile:hover {
+      border-color: #38bdf8;
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .gobag-tile.checked {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.12);
+      color: #a7f3d0;
+    }
+
+    /* Do's & Don'ts List */
+    .dos-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      flex: 1;
+      gap: 0.25rem;
+      font-size: 0.65rem;
+    }
+
+    .dos-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .call-helpdesk-btn {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border: none;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 0.35rem;
+      border-radius: 6px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .call-helpdesk-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      transform: translateY(-1px);
+    }
+
+    .open-ai-btn {
+      background: rgba(15, 23, 42, 0.85);
+      color: #a78bfa;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.3rem;
+      border-radius: 6px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      margin-top: 0.25rem;
+    }
+
+    .open-ai-btn:hover {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: #a78bfa;
+      color: #ffffff;
+    }
+
+    /* Institutional Footer */
     .help-footer-bar {
-      height: 32px;
+      height: 28px;
       background: #040813;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.15rem;
-      font-size: 0.7rem;
+      padding: 0 1rem;
+      font-size: 0.63rem;
       color: #64748b;
       flex-shrink: 0;
     }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(6, 12, 28, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-dialog-box {
+      background: #0b1426;
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .safety-tab-btn {
+      padding: 0.35rem 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .safety-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="help-layout-container">
+
     <!-- Left Navigation Sidebar -->
     <aside class="help-sidebar">
+
+      <!-- Brand Header -->
       <div class="help-sidebar-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.25)"/>
-          <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
-        </svg>
+        <div class="help-logo-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#3b82f6" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.28)" />
+            <path d="M12 8v8M8 12h8" stroke-linecap="round" />
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 1.15rem; color: #fff; line-height: 1;">AEGIS</div>
-          <div style="font-size: 0.58rem; color: #94a3b8; font-weight: 500;">Stronger Together, Safer Together.</div>
+          <div class="help-brand-name">AEGIS</div>
+          <div class="help-brand-sub">Stronger Together, Safer Together.</div>
         </div>
       </div>
 
+      <!-- Nav Items -->
       <nav class="help-nav-menu">
-        <a class="help-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a class="help-nav-item" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Command Center</a>
-        <a class="help-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> Safe Routes</a>
-        <a class="help-nav-item" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> Shelter Network</a>
-        <a class="help-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> SOS Reports</a>
-        <a class="help-nav-item" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> My SOS / Rescue Tracking</a>
-        <a class="help-nav-item" onclick="location.href='citizen-notifications.html'"><i class="fa-solid fa-bell"></i> Notifications & Updates <span style="background:#ef4444; color:#fff; font-size:0.58rem; padding:1.5px 6px; border-radius:50%; margin-left:auto; font-weight:800;">3</span></a>
-        <a class="help-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> Emergency Contacts</a>
-        <a class="help-nav-item" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> Profile & Settings</a>
-        <a class="help-nav-item active" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        <a class="help-nav-item" onclick="location.href='index.html'" style="margin-top:auto; color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <a class="help-nav-item" onclick="location.href='citizen-dashboard.html'">
+          <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-ai.html'">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Assistant</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-sos.html'">
+          <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> <span>SOS</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-intel.html'">
+          <i class="fa-solid fa-route"></i> <span>Safe Routes</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-shelters.html'">
+          <i class="fa-solid fa-campground"></i> <span>Shelters</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-tracking.html'">
+          <i class="fa-solid fa-location-crosshairs"></i> <span>My SOS / Tracking</span>
+        </a>
+
+        <div class="help-nav-divider"></div>
+
+        <a class="help-nav-item" onclick="location.href='citizen-notifications.html'">
+          <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="help-nav-item" onclick="location.href='citizen-contacts.html'">
+          <i class="fa-solid fa-phone"></i> <span>Emergency Contacts</span>
+        </a>
+
+        <div class="help-nav-divider"></div>
+
+        <a class="help-nav-item" onclick="location.href='citizen-profile.html'">
+          <i class="fa-solid fa-gear"></i> <span>Profile & Settings</span>
+        </a>
+        <a class="help-nav-item active" onclick="location.href='citizen-help.html'">
+          <i class="fa-solid fa-circle-question"></i> <span>Help & Support</span>
+        </a>
+        <a class="help-nav-item nav-logout" onclick="location.href='index.html'">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </a>
       </nav>
 
-      <!-- Emergency Hotline Card -->
+      <!-- Sidebar Bottom Emergency Box -->
       <div class="help-emergency-card">
-        <div style="font-size: 0.65rem; color: #fca5a5; font-weight: 700;">In case of emergency</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
-        <div style="font-size: 0.625rem; color: #cbd5e1; margin-bottom: 0.25rem;">or send SOS instantly</div>
-        
-        <div style="display:flex; justify-content:center; margin-top:0.35rem;">
-          <svg width="110" height="32" viewBox="0 0 120 35" fill="none">
-            <path d="M10 25 Q35 15 60 25 T110 25" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
-            <path d="M25 22 L95 22 L85 30 L35 30 Z" fill="#ea580c"/>
-            <circle cx="45" cy="14" r="4" fill="#fbbf24"/>
-            <circle cx="60" cy="13" r="4" fill="#60a5fa"/>
-            <circle cx="75" cy="14" r="4" fill="#34d399"/>
-            <path d="M45 18 L45 22 M60 17 L60 22 M75 18 L75 22" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="emergency-card-title">IN CASE OF EMERGENCY</div>
+        <div class="emergency-card-call"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
+        <div class="emergency-card-desc">or send SOS instantly</div>
+        <button class="emergency-card-btn" onclick="location.href='citizen-sos.html'">
+          <span style="font-size:0.85rem;">✦</span> Send SOS Now
+        </button>
       </div>
     </aside>
 
     <!-- Main Workspace Area -->
     <main class="help-main-area">
-      <!-- Top Bar -->
+
+      <!-- Top Bar (Exact Unified Match) -->
       <header class="help-topbar">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="district-select-box">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:1rem; cursor:pointer;"
+            title="Toggle Sidebar"></i>
+          <div class="district-select-pill">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <select id="help-district-select" onchange="renderHelpForDistrict(this.value)">
-              <!-- Upper Assam -->
-              <option value="Golaghat" selected>Golaghat District, Assam</option>
-              <option value="Jorhat">Jorhat District, Assam</option>
-              <option value="Dibrugarh">Dibrugarh District, Assam</option>
-              <option value="Sivasagar">Sivasagar District, Assam</option>
-              <option value="Tinsukia">Tinsukia District, Assam</option>
-              <option value="Dhemaji">Dhemaji District, Assam</option>
-              <option value="Lakhimpur">Lakhimpur District, Assam</option>
-              <!-- Central Assam -->
-              <option value="Nagaon">Nagaon District, Assam</option>
-              <option value="Hojai">Hojai District, Assam</option>
-              <option value="Morigaon">Morigaon District, Assam</option>
-              <option value="Dima Hasao">Dima Hasao District, Assam</option>
-              <option value="East Karbi Anglong">East Karbi Anglong District, Assam</option>
-              <!-- Lower & North Assam -->
-              <option value="Kamrup Metropolitan">Kamrup Metropolitan (Guwahati), Assam</option>
-              <option value="Darrang">Darrang District, Assam</option>
-              <option value="Barpeta">Barpeta District, Assam</option>
-              <option value="Sonitpur">Sonitpur District, Assam</option>
-              <option value="Dhubri">Dhubri District, Assam</option>
-              <option value="Goalpara">Goalpara District, Assam</option>
-              <!-- Barak Valley -->
-              <option value="Cachar">Cachar District, Assam</option>
-              <option value="Hailakandi">Hailakandi District, Assam</option>
-              <option value="Karimganj">Karimganj District, Assam</option>
-            </select>
+            <span id="topbar-dist-name">Golaghat</span>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:1rem;">
-          <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
-            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
-            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.58rem; font-weight:800; padding:1px 5px; border-radius:50%;">3</span>
+        <div class="topbar-alert-banner">
+          <div
+            style="display:flex; align-items:center; gap:0.45rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.9rem; flex-shrink:0;"></i>
+            <span><strong style="color:#f87171;">HIGH FLOOD RISK</strong> in <span
+                id="topbar-dist-name">Golaghat</span> District. Heavy rainfall and rising water levels. Stay alert and
+              avoid flooded areas.</span>
           </div>
+          <button class="topbar-guide-btn" onclick="openSafetyGuideModal()">
+            Stay Safe Guide &rarr;
+          </button>
+        </div>
 
-          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
-            <div style="position:relative;">
-              <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #38bdf8;" alt="Avatar">
-              <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#10b981; border:2px solid #070d1d; border-radius:50%;"></span>
-            </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
+            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.1rem;"></i>
+            <span
+              style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;"
+            onclick="location.href='citizen-profile.html'">
+            <img class="citizen-user-avatar"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+              style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid rgba(59,130,246,0.4);"
+              alt="Avatar">
             <div style="text-align:left;">
-              <div class="citizen-user-name" style="font-size:0.8rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div class="citizen-user-email" style="font-size:0.625rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.76rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div style="font-size:0.6rem; color:#94a3b8;">ravi.das@email.com</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Page Header Banner -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 1.15rem 0.35rem 1.15rem;">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div style="width:34px; height:34px; border-radius:50%; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:1rem; border:1px solid rgba(59,130,246,0.4);">
+      <!-- Sub-Header Row -->
+      <div class="help-header-row">
+        <div class="help-title-left">
+          <div class="help-header-icon">
             <i class="fa-solid fa-circle-question"></i>
           </div>
           <div>
-            <div style="font-weight:800; font-size:1.1rem; color:#fff; line-height:1.1;">HELP, FLOOD SAFETY GUIDELINES & FAQS</div>
-            <div style="font-size:0.75rem; color:#94a3b8;">Essential survival checklists, evacuation guidelines and platform user manual.</div>
+            <div class="help-header-title">HELP, FLOOD SAFETY GUIDELINES &amp; FAQS</div>
+            <div class="help-header-subtitle">Essential survival checklists, evacuation guidelines and platform user manual.</div>
           </div>
         </div>
 
-        <button class="btn btn-outline" style="font-size:0.75rem; font-weight:700; padding:0.3rem 0.85rem; color:#cbd5e1; border-color:rgba(255,255,255,0.18);" onclick="showCustomAlert('📄 PDF Guide Downloading', 'Offline disaster preparedness PDF manual downloaded successfully.', 'success')">
-          <i class="fa-solid fa-file-pdf"></i> Download PDF Guide
+        <button class="pdf-guide-btn" onclick="openPdfModal()">
+          <i class="fa-solid fa-file-pdf" style="color:#ef4444;"></i> Download PDF Guide
         </button>
       </div>
 
       <!-- Filter & Search Bar -->
       <div class="help-filter-bar">
         <div class="help-search-box">
-          <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8; font-size:0.8rem;"></i>
-          <input type="text" placeholder="Search safety guidelines, evacuation rules, FAQ answers..." onkeyup="filterFaqs(this.value)">
+          <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8; font-size:0.75rem;"></i>
+          <input type="text" id="faq-search-input" placeholder="Search safety guidelines, evacuation rules, FAQ answers..." onkeyup="filterFaqs(this.value)">
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.45rem; overflow-x:auto;">
-          <div class="filter-chip active" onclick="filterFaqCat('all', this)">All Topics</div>
+        <div class="filter-chips-container">
+          <div class="filter-chip active" onclick="filterFaqCat('all', this)"><i class="fa-solid fa-layer-group"></i> All Topics</div>
           <div class="filter-chip" onclick="filterFaqCat('evacuation', this)"><i class="fa-solid fa-person-running"></i> Evacuation</div>
-          <div class="filter-chip" onclick="filterFaqCat('sos', this)"><i class="fa-solid fa-life-ring"></i> SOS & Rescue</div>
+          <div class="filter-chip" onclick="filterFaqCat('sos', this)"><i class="fa-solid fa-life-ring"></i> SOS &amp; Rescue</div>
           <div class="filter-chip" onclick="filterFaqCat('shelter', this)"><i class="fa-solid fa-campground"></i> Shelters</div>
           <div class="filter-chip" onclick="filterFaqCat('offline', this)"><i class="fa-solid fa-signal"></i> Offline Mode</div>
         </div>
@@ -428,172 +982,228 @@
 
       <!-- Master Workspace 2-Column Grid -->
       <div class="help-workspace-grid">
-        
-        <!-- Left Console: Checklist + Accordion FAQs -->
+
+        <!-- Left Column: Evacuation Checklist + FAQs -->
         <div class="help-left-console">
-          
+
           <!-- 1. Immediate Evacuation Safety Checklist -->
-          <div class="help-panel-box" style="border:1px solid rgba(16,185,129,0.35); background:rgba(6,24,18,0.85);">
-            <div style="font-weight:800; font-size:0.875rem; color:#10b981; display:flex; align-items:center; gap:0.45rem; margin-bottom:0.45rem;">
-              <i class="fa-solid fa-list-check"></i> IMMEDIATE EVACUATION SAFETY CHECKLIST
+          <div class="help-checklist-panel">
+            <div class="checklist-title-bar">
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <i class="fa-solid fa-list-check"></i>
+                <span>IMMEDIATE EVACUATION SAFETY CHECKLIST</span>
+              </div>
+              <span id="checklist-counter" style="font-size:0.6rem; color:#38bdf8; background:rgba(56,189,248,0.15); padding:1px 6px; border-radius:10px;">4 / 4 Complete</span>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem 1rem; font-size:0.785rem;">
-              <div style="display:flex; align-items:flex-start; gap:0.45rem;">
-                <input type="checkbox" checked style="accent-color:#10b981; margin-top:3px;">
+            <div class="checklist-grid">
+              <div class="checklist-item">
+                <input type="checkbox" id="chk-1" checked onchange="updateChecklistProgress()">
                 <div>
-                  <strong style="color:#fff;">Turn off Electricity & Gas:</strong>
-                  <span style="color:#cbd5e1;"> Prevent electrocution and fires before leaving home.</span>
+                  <strong style="color:#ffffff;">Turn off Electricity &amp; Gas:</strong>
+                  <span style="color:#cbd5e1;"> Prevent electrocution and gas explosion before leaving home.</span>
                 </div>
               </div>
 
-              <div style="display:flex; align-items:flex-start; gap:0.45rem;">
-                <input type="checkbox" checked style="accent-color:#10b981; margin-top:3px;">
+              <div class="checklist-item">
+                <input type="checkbox" id="chk-2" checked onchange="updateChecklistProgress()">
                 <div>
-                  <strong style="color:#fff;">Move to High Ground:</strong>
-                  <span style="color:#cbd5e1;"> Do not walk or drive through moving flood water.</span>
+                  <strong style="color:#ffffff;">Move to High Ground:</strong>
+                  <span style="color:#cbd5e1;"> Do not walk or drive through fast-moving flood water.</span>
                 </div>
               </div>
 
-              <div style="display:flex; align-items:flex-start; gap:0.45rem;">
-                <input type="checkbox" checked style="accent-color:#10b981; margin-top:3px;">
+              <div class="checklist-item">
+                <input type="checkbox" id="chk-3" checked onchange="updateChecklistProgress()">
                 <div>
-                  <strong style="color:#fff;">Emergency Go-Bag:</strong>
-                  <span style="color:#cbd5e1;"> Pack ID documents, water, flashlight & medicines.</span>
+                  <strong style="color:#ffffff;">Emergency Go-Bag:</strong>
+                  <span style="color:#cbd5e1;"> Pack identification papers, dry rations, torch &amp; medicine.</span>
                 </div>
               </div>
 
-              <div style="display:flex; align-items:flex-start; gap:0.45rem;">
-                <input type="checkbox" checked style="accent-color:#10b981; margin-top:3px;">
+              <div class="checklist-item">
+                <input type="checkbox" id="chk-4" checked onchange="updateChecklistProgress()">
                 <div>
-                  <strong style="color:#fff;">Follow AI Safe Routes:</strong>
-                  <span style="color:#cbd5e1;"> Avoid submerged bridges and high-risk embankments.</span>
+                  <strong style="color:#ffffff;">Follow AI Safe Routes:</strong>
+                  <span style="color:#cbd5e1;"> Avoid submerged bridges, river bunds &amp; power poles.</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 2. Frequently Asked Questions Section -->
-          <div style="font-weight:800; font-size:0.925rem; color:#fff; margin:0.35rem 0 0.15rem 0; display:flex; align-items:center; gap:0.45rem;">
-            <i class="fa-solid fa-circle-question" style="color:#38bdf8;"></i> FREQUENTLY ASKED QUESTIONS
+          <!-- 2. Frequently Asked Questions Section Header -->
+          <div class="faq-section-header">
+            <i class="fa-solid fa-circle-question" style="color:#38bdf8;"></i>
+            <span>FREQUENTLY ASKED QUESTIONS</span>
           </div>
 
-          <div id="faq-list">
-            <!-- FAQ 1 -->
-            <div class="faq-card" data-cat="evacuation">
-              <div style="font-weight:800; font-size:0.875rem; color:#38bdf8; display:flex; align-items:center; gap:0.45rem;">
-                <i class="fa-solid fa-route"></i> How does the AI Safe Route Finder avoid flooded roads?
+          <!-- FAQ Accordion List -->
+          <div id="faq-list" style="display:flex; flex-direction:column; gap:0.4rem;">
+
+            <!-- FAQ 1: Safe Route Finder -->
+            <div class="faq-card" data-cat="evacuation" onclick="toggleFaq(this)">
+              <div class="faq-header">
+                <div class="faq-title">
+                  <i class="fa-solid fa-route"></i>
+                  <span>How does the AI Safe Route Finder avoid flooded roads?</span>
+                </div>
+                <i class="fa-solid fa-chevron-down faq-chevron"></i>
               </div>
-              <div style="font-size:0.785rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.45;">
+              <div class="faq-body">
                 AEGIS continuously aggregates satellite water-level telemetry, citizen road block reports, and river basin gauge data. The system automatically computes detour waypoints around flooded roads to guide you safely to open relief camps.
               </div>
             </div>
 
-            <!-- FAQ 2 -->
-            <div class="faq-card" data-cat="sos">
-              <div style="font-weight:800; font-size:0.875rem; color:#38bdf8; display:flex; align-items:center; gap:0.45rem;">
-                <i class="fa-solid fa-life-ring"></i> What happens after I broadcast an SOS Distress Signal?
+            <!-- FAQ 2: SOS Broadcast -->
+            <div class="faq-card" data-cat="sos" onclick="toggleFaq(this)">
+              <div class="faq-header">
+                <div class="faq-title">
+                  <i class="fa-solid fa-life-ring"></i>
+                  <span>What happens after I broadcast an SOS Distress Signal?</span>
+                </div>
+                <i class="fa-solid fa-chevron-down faq-chevron"></i>
               </div>
-              <div style="font-size:0.785rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.45;">
+              <div class="faq-body">
                 Your GPS coordinates, family headcount, and emergency type are instantly transmitted to the nearest NDRF/SDRF Battalion Command Center. A unique tracking ID is generated, allowing you to track the dispatched rescue boat live on the map.
               </div>
             </div>
 
-            <!-- FAQ 3 -->
-            <div class="faq-card" data-cat="offline">
-              <div style="font-weight:800; font-size:0.875rem; color:#38bdf8; display:flex; align-items:center; gap:0.45rem;">
-                <i class="fa-solid fa-signal"></i> Can I use this portal without active cellular internet?
+            <!-- FAQ 3: Offline Mode -->
+            <div class="faq-card" data-cat="offline" onclick="toggleFaq(this)">
+              <div class="faq-header">
+                <div class="faq-title">
+                  <i class="fa-solid fa-signal"></i>
+                  <span>Can I use this portal without active cellular internet?</span>
+                </div>
+                <i class="fa-solid fa-chevron-down faq-chevron"></i>
               </div>
-              <div style="font-size:0.785rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.45;">
-                Yes. Click "Download Offline Map Directions" on the Safe Routes page to cache street directions and emergency hotline contacts directly in your local device storage. You can also broadcast SOS via SMS to <strong>51969</strong>.
+              <div class="faq-body">
+                Yes. Click "Download Offline Map Directions" on the Safe Routes page to cache street directions and emergency hotline contacts directly in your local device storage. You can also broadcast SOS via SMS to <strong style="color:#38bdf8;">51969</strong>.
               </div>
             </div>
 
-            <!-- FAQ 4 -->
-            <div class="faq-card" data-cat="shelter">
-              <div style="font-weight:800; font-size:0.875rem; color:#38bdf8; display:flex; align-items:center; gap:0.45rem;">
-                <i class="fa-solid fa-campground"></i> How are relief shelters prioritized and allocated?
+            <!-- FAQ 4: Shelter Allocation -->
+            <div class="faq-card" data-cat="shelter" onclick="toggleFaq(this)">
+              <div class="faq-header">
+                <div class="faq-title">
+                  <i class="fa-solid fa-campground"></i>
+                  <span>How are relief shelters prioritized and allocated?</span>
+                </div>
+                <i class="fa-solid fa-chevron-down faq-chevron"></i>
               </div>
-              <div style="font-size:0.785rem; color:#cbd5e1; margin-top:0.35rem; line-height:1.45;">
+              <div class="faq-body">
                 Shelters are categorized based on live capacity, medical facilities, ration availability, and elevation safety. The system dynamically points you to the closest operational facility with verified bed availability.
               </div>
             </div>
+
+            <!-- FAQ 5: Medical First Aid -->
+            <div class="faq-card" data-cat="evacuation" onclick="toggleFaq(this)">
+              <div class="faq-header">
+                <div class="faq-title">
+                  <i class="fa-solid fa-kit-medical"></i>
+                  <span>What should I do if a family member requires medical evacuation?</span>
+                </div>
+                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+              </div>
+              <div class="faq-body" style="display:none;">
+                When dispatching an SOS, choose <strong>Medical Emergency</strong> as the primary category and check the <em>Elderly / Infant / Patient present</em> checkbox. SDRF paramedics with oxygen support and inflatable stretchers will be dispatched first.
+              </div>
+            </div>
+
           </div>
 
         </div>
 
-        <!-- Right Column: Emergency Kit, Dos & Don'ts, 24/7 Helpdesk -->
+        <!-- Right Column: Emergency Kit, Do's & Don'ts, 24/7 Helpdesk -->
         <div class="help-right-col">
-          
+
           <!-- 1. Emergency Go-Bag Kit -->
-          <div class="help-panel-box">
-            <div style="font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.45rem;">
-              <i class="fa-solid fa-briefcase-medical" style="color:#ef4444;"></i> Emergency Go-Bag Kit
+          <div class="help-side-card side-card-gobag">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <i class="fa-solid fa-briefcase-medical" style="color:#ef4444;"></i>
+                <span>Emergency Go-Bag Kit</span>
+              </div>
+              <span id="gobag-count" style="font-size:0.56rem; color:#10b981; font-weight:700;">6/6 Packed</span>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; font-size:0.72rem; color:#cbd5e1;">
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-flashlight" style="color:#f59e0b;"></i> Flashlight
+            <div class="gobag-grid">
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-flashlight" style="color:#f59e0b;"></i> Flashlight</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-bottle-water" style="color:#38bdf8;"></i> 3L Clean Water
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-bottle-water" style="color:#38bdf8;"></i> 3L Clean Water</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-kit-medical" style="color:#ef4444;"></i> First-Aid Kit
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-kit-medical" style="color:#ef4444;"></i> First-Aid Kit</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-id-card" style="color:#a78bfa;"></i> ID Documents
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-id-card" style="color:#a78bfa;"></i> ID Documents</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-battery-full" style="color:#10b981;"></i> Power Bank
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-battery-full" style="color:#10b981;"></i> Power Bank</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
-              <div style="background:rgba(15,23,42,0.8); padding:0.35rem 0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-                <i class="fa-solid fa-cookie" style="color:#f59e0b;"></i> Dry Rations
+              <div class="gobag-tile checked" onclick="toggleGoBag(this)">
+                <span><i class="fa-solid fa-cookie" style="color:#f59e0b;"></i> Dry Rations</span>
+                <i class="fa-solid fa-check" style="font-size:0.6rem; color:#10b981;"></i>
               </div>
             </div>
           </div>
 
           <!-- 2. Do's & Don'ts Quick Guide -->
-          <div class="help-panel-box">
-            <div style="font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.35rem;">FLOOD DO'S &amp; DON'TS</div>
-
-            <div style="display:flex; flex-direction:column; gap:0.3rem; font-size:0.72rem;">
-              <div style="color:#a7f3d0; display:flex; align-items:flex-start; gap:0.4rem;">
-                <i class="fa-solid fa-circle-check" style="color:#10b981; margin-top:2px;"></i>
-                <span>Stay tuned to ASDMA radio and official alerts.</span>
+          <div class="help-side-card side-card-dos">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i>
+                <span>FLOOD DO'S &amp; DON'TS</span>
               </div>
-              <div style="color:#a7f3d0; display:flex; align-items:flex-start; gap:0.4rem;">
-                <i class="fa-solid fa-circle-check" style="color:#10b981; margin-top:2px;"></i>
+            </div>
+
+            <div class="dos-list">
+              <div class="dos-item" style="color:#a7f3d0;">
+                <i class="fa-solid fa-circle-check" style="color:#10b981; margin-top:1px;"></i>
+                <span>Stay tuned to ASDMA radio and official AEGIS alerts.</span>
+              </div>
+              <div class="dos-item" style="color:#a7f3d0;">
+                <i class="fa-solid fa-circle-check" style="color:#10b981; margin-top:1px;"></i>
                 <span>Move elderly and children to high elevation early.</span>
               </div>
-              <div style="color:#fca5a5; display:flex; align-items:flex-start; gap:0.4rem;">
-                <i class="fa-solid fa-circle-xmark" style="color:#ef4444; margin-top:2px;"></i>
-                <span>Never drive through moving water or causeways.</span>
+              <div class="dos-item" style="color:#fca5a5;">
+                <i class="fa-solid fa-circle-xmark" style="color:#ef4444; margin-top:1px;"></i>
+                <span>Never drive through moving water or submerged bunds.</span>
               </div>
-              <div style="color:#fca5a5; display:flex; align-items:flex-start; gap:0.4rem;">
-                <i class="fa-solid fa-circle-xmark" style="color:#ef4444; margin-top:2px;"></i>
-                <span>Do not touch downed power lines or flooded poles.</span>
+              <div class="dos-item" style="color:#fca5a5;">
+                <i class="fa-solid fa-circle-xmark" style="color:#ef4444; margin-top:1px;"></i>
+                <span>Do not touch downed power lines or electric poles.</span>
               </div>
             </div>
           </div>
 
           <!-- 3. Direct Helpdesk Support -->
-          <div class="help-panel-box" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+          <div class="help-side-card side-card-desk">
             <div>
-              <div style="font-weight:800; font-size:0.875rem; color:#fff; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.45rem;">
-                <i class="fa-solid fa-headset" style="color:#38bdf8;"></i> 24/7 Citizen Helpdesk
+              <div class="side-card-header" style="margin-bottom:0.15rem;">
+                <div class="side-card-title">
+                  <i class="fa-solid fa-headset" style="color:#38bdf8;"></i>
+                  <span>24/7 Citizen Helpdesk</span>
+                </div>
               </div>
-              <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.4;">
-                Need human assistance or reporting a new flooded area?
+              <div style="font-size:0.62rem; color:#cbd5e1; line-height:1.35;">
+                Need human assistance or reporting a newly submerged zone?
               </div>
             </div>
 
-            <div style="display:flex; flex-direction:column; gap:0.35rem; margin-top:0.45rem;">
-              <button class="btn btn-primary" style="background:#2563eb; width:100%; font-size:0.785rem; font-weight:800; padding:0.4rem;" onclick="location.href='tel:1070'">
+            <div>
+              <button class="call-helpdesk-btn" onclick="openCallModal()">
                 <i class="fa-solid fa-phone"></i> Call Helpdesk (1070)
               </button>
-              <button class="btn btn-outline" style="border-color:#a78bfa; color:#a78bfa; width:100%; font-size:0.75rem; padding:0.35rem;" onclick="location.href='citizen-ai.html'">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Open AI Command Center
+              <button class="open-ai-btn" onclick="location.href='citizen-ai.html'">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Open AI Assistant
               </button>
             </div>
           </div>
@@ -602,14 +1212,14 @@
 
       </div>
 
-      <!-- Sticky Meta Footer -->
+      <!-- Institutional Sticky Footer -->
       <footer class="help-footer-bar">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <i class="fa-solid fa-shield-halved" style="color:#10b981;"></i>
           <span><strong>Stay Informed. Stay Safe.</strong> AEGIS is with you in every step.</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
           <span>Real-time Updates</span>
           <span>&bull;</span>
           <span>Verified Information</span>
@@ -619,9 +1229,7 @@
           <span>Trusted by Government of Assam</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span>Data Source: ASDMA | IMD | Local Authorities</span>
-          <span>&bull;</span>
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <span>Last Updated: 12 Aug 2026, 10:35 AM</span>
           <span>&bull;</span>
           <span style="color:#10b981; font-weight:700;">🟢 Live</span>
@@ -631,9 +1239,173 @@
     </main>
   </div>
 
-  <!-- Application Logic -->
-  <script src="js/citizen.js?v=3.0"></script>
+  <!-- PDF Guide Modal -->
+  <div id="pdf-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'pdf-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:520px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(239,68,68,0.4);">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">ASDMA Official Flood Safety Manual (PDF)</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('pdf-modal-backdrop')">&times;</button>
+      </div>
 
+      <div style="padding:1rem; font-size:0.74rem; line-height:1.5; color:#cbd5e1; max-height:55vh; overflow-y:auto;">
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.25); border-radius:8px; padding:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-weight:800; color:#fff; font-size:0.8rem; margin-bottom:0.25rem;">📄 Assam Citizen Flood Survival Handbook (2026 Edition)</div>
+          <div style="font-size:0.65rem; color:#94a3b8;">Includes high-resolution offline evacuation maps, boat rescue protocols, and emergency medical remedies.</div>
+        </div>
+
+        <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem; font-size:0.72rem;">
+          <li>Pre-evacuation checklists with power shutoff guides.</li>
+          <li>NDRF / SDRF whistle and light signaling codes.</li>
+          <li>Water purification and oral rehydration salt (ORS) dosage table.</li>
+          <li>All 21 Assam District Emergency Operation Centers (DEOC) hotlines.</li>
+        </ul>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.62rem; color:#94a3b8;">Format: PDF (2.4 MB) &bull; Verified by ASDMA</span>
+        <div style="display:flex; gap:0.5rem;">
+          <button style="background:rgba(255,255,255,0.08); color:#cbd5e1; border:none; padding:0.35rem 0.75rem; border-radius:6px; font-size:0.72rem; cursor:pointer;" onclick="closeModal('pdf-modal-backdrop')">Close</button>
+          <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="triggerPdfDownload()">Download PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call Helpdesk Modal -->
+  <div id="call-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'call-modal-backdrop')">
+    <div class="modal-dialog-box" style="max-width:440px;" onclick="event.stopPropagation()">
+      <div style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <div style="width:30px; height:30px; border-radius:6px; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.9rem; border:1px solid rgba(59,130,246,0.4);">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div style="font-weight:800; font-size:0.9rem; color:#ffffff;">Connect with Emergency Helpdesk</div>
+        </div>
+        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeModal('call-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="padding:1rem; display:flex; flex-direction:column; gap:0.6rem; font-size:0.74rem;">
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.25); border-radius:7px; padding:0.6rem 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff;">State Disaster Helpdesk</div>
+            <div style="font-size:0.6rem; color:#94a3b8;">Toll-free 24/7 Emergency Line</div>
+          </div>
+          <a href="tel:1070" style="background:#2563eb; color:#fff; text-decoration:none; font-weight:800; padding:0.25rem 0.65rem; border-radius:5px; font-size:0.72rem;">Call 1070</a>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(239,68,68,0.25); border-radius:7px; padding:0.6rem 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#ef4444;">National Emergency Helpline</div>
+            <div style="font-size:0.6rem; color:#94a3b8;">Immediate Police, Fire &amp; Ambulance</div>
+          </div>
+          <a href="tel:112" style="background:#ef4444; color:#fff; text-decoration:none; font-weight:800; padding:0.25rem 0.65rem; border-radius:5px; font-size:0.72rem;">Call 112</a>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:7px; padding:0.6rem 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#38bdf8;">District Disaster Line (DEOC)</div>
+            <div style="font-size:0.6rem; color:#94a3b8;" id="deoc-line-name">Golaghat District Control Room</div>
+          </div>
+          <a href="tel:1077" style="background:rgba(59,130,246,0.2); border:1px solid #38bdf8; color:#38bdf8; text-decoration:none; font-weight:800; padding:0.25rem 0.65rem; border-radius:5px; font-size:0.72rem;">Call 1077</a>
+        </div>
+      </div>
+
+      <div style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:flex-end;">
+        <button style="background:var(--primary-blue); color:#fff; border:none; padding:0.35rem 0.95rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="closeModal('call-modal-backdrop')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safety Guide Modal (Matches Dashboard Page) -->
+  <div id="safety-modal-backdrop" class="modal-backdrop" style="display:none;" onclick="handleModalBackdropClick(event, 'safety-modal-backdrop')">
+    <div class="modal-dialog-box" onclick="event.stopPropagation()">
+      <div
+        style="padding:0.75rem 1rem; background:rgba(15,23,42,0.95); border-bottom:1px solid rgba(59,130,246,0.25); display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+          <div
+            style="width:34px; height:34px; border-radius:8px; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:1.1rem; border:1px solid rgba(239,68,68,0.4);">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:0.95rem; color:#ffffff;">ASSAM FLOOD SAFETY & EVACUATION PROTOCOL</div>
+            <div style="font-size:0.65rem; color:#94a3b8;">Issued by Assam State Disaster Management Authority (ASDMA)</div>
+          </div>
+        </div>
+        <button
+          style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer; padding:0.2rem;"
+          onclick="closeModal('safety-modal-backdrop')">&times;</button>
+      </div>
+
+      <div style="display:flex; border-bottom:1px solid rgba(59,130,246,0.2); background:rgba(15,23,42,0.5);">
+        <button class="safety-tab-btn active" onclick="switchSafetyTab(0)">1. Immediate Actions</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(1)">2. Evacuation Steps</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(2)">3. Emergency Kit</button>
+        <button class="safety-tab-btn" onclick="switchSafetyTab(3)">4. Medical & Hygiene</button>
+      </div>
+
+      <div style="padding:0.9rem 1.1rem; overflow-y:auto; flex:1; font-size:0.74rem; line-height:1.5; color:#cbd5e1;">
+        <div id="tab-sec-0" class="safety-sec">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚨 Immediate Life-Saving Instructions</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li><strong>Move to higher ground immediately:</strong> Do not wait until floodwater reaches your door.</li>
+            <li><strong>Disconnect main power & gas:</strong> Turn off main electrical switches to prevent electrocution.</li>
+            <li><strong>Avoid walking or driving through moving water:</strong> 6 inches of moving water can knock you down.</li>
+            <li><strong>Keep emergency communication lines open:</strong> Save phone battery for critical rescue broadcasts.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-1" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🚶 Evacuation & Safe Transit Protocol</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Follow official designated safe routes shown in the <strong>Safe Routes</strong> portal.</li>
+            <li>Do not cross breached river embankments (Bunds) or submerged bridges.</li>
+            <li>Signal rescue boats with brightly colored cloth, torches, or sound whistles.</li>
+            <li>Give priority to infants, pregnant women, elderly citizens, and individuals with disabilities.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-2" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🎒 72-Hour Emergency Grab-and-Go Kit</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Waterproof pouch with identification cards, property documents, and emergency cash.</li>
+            <li>Bottled drinking water (minimum 3 litres per person) and non-perishable high-energy rations.</li>
+            <li>Flashlight with spare batteries, power banks, and whistle for audio signaling.</li>
+            <li>Basic first-aid kit with antiseptic lotion, bandages, and prescribed medications for 7 days.</li>
+          </ul>
+        </div>
+        <div id="tab-sec-3" class="safety-sec" style="display:none;">
+          <h4 style="color:#ffffff; margin-bottom:0.4rem; font-weight:800;">🩺 Water-Borne Disease Prevention & Hygiene</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.35rem;">
+            <li>Boil all drinking water for at least 1 minute or use Halazone water purification tablets.</li>
+            <li>Do not consume food that has come into direct contact with flood waters.</li>
+            <li>Wash hands with soap or alcohol sanitizer before eating.</li>
+            <li>Seek immediate medical assistance at relief camps if showing symptoms of fever or diarrhea.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        style="padding:0.6rem 1rem; background:rgba(15,23,42,0.95); border-top:1px solid rgba(59,130,246,0.25); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.65rem; color:#94a3b8;">State Emergency Helpline: <strong style="color:#ef4444;">1070 / 112</strong></span>
+        <button
+          style="background:var(--primary-blue); color:#ffffff; border:none; padding:0.3rem 0.85rem; border-radius:6px; font-size:0.72rem; font-weight:700; cursor:pointer;"
+          onclick="closeModal('safety-modal-backdrop')">
+          Understood & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Bar -->
+  <div id="help-toast-alert" style="position:fixed; bottom:38px; right:20px; background:#0b1426; border:1px solid #10b981; color:#fff; padding:0.5rem 0.9rem; border-radius:8px; font-size:0.75rem; display:none; align-items:center; gap:0.5rem; box-shadow:0 6px 20px rgba(0,0,0,0.6); z-index:10000;">
+    <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:0.9rem;"></i>
+    <span id="help-toast-text">Success</span>
+  </div>
+
+  <!-- Application Logic -->
   <script>
     let currentDistrictData = null;
 
@@ -641,31 +1413,146 @@
       renderHelpForDistrict('Golaghat');
     });
 
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById('help-toast-alert');
+      const text = document.getElementById('help-toast-text');
+      if (!toast || !text) return;
+
+      text.innerText = msg;
+      toast.style.borderColor = isSuccess ? '#10b981' : '#ef4444';
+      toast.querySelector('i').className = isSuccess ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+      toast.querySelector('i').style.color = isSuccess ? '#10b981' : '#ef4444';
+      toast.style.display = 'flex';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync Topbar District
+      if (window.citizenApp) {
+        window.citizenApp.syncTopbarDistrict();
+      }
+      const selectedDist = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+      renderHelpForDistrict(selectedDist);
+    });
+
+    function onDistrictChange(districtName) {
+      document.getElementById('topbar-dist-name').innerText = districtName;
+      const deocLine = document.getElementById('deoc-line-name');
+      if (deocLine) deocLine.innerText = `${districtName} District Control Room`;
+      renderHelpForDistrict(districtName);
+      showToast(`Switched district: ${districtName}`);
+    }
+
     function renderHelpForDistrict(districtName) {
       if (!window.citizenApp) return;
       currentDistrictData = window.citizenApp.getDistrictModelData(districtName);
+      const deocLine = document.getElementById('deoc-line-name');
+      if (deocLine) deocLine.innerText = `${districtName} District Control Room`;
+    }
+
+    // Modal Control
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    }
+
+    function handleModalBackdropClick(event, id) {
+      if (event.target.id === id) {
+        closeModal(id);
+      }
+    }
+
+    function openSafetyGuideModal() {
+      openModal('safety-modal-backdrop');
+    }
+
+    function switchSafetyTab(idx) {
+      const tabs = document.querySelectorAll('.safety-tab-btn');
+      tabs.forEach((tab, i) => tab.classList.toggle('active', i === idx));
+      for (let i = 0; i < 4; i++) {
+        const sec = document.getElementById(`tab-sec-${i}`);
+        if (sec) sec.style.display = (i === idx) ? 'block' : 'none';
+      }
+    }
+
+    function openPdfModal() {
+      openModal('pdf-modal-backdrop');
+    }
+
+    function triggerPdfDownload() {
+      closeModal('pdf-modal-backdrop');
+      showToast('Downloading ASDMA Flood Safety Manual (PDF)...');
+    }
+
+    function openCallModal() {
+      openModal('call-modal-backdrop');
+    }
+
+    // FAQ Accordion & Filtering
+    function toggleFaq(card) {
+      const body = card.querySelector('.faq-body');
+      const chevron = card.querySelector('.faq-chevron');
+      const isHidden = body.style.display === 'none';
+
+      body.style.display = isHidden ? 'block' : 'none';
+      chevron.className = isHidden ? 'fa-solid fa-chevron-up faq-chevron' : 'fa-solid fa-chevron-down faq-chevron';
     }
 
     function filterFaqCat(cat, element) {
       document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
       element.classList.add('active');
 
-      document.querySelectorAll('.faq-card').forEach(card => {
-        if (cat === 'all') {
+      const cards = document.querySelectorAll('.faq-card');
+      let visibleCount = 0;
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
           card.style.display = 'block';
+          visibleCount++;
         } else {
-          card.style.display = (card.getAttribute('data-cat') === cat) ? 'block' : 'none';
+          card.style.display = 'none';
         }
       });
+      showToast(`Showing ${visibleCount} FAQs for: ${element.innerText.trim()}`);
     }
 
     function filterFaqs(query) {
-      const q = query.toLowerCase();
-      document.querySelectorAll('.faq-card').forEach(card => {
+      const q = query.toLowerCase().trim();
+      const cards = document.querySelectorAll('.faq-card');
+      cards.forEach(card => {
         const text = card.innerText.toLowerCase();
         card.style.display = text.includes(q) ? 'block' : 'none';
       });
     }
+
+    // Checklist Counter
+    function updateChecklistProgress() {
+      const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+      let checked = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checked++; });
+      document.getElementById('checklist-counter').innerText = `${checked} / ${checkboxes.length} Complete`;
+      showToast(`Evacuation checklist: ${checked} of ${checkboxes.length} verified.`);
+    }
+
+    // Go-Bag Tile Toggle
+    function toggleGoBag(tile) {
+      tile.classList.toggle('checked');
+      const icon = tile.querySelector('.fa-check');
+      if (icon) {
+        icon.style.display = tile.classList.contains('checked') ? 'inline-block' : 'none';
+      }
+      const allChecked = document.querySelectorAll('.gobag-tile.checked').length;
+      document.getElementById('gobag-count').innerText = `${allChecked}/6 Packed`;
+      showToast(`Emergency Kit: ${allChecked} of 6 items packed.`);
+    }
   </script>
 </body>
+
 </html>

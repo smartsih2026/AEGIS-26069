@@ -563,9 +563,10 @@
         zoomControl: false
       });
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; CartoDB',
-        maxZoom: 19
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        className: 'dark-tiles',
+        attribution: '&copy; Esri World Street Map',
+        maxZoom: 18
       }).addTo(resourcesMap);
 
       L.control.zoom({ position: 'topleft' }).addTo(resourcesMap);

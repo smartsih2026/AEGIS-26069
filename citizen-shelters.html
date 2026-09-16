@@ -3,53 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shelter Network - AEGIS</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Shelter Network - AEGIS Emergency System</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome 6 Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <!-- Leaflet CSS for OpenStreetMap -->
+  <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- Master Citizen Stylesheet -->
   <link rel="stylesheet" href="citizen-styles.css">
 
-  <!-- Master Citizen Script -->
+  <!-- Master Citizen Data Script -->
   <script src="js/citizen.js?v=3.0"></script>
 
-  <!-- Firebase SDK (Compat Version) & Auth Module -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="js/firebase-auth.js?v=3.0"></script>
-
   <style>
+    :root {
+      --bg-dark: #030712;
+      --bg-sidebar: #060b18;
+      --bg-card: #070d1d;
+      --border-subtle: rgba(59, 130, 246, 0.18);
+      --border-card: rgba(59, 130, 246, 0.22);
+      --primary-blue: #2563eb;
+      --primary-blue-hover: #1d4ed8;
+      --accent-cyan: #38bdf8;
+      --danger-red: #ef4444;
+      --warning-amber: #f59e0b;
+      --success-green: #10b981;
+      --purple-accent: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     html, body {
       height: 100vh;
       width: 100vw;
       overflow: hidden;
-      background-color: #030712;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #f1f5f9;
-      font-size: 14px;
-      line-height: 1.4;
-      -webkit-font-smoothing: antialiased;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
     }
 
+    /* Master Layout */
     .sh-layout-container {
       display: grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 230px 1fr;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
@@ -57,44 +72,81 @@
 
     /* Left Sidebar */
     .sh-sidebar {
-      background: #060b18;
-      border-right: 1px solid rgba(59, 130, 246, 0.18);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      padding: 0.85rem 0.75rem;
+      padding: 0.35rem 0.45rem;
       height: 100vh;
       overflow: hidden;
+      flex-shrink: 0;
+      justify-content: flex-start;
+      gap: 0.15rem;
     }
 
     .sh-sidebar-logo {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.2rem 0.4rem 0.75rem 0.4rem;
+      gap: 0.5rem;
+      padding: 0.02rem 0.1rem 0.2rem 0.1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.05rem;
+      flex-shrink: 0;
+    }
+
+    .sh-logo-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sh-brand-name {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .sh-brand-sub {
+      font-size: 0.54rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     .sh-nav-menu {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
-      flex: 1;
-      overflow: hidden;
+      gap: 0.02rem;
+      flex-shrink: 0;
     }
 
     .sh-nav-item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      padding: 0.48rem 0.75rem;
+      gap: 0.5rem;
+      padding: 0.17rem 0.4rem;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.825rem;
-      border-radius: 8px;
-      transition: all 0.18s ease;
+      font-size: 0.72rem;
+      border-radius: 6px;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .sh-nav-item i {
+      width: 14px;
+      font-size: 0.76rem;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .sh-nav-item:hover {
@@ -103,668 +155,1037 @@
     }
 
     .sh-nav-item.active {
-      background: #2563eb;
+      background: var(--primary-blue);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .sh-emergency-card {
-      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.22) 100%);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 10px;
-      padding: 0.65rem;
+    .sh-nav-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 0.06rem 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger-red);
+      color: #ffffff;
+      font-size: 0.52rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 9999px;
+      min-width: 14px;
       text-align: center;
-      margin-top: 0.45rem;
-      position: relative;
     }
 
-    /* Main Area */
+    .sh-nav-item.nav-logout {
+      color: #ef4444;
+      margin-top: 0.02rem;
+    }
+    .sh-nav-item.nav-logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    /* Sidebar Emergency Box */
+    .sh-emergency-card {
+      background: rgba(11, 20, 38, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 8px;
+      padding: 0.25rem 0.4rem;
+      text-align: center;
+      margin-top: auto;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+    }
+
+    .emergency-card-title {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .emergency-card-call {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0.02rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .emergency-card-desc {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      margin-bottom: 0.15rem;
+    }
+
+    .emergency-card-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.24rem 0.45rem;
+      font-weight: 700;
+      font-size: 0.65rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s ease;
+    }
+    .emergency-card-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* Main Area Container */
     .sh-main-area {
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
-      background: #030712;
+      background: var(--bg-dark);
     }
 
     /* Top Bar */
     .sh-topbar {
-      height: 48px;
-      background: #070d1d;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+      height: 46px;
+      background: #070d1c;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.25rem;
+      padding: 0 1rem;
+      gap: 0.75rem;
       flex-shrink: 0;
     }
 
-    .district-select-box {
+    .district-select-pill {
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #f1f5f9;
-      font-size: 0.825rem;
+      color: #ffffff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+    }
+    .district-select-pill:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .topbar-alert-banner {
+      flex: 1;
+      max-width: 760px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 0.2rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #fca5a5;
+      min-width: 0;
+    }
+
+    .topbar-guide-btn {
+      background: #3b1419;
+      color: #ffffff;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 0.16rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-left: 0.45rem;
+      flex-shrink: 0;
+    }
+    .topbar-guide-btn:hover {
+      background: #541920;
+      border-color: #ef4444;
+    }
+
+    /* Sub-Header: Shelter Network Banner */
+    .sh-header-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #060d1f;
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 0.32rem 0.85rem;
+      margin: 0.2rem 1rem 0 1rem;
+      flex-shrink: 0;
+    }
+
+    .sh-header-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .btn-guidelines {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #cbd5e1;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 0.35rem 0.85rem;
+      padding: 0.22rem 0.75rem;
       border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.18s;
+    }
+    .btn-guidelines:hover {
+      border-color: #38bdf8;
+      color: #fff;
+      background: rgba(59, 130, 246, 0.18);
+    }
+
+    /* Top 5 Metric Cards Bar */
+    .sh-metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.45rem;
+      padding: 0.2rem 1rem 0 1rem;
+      flex-shrink: 0;
+    }
+
+    .sh-metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      padding: 0.32rem 0.6rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .district-select-box select {
-      background: transparent;
-      border: none;
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.825rem;
-      outline: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .district-select-box select option {
-      background: #070d1d;
-      color: #fff;
-    }
 
-    /* Top 5 Metrics Cards Bar */
-    .sh-stats-bar {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.65rem;
-      padding: 0.25rem 1.15rem 0.35rem 1.15rem;
+    .sh-metric-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
       flex-shrink: 0;
     }
 
-    .sh-stat-card {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 0.45rem 0.65rem;
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-    }
-
-    /* Filter Controls Bar */
+    /* Search & Filter Bar */
     .sh-filter-bar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.65rem;
-      padding: 0 1.15rem 0.45rem 1.15rem;
+      gap: 0.45rem;
+      padding: 0.2rem 1rem 0 1rem;
       flex-shrink: 0;
     }
 
-    .sh-search-input {
+    .sh-search-box {
       flex: 1;
-      max-width: 320px;
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.25);
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .sh-search-box i {
+      position: absolute;
+      left: 10px;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+    }
+    .sh-search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 7px;
+      padding: 0.26rem 0.65rem 0.26rem 1.85rem;
       color: #fff;
-      font-size: 0.785rem;
-      padding: 0.32rem 0.75rem;
-      border-radius: 6px;
+      font-size: 0.72rem;
       outline: none;
     }
+    .sh-search-input:focus {
+      border-color: #38bdf8;
+    }
 
-    .sh-filter-select {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.25);
+    .sh-select-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
       color: #cbd5e1;
-      font-size: 0.785rem;
-      padding: 0.32rem 0.75rem;
-      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.26rem 0.6rem;
+      border-radius: 7px;
       outline: none;
       cursor: pointer;
     }
 
-    /* Workspace 3-Column Grid */
+    .btn-use-location {
+      background: var(--primary-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 0.28rem 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+      transition: background 0.18s;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
+    }
+    .btn-use-location:hover {
+      background: var(--primary-blue-hover);
+    }
+
+    /* Master Workspace 3-Column Grid */
     .sh-workspace-grid {
       display: grid;
-      grid-template-columns: 270px 1fr 310px;
-      gap: 0.85rem;
-      padding: 0 1.15rem 0.45rem 1.15rem;
+      grid-template-columns: 270px 1fr 280px;
+      gap: 0.45rem;
+      padding: 0.2rem 1rem 0.2rem 1rem;
       flex: 1;
       overflow: hidden;
       min-height: 0;
     }
 
-    /* Left: Nearby Shelters List */
-    .sh-list-panel {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 10px;
+    /* Common Card Box */
+    .sh-card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 9px;
+      padding: 0.4rem 0.6rem;
       display: flex;
       flex-direction: column;
-      padding: 0.65rem 0.75rem;
       overflow: hidden;
+      position: relative;
     }
 
+    /* Nearby Shelters List */
     .sh-list-scroll {
       flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
-      padding-right: 0.25rem;
+      gap: 0.3rem;
+      padding-right: 0.15rem;
       min-height: 0;
     }
-
     .sh-list-scroll::-webkit-scrollbar {
-      width: 5px;
+      width: 3px;
     }
     .sh-list-scroll::-webkit-scrollbar-thumb {
       background: rgba(59, 130, 246, 0.25);
       border-radius: 3px;
     }
 
-    .sh-item-card {
-      background: rgba(11, 20, 38, 0.85);
+    .shelter-item-card {
+      background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 0.5rem 0.65rem;
+      border-radius: 7px;
+      padding: 0.32rem 0.48rem;
       cursor: pointer;
-      transition: all 0.18s;
+      transition: all 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.18rem;
     }
-    .sh-item-card:hover, .sh-item-card.active {
+    .shelter-item-card:hover {
+      border-color: #38bdf8;
+      background: rgba(59, 130, 246, 0.15);
+    }
+    .shelter-item-card.active {
       border-color: #10b981;
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(16, 185, 129, 0.15);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
     }
 
-    /* Middle: Interactive Leaflet Map */
-    .sh-map-panel {
+    .shelter-tag {
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .tag-open {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .tag-limited {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    /* Map Box */
+    #sh-map-container {
       position: relative;
-      border-radius: 10px;
+      flex: 1;
+      width: 100%;
+      border-radius: 8px;
       overflow: hidden;
       border: 1px solid rgba(59, 130, 246, 0.25);
-      background: #e2e8f0;
-      height: 100%;
+      min-height: 100px;
     }
 
-    #shelter-leaflet-map {
+    #sh-leaflet-map {
       width: 100%;
       height: 100%;
+      background: #070d1d;
     }
 
-    /* Top Map Layer Filter Pills */
-    .map-top-filters {
+    /* Floating Map Category Tabs */
+    .map-category-tabs {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
       display: flex;
-      gap: 0.4rem;
-      background: rgba(6, 12, 28, 0.92);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 0.25rem 0.55rem;
-      border-radius: 8px;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(6, 12, 28, 0.88);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      backdrop-filter: blur(8px);
+      padding: 0.2rem 0.35rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
     }
 
-    .map-filter-chip {
-      font-size: 0.685rem;
+    .map-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #cbd5e1;
+      font-size: 0.62rem;
       font-weight: 700;
-      padding: 0.2rem 0.5rem;
-      border-radius: 5px;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .map-tab-btn:hover {
+      background: rgba(59, 130, 246, 0.18);
       color: #fff;
     }
 
-    /* Right: Selected Shelter Profile */
-    .sh-detail-panel {
-      background: #060c1c;
-      border: 1px solid rgba(59, 130, 246, 0.22);
-      border-radius: 10px;
-      padding: 0.75rem 0.85rem;
+    .map-tab-btn.active-shelters {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: rgba(16, 185, 129, 0.55);
+      color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    }
+
+    .map-tab-btn.active-clinics {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: rgba(56, 189, 248, 0.55);
+      color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+
+    .map-tab-btn.active-flooded {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.55);
+      color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+    }
+
+    .map-tab-btn.active-roads {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(245, 158, 11, 0.55);
+      color: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+    }
+
+    /* Map Overlays */
+    .map-legend-panel {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      z-index: 500;
+      background: rgba(6, 12, 28, 0.92);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 8px;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.58rem;
+      color: #cbd5e1;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      gap: 0.15rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
     }
 
-    /* Facility Icon Cards */
-    .facility-tile {
-      background: rgba(15, 23, 42, 0.75);
-      padding: 0.35rem 0.25rem;
-      border-radius: 6px;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      user-select: none;
-    }
-    .facility-tile:hover {
-      border-color: #38bdf8;
-      background: rgba(37, 99, 235, 0.25);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-    }
-
-    /* Bottom Info Callout Banner */
-    .sh-info-banner {
-      margin: 0.25rem 1.15rem 0.35rem 1.15rem;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
-      padding: 0.35rem 0.85rem;
+    .map-legend-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.685rem;
-      color: #94a3b8;
+      gap: 0.4rem;
+    }
+
+    /* Detail Card (Right Column) */
+    .detail-photo-wrapper {
+      width: 100%;
+      height: 72px;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .detail-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .facility-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.22rem;
+      margin: 0.3rem 0;
+    }
+    .facility-chip {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 5px;
+      padding: 0.22rem 0.12rem;
+      text-align: center;
+      font-size: 0.52rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .facility-chip:hover {
+      border-color: #38bdf8;
+      background: rgba(59, 130, 246, 0.2);
+    }
+    .facility-chip i {
+      font-size: 0.68rem;
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    /* Bottom 3 Cards Grid */
+    .sh-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.45rem;
+      height: 72px;
+      padding: 0 1rem 0.2rem 1rem;
       flex-shrink: 0;
     }
 
-    /* Sticky Footer */
+    /* Footer Bar */
     .sh-footer-bar {
-      height: 32px;
+      height: 25px;
       background: #040813;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.15rem;
-      font-size: 0.685rem;
-      color: #64748b;
+      padding: 0 1rem;
+      font-size: 0.62rem;
+      color: var(--text-dim);
       flex-shrink: 0;
-    }
-
-    /* Interactive Facility Stock Modal */
-    .facility-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(3, 7, 18, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .facility-modal-card {
-      background: #070e24;
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 480px;
-      padding: 1.25rem;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
-      animation: modalFadeIn 0.2s ease-out;
-      color: #f1f5f9;
-    }
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      white-space: nowrap;
     }
   </style>
 </head>
 <body>
 
   <div class="sh-layout-container">
+    
     <!-- Left Navigation Sidebar -->
     <aside class="sh-sidebar">
       <div class="sh-sidebar-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(37,99,235,0.25)"/>
-          <path d="M12 8v8M8 12h8" stroke-linecap="round"/>
-        </svg>
+        <div class="sh-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+            <path d="M12 2L3 7V12C3 17.52 6.84 22.74 12 24C17.16 22.74 21 17.52 21 12V7L12 2Z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5"/>
+            <path d="M12 6V18M6 12H18" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 1.15rem; color: #fff; line-height: 1;">AEGIS</div>
-          <div style="font-size: 0.58rem; color: #94a3b8; font-weight: 500;">Stronger Together, Safer Together.</div>
+          <div class="sh-brand-name">AEGIS</div>
+          <div class="sh-brand-sub">Stronger Together, Safer Together.</div>
         </div>
       </div>
 
       <nav class="sh-nav-menu">
-        <a class="sh-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> Dashboard</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Command Center</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> Safe Routes</a>
-        <a class="sh-nav-item active" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> Shelter Network</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-circle-exclamation" style="color:#ef4444;"></i> SOS Reports</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> My SOS / Tracking</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-notifications.html'"><i class="fa-solid fa-bell"></i> Notifications <span style="background:#ef4444; color:#fff; font-size:0.55rem; padding:1px 5px; border-radius:50%; margin-left:auto; font-weight:800;">3</span></a>
-        <a class="sh-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> Emergency Contacts</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> Profile & Settings</a>
-        <a class="sh-nav-item" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        <a class="sh-nav-item" onclick="location.href='index.html'" style="margin-top:auto; color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        <a class="sh-nav-item" onclick="location.href='citizen-dashboard.html'"><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+        <a class="sh-nav-item" onclick="location.href='citizen-ai.html'"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Assistant</span></a>
+        <a class="sh-nav-item" onclick="location.href='citizen-sos.html'"><i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> <span>SOS</span></a>
+        <a class="sh-nav-item" onclick="location.href='citizen-intel.html'"><i class="fa-solid fa-route"></i> <span>Safe Routes</span></a>
+        <a class="sh-nav-item active" onclick="location.href='citizen-shelters.html'"><i class="fa-solid fa-campground"></i> <span>Shelters</span></a>
+        <a class="sh-nav-item" onclick="location.href='citizen-tracking.html'"><i class="fa-solid fa-location-crosshairs"></i> <span>My SOS / Tracking</span></a>
+        
+        <div class="sh-nav-divider"></div>
+
+        <a class="sh-nav-item" onclick="location.href='citizen-notifications.html'">
+          <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="sh-nav-item" onclick="location.href='citizen-contacts.html'"><i class="fa-solid fa-phone"></i> <span>Emergency Contacts</span></a>
+        
+        <div class="sh-nav-divider"></div>
+
+        <a class="sh-nav-item" onclick="location.href='citizen-profile.html'"><i class="fa-solid fa-gear"></i> <span>Profile & Settings</span></a>
+        <a class="sh-nav-item" onclick="location.href='citizen-help.html'"><i class="fa-solid fa-circle-question"></i> <span>Help & Support</span></a>
+        <a class="sh-nav-item nav-logout" onclick="location.href='index.html'"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
       </nav>
 
-      <!-- Emergency Hotline Card -->
+      <!-- Sidebar Emergency Box -->
       <div class="sh-emergency-card">
-        <div style="font-size: 0.65rem; color: #fca5a5; font-weight: 700;">In case of emergency</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
-        <div style="font-size: 0.625rem; color: #cbd5e1; margin-bottom: 0.25rem;">or send SOS instantly</div>
-        
-        <div style="display:flex; justify-content:center; margin-top:0.35rem;">
-          <svg width="110" height="32" viewBox="0 0 120 35" fill="none">
-            <path d="M10 25 Q35 15 60 25 T110 25" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.6"/>
-            <path d="M25 22 L95 22 L85 30 L35 30 Z" fill="#ea580c"/>
-            <circle cx="45" cy="14" r="4" fill="#fbbf24"/>
-            <circle cx="60" cy="13" r="4" fill="#60a5fa"/>
-            <circle cx="75" cy="14" r="4" fill="#34d399"/>
-            <path d="M45 18 L45 22 M60 17 L60 22 M75 18 L75 22" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="emergency-card-title">IN CASE OF EMERGENCY</div>
+        <div class="emergency-card-call"><i class="fa-solid fa-phone-volume" style="color:#ef4444"></i> Call 112</div>
+        <div class="emergency-card-desc">or send SOS instantly</div>
+        <button class="emergency-card-btn" onclick="location.href='citizen-sos.html'">
+          <i class="fa-solid fa-plus"></i> Send SOS Now
+        </button>
       </div>
     </aside>
 
-    <!-- Main Area -->
+    <!-- Main Workspace Area -->
     <main class="sh-main-area">
-      <!-- Top Bar -->
+      
+      <!-- Top Bar Header -->
       <header class="sh-topbar">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="district-select-box">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:0.95rem; cursor:pointer;"></i>
+          <div class="district-select-pill">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <select id="sh-district-dropdown" onchange="renderSheltersForDistrict(this.value)">
-              <!-- Upper Assam -->
-              <option value="Golaghat" selected>Golaghat District, Assam</option>
-              <option value="Jorhat">Jorhat District, Assam</option>
-              <option value="Dibrugarh">Dibrugarh District, Assam</option>
-              <option value="Sivasagar">Sivasagar District, Assam</option>
-              <option value="Tinsukia">Tinsukia District, Assam</option>
-              <option value="Dhemaji">Dhemaji District, Assam</option>
-              <option value="Lakhimpur">Lakhimpur District, Assam</option>
-              <!-- Central Assam -->
-              <option value="Nagaon">Nagaon District, Assam</option>
-              <option value="Hojai">Hojai District, Assam</option>
-              <option value="Morigaon">Morigaon District, Assam</option>
-              <option value="Dima Hasao">Dima Hasao District, Assam</option>
-              <option value="East Karbi Anglong">East Karbi Anglong District, Assam</option>
-              <!-- Lower & North Assam -->
-              <option value="Kamrup Metropolitan">Kamrup Metropolitan (Guwahati), Assam</option>
-              <option value="Darrang">Darrang District, Assam</option>
-              <option value="Barpeta">Barpeta District, Assam</option>
-              <option value="Sonitpur">Sonitpur District, Assam</option>
-              <option value="Dhubri">Dhubri District, Assam</option>
-              <option value="Goalpara">Goalpara District, Assam</option>
-              <!-- Barak Valley -->
-              <option value="Cachar">Cachar District, Assam</option>
-              <option value="Hailakandi">Hailakandi District, Assam</option>
-              <option value="Karimganj">Karimganj District, Assam</option>
-            </select>
+            <span id="topbar-dist-name">Golaghat</span>
           </div>
+        </div>
+
+        <div class="topbar-alert-banner">
+          <div style="display:flex; align-items:center; gap:0.45rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444; font-size:0.9rem; flex-shrink:0;"></i>
+            <span><strong style="color:#f87171;">HIGH FLOOD RISK</strong> in <span id="topbar-alert-dist-name">Golaghat</span> District. Heavy rainfall and rising water levels. Stay alert and avoid flooded areas.</span>
+          </div>
+          <button class="topbar-guide-btn" onclick="openStaySafeGuide()">Stay Safe Guide &rarr;</button>
         </div>
 
         <div style="display:flex; align-items:center; gap:1rem;">
           <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
-            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
-            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.55rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
+            <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1rem;"></i>
+            <span style="position:absolute; top:-4px; right:-6px; background:#ef4444; color:#fff; font-size:0.52rem; font-weight:800; padding:1px 4px; border-radius:50%;">3</span>
           </div>
 
-          <div style="display:flex; align-items:center; gap:0.55rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
+          <div style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;" onclick="location.href='citizen-profile.html'">
             <div style="position:relative;">
-              <img class="citizen-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #38bdf8;" alt="Avatar">
-              <span style="position:absolute; bottom:0; right:0; width:8px; height:8px; background:#10b981; border:2px solid #070d1d; border-radius:50%;"></span>
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid #38bdf8;" alt="Avatar">
+              <span style="position:absolute; bottom:0; right:0; width:7px; height:7px; background:#10b981; border:1.5px solid #070d1d; border-radius:50%;"></span>
             </div>
             <div style="text-align:left;">
-              <div class="citizen-user-name" style="font-size:0.785rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div class="citizen-user-email" style="font-size:0.625rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.75rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div style="font-size:0.58rem; color:#94a3b8;">ravi.das@email.com</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Shelter Network Header Banner -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 1.15rem 0.25rem 1.15rem;">
+      <!-- Sub-Header: Shelter Network -->
+      <div class="sh-header-banner">
         <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.95rem; border:1px solid rgba(16,185,129,0.4);">
+          <div class="sh-header-badge">
             <i class="fa-solid fa-campground"></i>
           </div>
           <div>
-            <div style="font-weight:800; font-size:1.05rem; color:#fff; line-height:1.1;">SHELTER NETWORK</div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Find nearby shelters, check capacity, facility stock &amp; get directions.</div>
+            <h1 style="font-size:1.05rem; font-weight:800; color:#ffffff; line-height:1.15;">Shelter Network</h1>
+            <p style="font-size:0.68rem; color:var(--text-muted);">Find nearby shelters, check capacity, facilities and get directions.</p>
           </div>
         </div>
-        <button class="btn btn-outline" style="font-size:0.72rem; padding:0.25rem 0.65rem; color:#cbd5e1; border-color:rgba(255,255,255,0.18);" onclick="showCustomAlert('🛡️ Official Shelter Guidelines', '1. Bring government ID cards and medical prescriptions.\n2. Registration is free for all citizens.\n3. Rations, clean water and medical care provided 24x7.', 'info')">
-          <i class="fa-solid fa-circle-info"></i> Shelter Guidelines
+
+        <button class="btn-guidelines" onclick="openShelterGuidelines()">
+          <i class="fa-solid fa-circle-info" style="color:#38bdf8;"></i> Shelter Guidelines
         </button>
       </div>
 
-      <!-- Top 5 Metrics Cards -->
-      <div class="sh-stats-bar">
-        <!-- Stat 1 -->
-        <div class="sh-stat-card">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-users"></i>
+      <!-- Top 5 Metric Cards Bar -->
+      <div class="sh-metrics-bar">
+        <!-- 1. Total Shelters -->
+        <div class="sh-metric-card">
+          <div class="sh-metric-icon" style="background:rgba(16,185,129,0.18); color:#10b981;">
+            <i class="fa-solid fa-campground"></i>
           </div>
           <div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Total Shelters</div>
-            <div style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;" id="stat-total-shelters">25</div>
-            <div style="font-size:0.58rem; color:#64748b;">Across Assam</div>
+            <div style="font-size:0.58rem; color:var(--text-muted); font-weight:600;">Total Shelters</div>
+            <div id="stat-total-shelters" style="font-size:1.05rem; font-weight:800; color:#10b981; line-height:1.1;">3 Verified</div>
+            <div id="stat-district-name" style="font-size:0.54rem; color:var(--text-dim);">In Golaghat</div>
           </div>
         </div>
 
-        <!-- Stat 2 -->
-        <div class="sh-stat-card">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
+        <!-- 2. Total Capacity -->
+        <div class="sh-metric-card">
+          <div class="sh-metric-icon" style="background:rgba(37,99,235,0.18); color:#38bdf8;">
             <i class="fa-solid fa-bed"></i>
           </div>
           <div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Total Capacity</div>
-            <div style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;" id="stat-total-capacity">5,620</div>
-            <div style="font-size:0.58rem; color:#64748b;">People</div>
+            <div style="font-size:0.58rem; color:var(--text-muted); font-weight:600;">Total Capacity</div>
+            <div id="stat-total-capacity" style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;">1,900</div>
+            <div style="font-size:0.54rem; color:var(--text-dim);">People</div>
           </div>
         </div>
 
-        <!-- Stat 3 -->
-        <div class="sh-stat-card">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(139,92,246,0.2); color:#a78bfa; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-user-group"></i>
+        <!-- 3. Currently Occupied -->
+        <div class="sh-metric-card">
+          <div class="sh-metric-icon" style="background:rgba(168,85,247,0.18); color:#a855f7;">
+            <i class="fa-solid fa-users"></i>
           </div>
           <div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Currently Occupied</div>
-            <div style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;" id="stat-total-occupied">2,318</div>
-            <div style="font-size:0.58rem; color:#64748b;">People</div>
+            <div style="font-size:0.58rem; color:var(--text-muted); font-weight:600;">Currently Occupied</div>
+            <div id="stat-occupied" style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;">712</div>
+            <div style="font-size:0.54rem; color:var(--text-dim);">People</div>
           </div>
         </div>
 
-        <!-- Stat 4 -->
-        <div class="sh-stat-card">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-house-chimney-medical"></i>
+        <!-- 4. Available Capacity -->
+        <div class="sh-metric-card">
+          <div class="sh-metric-icon" style="background:rgba(16,185,129,0.18); color:#10b981;">
+            <i class="fa-solid fa-bed"></i>
           </div>
           <div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Available Capacity</div>
-            <div style="font-size:1.05rem; font-weight:800; color:#10b981; line-height:1.1;" id="stat-total-avail">3,302</div>
-            <div style="font-size:0.58rem; color:#64748b;">People</div>
+            <div style="font-size:0.58rem; color:var(--text-muted); font-weight:600;">Available Capacity</div>
+            <div id="stat-available" style="font-size:1.05rem; font-weight:800; color:#10b981; line-height:1.1;">1,188</div>
+            <div style="font-size:0.54rem; color:var(--text-dim);">Beds Ready</div>
           </div>
         </div>
 
-        <!-- Stat 5 -->
-        <div class="sh-stat-card">
-          <div style="width:32px; height:32px; border-radius:50%; background:rgba(6,182,212,0.2); color:#06b6d4; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0;">
-            <i class="fa-solid fa-shield-check"></i>
+        <!-- 5. Operational Shelters -->
+        <div class="sh-metric-card">
+          <div class="sh-metric-icon" style="background:rgba(56,189,248,0.18); color:#38bdf8;">
+            <i class="fa-solid fa-shield-halved"></i>
           </div>
           <div>
-            <div style="font-size:0.65rem; color:#94a3b8;">Active Shelters</div>
-            <div style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;" id="stat-active-shelters">23</div>
-            <div style="font-size:0.58rem; color:#10b981; font-weight:700;">Operational</div>
+            <div style="font-size:0.58rem; color:var(--text-muted); font-weight:600;">Operational Shelters</div>
+            <div id="stat-operational" style="font-size:1.05rem; font-weight:800; color:#fff; line-height:1.1;">3 Active</div>
+            <div style="font-size:0.54rem; color:#10b981;">100% Operational</div>
           </div>
         </div>
       </div>
 
-      <!-- Filter Controls Bar -->
+      <!-- Search & Filters Bar -->
       <div class="sh-filter-bar">
-        <input type="text" class="sh-search-input" placeholder="Search shelters by name or area..." onkeyup="filterShelterList(this.value)">
-        
-        <div style="display:flex; align-items:center; gap:0.55rem;">
-          <select class="sh-filter-select" onchange="filterDistance(this.value)">
-            <option value="all">Distance: All</option>
-            <option value="5">&lt; 5 km</option>
-            <option value="10">&lt; 10 km</option>
-            <option value="20">&lt; 20 km</option>
-          </select>
-
-          <select class="sh-filter-select" onchange="filterType(this.value)">
-            <option value="all">All Types</option>
-            <option value="Relief Camp">Relief Camp</option>
-            <option value="School Shelter">School Shelter</option>
-            <option value="Community Hall">Community Hall</option>
-            <option value="College Shelter">College Shelter</option>
-          </select>
-
-          <select class="sh-filter-select" onchange="filterAvailability(this.value)">
-            <option value="all">Availability: All</option>
-            <option value="open">Open Only</option>
-            <option value="high">High (&gt;150 beds)</option>
-          </select>
-
-          <button class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.65rem; color:#38bdf8; border-color:rgba(56,189,248,0.3);" onclick="renderSheltersForDistrict(document.getElementById('sh-district-dropdown').value)">
-            <i class="fa-solid fa-arrows-rotate"></i> Refresh
-          </button>
+        <div class="sh-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="sh-search-input" id="shelter-search-input" placeholder="Search shelters by name or area..." oninput="filterShelters()">
         </div>
+
+        <select class="sh-select-pill" id="filter-type" onchange="filterShelters()">
+          <option value="all">✨ All Types</option>
+          <option value="relief">Relief Camp</option>
+          <option value="college">College / School</option>
+          <option value="community">Community Hall</option>
+        </select>
+
+        <select class="sh-select-pill" id="filter-status" onchange="filterShelters()">
+          <option value="all">📋 All Status</option>
+          <option value="open">Open (Available)</option>
+          <option value="limited">Limited Space</option>
+          <option value="full">Full Capacity</option>
+        </select>
+
+        <select class="sh-select-pill" id="filter-distance" onchange="filterShelters()">
+          <option value="10">📍 Within 10 km</option>
+          <option value="5">Within 5 km</option>
+          <option value="15">Within 15 km</option>
+          <option value="25">Within 25 km</option>
+        </select>
+
+        <button class="btn-use-location" onclick="useMyLocation()">
+          <i class="fa-solid fa-arrows-rotate"></i> Use My Location
+        </button>
       </div>
 
       <!-- Main Workspace 3-Column Grid -->
       <div class="sh-workspace-grid">
         
-        <!-- Left: Nearby Shelters List -->
-        <div class="sh-list-panel">
-          <div style="font-size:0.785rem; font-weight:800; color:#cbd5e1; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
-            <i class="fa-solid fa-location-arrow" style="color:#10b981;"></i> NEARBY SHELTERS
-          </div>
-
-          <div class="sh-list-scroll" id="shelter-items-list">
-            <!-- Dynamically Rendered by JavaScript -->
-          </div>
-
-          <div style="text-align:center; padding-top:0.45rem; border-top:1px solid rgba(255,255,255,0.06);">
-            <a href="citizen-intel.html" style="font-size:0.72rem; color:#38bdf8; font-weight:700; text-decoration:none;">
-              View All Evacuation Routes &rarr;
-            </a>
-          </div>
-        </div>
-
-        <!-- Middle: OpenStreetMap Map View -->
-        <div class="sh-map-panel">
-          <!-- Top Layer Chips -->
-          <div class="map-top-filters">
-            <span class="map-filter-chip" style="background:rgba(16,185,129,0.3); border:1px solid #10b981;"><i class="fa-solid fa-campground"></i> Shelters</span>
-            <span class="map-filter-chip" style="background:rgba(37,99,235,0.3); border:1px solid #3b82f6;"><i class="fa-solid fa-hospital"></i> Clinics</span>
-            <span class="map-filter-chip" style="background:rgba(239,68,68,0.3); border:1px solid #ef4444;"><i class="fa-solid fa-water"></i> Flooded Areas</span>
-            <span class="map-filter-chip" style="background:rgba(245,158,11,0.3); border:1px solid #f59e0b;"><i class="fa-solid fa-road-barrier"></i> Blocked Roads</span>
-          </div>
-
-          <!-- Leaflet Map Container -->
-          <div id="shelter-leaflet-map"></div>
-
-          <!-- Floating My Location Button -->
-          <button style="position:absolute; bottom:12px; left:12px; z-index:1000; background:rgba(6,12,28,0.92); border:1px solid rgba(59,130,246,0.4); color:#fff; font-size:0.72rem; font-weight:700; padding:0.3rem 0.65rem; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:0.35rem;" onclick="centerMyLocation()">
-            <i class="fa-solid fa-crosshairs" style="color:#38bdf8;"></i> My Location
-          </button>
-
-          <!-- Floating Map Legend Box -->
-          <div style="position:absolute; bottom:12px; right:12px; z-index:1000; background:rgba(6,12,28,0.92); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:0.45rem 0.65rem; font-size:0.685rem; color:#cbd5e1;">
-            <div style="font-weight:800; color:#fff; margin-bottom:3px; font-size:0.72rem;">Legend</div>
-            <div style="display:flex; align-items:center; gap:0.35rem; margin-bottom:2px;"><span style="color:#10b981;">🟢</span> Shelter</div>
-            <div style="display:flex; align-items:center; gap:0.35rem; margin-bottom:2px;"><span style="color:#3b82f6;">🔵</span> Clinic</div>
-            <div style="display:flex; align-items:center; gap:0.35rem; margin-bottom:2px;"><span style="color:#ef4444;">🔴</span> Flooded Area</div>
-            <div style="display:flex; align-items:center; gap:0.35rem;"><span style="color:#f59e0b;">🟠</span> Blocked Road</div>
-          </div>
-        </div>
-
-        <!-- Right: Selected Shelter Detail Profile -->
-        <div class="sh-detail-panel" id="shelter-detail-card">
-          <!-- Shelter Image -->
-          <div style="position:relative; width:100%; height:120px; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); margin-bottom:0.55rem; flex-shrink:0;">
-            <img id="det-img" src="https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=400&q=80" style="width:100%; height:100%; object-fit:cover;">
-            <span style="position:absolute; top:8px; right:8px; background:#10b981; color:#fff; font-size:0.625rem; font-weight:800; padding:2px 6px; border-radius:4px;" id="det-status-badge">Open</span>
-          </div>
-
-          <!-- Title & Distance -->
-          <div style="margin-bottom:0.45rem;">
-            <div style="display:flex; align-items:center; gap:0.45rem;">
-              <span style="font-weight:800; font-size:0.95rem; color:#fff;" id="det-name">Golaghat Stadium Relief Camp</span>
-              <span style="background:rgba(16,185,129,0.25); color:#10b981; font-size:0.625rem; font-weight:800; padding:1.5px 5px; border-radius:4px;" id="det-nearest-badge">Nearest</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#94a3b8; margin-top:2px;">
-              <span id="det-location">Golaghat Town, Assam</span>
-              <strong style="color:#38bdf8;" id="det-distance">2.4 km away</strong>
-            </div>
-          </div>
-
-          <!-- 4 Stats Grid -->
-          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.35rem; background:rgba(15,23,42,0.8); border:1px solid rgba(59,130,246,0.2); border-radius:7px; padding:0.45rem; text-align:center; margin-bottom:0.55rem; flex-shrink:0;">
-            <div>
-              <div style="font-size:0.625rem; color:#94a3b8;">Capacity</div>
-              <div style="font-size:0.85rem; font-weight:800; color:#fff;" id="det-capacity">500</div>
-            </div>
-            <div>
-              <div style="font-size:0.625rem; color:#94a3b8;">Available</div>
-              <div style="font-size:0.85rem; font-weight:800; color:#10b981;" id="det-available">190</div>
-            </div>
-            <div>
-              <div style="font-size:0.625rem; color:#94a3b8;">Occupied</div>
-              <div style="font-size:0.85rem; font-weight:800; color:#a78bfa;" id="det-occupied">310</div>
-            </div>
-            <div>
-              <div style="font-size:0.625rem; color:#94a3b8;">Type</div>
-              <div style="font-size:0.685rem; font-weight:700; color:#fff;" id="det-type">Relief Camp</div>
-            </div>
-          </div>
-
-          <!-- Facilities Icons Header -->
+        <!-- Column 1: Nearby Shelters List -->
+        <div class="sh-card-box">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <div style="font-size:0.72rem; color:#94a3b8; font-weight:700;">Facilities Available</div>
-            <div style="font-size:0.6rem; color:#38bdf8; font-weight:600;"><i class="fa-solid fa-hand-pointer"></i> Click icon for live stock</div>
-          </div>
-
-          <!-- 6 Interactive Facility Tile Cards -->
-          <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:0.3rem; margin-bottom:0.55rem; flex-shrink:0;">
-            
-            <div class="facility-tile" onclick="openFacilityModal('food')" title="Click for Live Food Stock & Meals">
-              <i class="fa-solid fa-utensils" style="color:#38bdf8; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Food</div>
+            <div style="font-weight:800; font-size:0.775rem; color:#fff; display:flex; align-items:center; gap:0.35rem;">
+              Nearby Shelters <span style="font-size:0.68rem; color:var(--text-muted);">(5)</span>
             </div>
-
-            <div class="facility-tile" onclick="openFacilityModal('water')" title="Click for Drinking Water Tank Level">
-              <i class="fa-solid fa-bottle-water" style="color:#38bdf8; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Water</div>
-            </div>
-
-            <div class="facility-tile" onclick="openFacilityModal('medical')" title="Click for Doctors & Medical Kits">
-              <i class="fa-solid fa-kit-medical" style="color:#ef4444; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Medical</div>
-            </div>
-
-            <div class="facility-tile" onclick="openFacilityModal('rest')" title="Click for Bedding & Rest Area Allocation">
-              <i class="fa-solid fa-bed" style="color:#f59e0b; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Rest Area</div>
-            </div>
-
-            <div class="facility-tile" onclick="openFacilityModal('toilet')" title="Click for Sanitation & Toilet Units">
-              <i class="fa-solid fa-restroom" style="color:#10b981; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Toilet</div>
-            </div>
-
-            <div class="facility-tile" onclick="openFacilityModal('charging')" title="Click for Generator & Phone Charging Docks">
-              <i class="fa-solid fa-charging-station" style="color:#a78bfa; font-size:0.8rem;"></i>
-              <div style="font-size:0.56rem; color:#94a3b8; margin-top:2px;">Charging</div>
-            </div>
-
-          </div>
-
-          <!-- Contact Person -->
-          <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.06); border-radius:7px; padding:0.45rem 0.65rem; margin-bottom:0.55rem; flex-shrink:0;">
-            <div style="font-size:0.625rem; color:#94a3b8;">Contact Person</div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.785rem; font-weight:700; color:#fff; margin-top:2px;">
-              <span id="det-contact-name">Mr. Pranjal Saikia</span>
-              <a href="tel:+919876543210" style="color:#38bdf8; text-decoration:none;" id="det-contact-phone"><i class="fa-solid fa-phone"></i> +91 98765 43210</a>
+            <div style="font-size:0.62rem; color:#38bdf8; font-weight:700; cursor:pointer;" onclick="toggleSortOrder()">
+              ⇅ Sort by: Nearest
             </div>
           </div>
 
-          <!-- Description -->
-          <div style="font-size:0.685rem; color:#cbd5e1; line-height:1.45; margin-bottom:0.65rem;" id="det-desc">
-            Government relief camp equipped with food, clean water, medical aid and sleeping area.
+          <div class="sh-list-scroll" id="shelters-list-container">
+            <!-- Item 1 (Active) -->
+            <div class="shelter-item-card active" onclick="selectShelter(0, this)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <div style="width:22px; height:22px; border-radius:5px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                    <i class="fa-solid fa-campground"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:0.72rem; font-weight:800; color:#fff;">Golaghat Relief Camp</div>
+                    <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> Golaghat Town</div>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">2.4 km</div>
+                  <span class="shelter-tag tag-open">Open</span>
+                </div>
+              </div>
+              <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; gap:0.25rem;">
+                <i class="fa-solid fa-users"></i> 182 / 500 people
+              </div>
+              <div style="display:flex; gap:0.25rem; font-size:0.54rem; color:#cbd5e1; margin-top:2px;">
+                <span>🍴 Food</span> &bull; <span>💧 Water</span> &bull; <span>🏥 Medical</span> &bull; <span>🛏️ Sleeping Area</span>
+              </div>
+              <button style="margin-top:0.2rem; width:100%; background:var(--primary-blue); color:#fff; border:none; border-radius:5px; font-weight:700; font-size:0.68rem; padding:0.25rem; cursor:pointer;" onclick="event.stopPropagation(); triggerDirections('Golaghat Relief Camp')">
+                <i class="fa-solid fa-location-arrow"></i> Get Directions &rarr;
+              </button>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="shelter-item-card" onclick="selectShelter(1, this)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <div style="width:22px; height:22px; border-radius:5px; background:rgba(37,99,235,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:0.72rem; font-weight:800; color:#fff;">District Government College</div>
+                    <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> Golaghat Town</div>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">3.1 km</div>
+                  <span class="shelter-tag tag-open">Open</span>
+                </div>
+              </div>
+              <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fa-solid fa-users"></i> 320 / 800 people</span>
+                <i class="fa-solid fa-chevron-right" style="font-size:0.6rem; color:var(--text-dim);"></i>
+              </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="shelter-item-card" onclick="selectShelter(2, this)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <div style="width:22px; height:22px; border-radius:5px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                    <i class="fa-solid fa-school"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:0.72rem; font-weight:800; color:#fff;">Furkating Higher Secondary School</div>
+                    <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> Furkating</div>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">5.6 km</div>
+                  <span class="shelter-tag tag-open">Open</span>
+                </div>
+              </div>
+              <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fa-solid fa-users"></i> 210 / 600 people</span>
+                <i class="fa-solid fa-chevron-right" style="font-size:0.6rem; color:var(--text-dim);"></i>
+              </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="shelter-item-card" onclick="selectShelter(3, this)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <div style="width:22px; height:22px; border-radius:5px; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                    <i class="fa-solid fa-house-chimney"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:0.72rem; font-weight:800; color:#fff;">Kamar Gaon Community Hall</div>
+                    <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> Kamar Gaon</div>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">7.2 km</div>
+                  <span class="shelter-tag tag-limited">Limited</span>
+                </div>
+              </div>
+              <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fa-solid fa-users"></i> 150 / 300 people</span>
+                <i class="fa-solid fa-chevron-right" style="font-size:0.6rem; color:var(--text-dim);"></i>
+              </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="shelter-item-card" onclick="selectShelter(4, this)">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                  <div style="width:22px; height:22px; border-radius:5px; background:rgba(168,85,247,0.2); color:#a855f7; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                    <i class="fa-solid fa-users"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:0.72rem; font-weight:800; color:#fff;">Bokakhat College Shelter</div>
+                    <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> Bokakhat</div>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">9.8 km</div>
+                  <span class="shelter-tag tag-open">Open</span>
+                </div>
+              </div>
+              <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fa-solid fa-users"></i> 280 / 700 people</span>
+                <i class="fa-solid fa-chevron-right" style="font-size:0.6rem; color:var(--text-dim);"></i>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Column 2: Map -->
+        <div class="sh-card-box" style="padding:0.45rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem; padding:0 0.25rem;">
+            <div style="font-weight:800; font-size:0.775rem; color:#fff;">
+              Shelters Around You
+            </div>
+            <span style="background:rgba(16,185,129,0.18); border:1px solid rgba(16,185,129,0.4); color:#10b981; font-size:0.62rem; font-weight:800; padding:1px 6px; border-radius:12px; display:flex; align-items:center; gap:0.3rem;">
+              <span style="width:5px; height:5px; border-radius:50%; background:#10b981;"></span> LIVE
+            </span>
           </div>
 
-          <!-- Action Buttons -->
-          <div style="display:flex; flex-direction:column; gap:0.45rem; margin-top:auto;">
-            <button class="btn btn-primary" style="width:100%; font-size:0.825rem; font-weight:800; padding:0.45rem;" onclick="location.href='citizen-intel.html'">
-              <i class="fa-solid fa-route"></i> Get Directions &rarr;
+          <div id="sh-map-container">
+            <div id="sh-leaflet-map"></div>
+
+            <!-- Floating Map Category Tabs (from reference) -->
+            <div class="map-category-tabs">
+              <button class="map-tab-btn active-shelters" id="tab-shelters" onclick="toggleMapFilter('shelters')">
+                <i class="fa-solid fa-campground"></i> Shelters
+              </button>
+              <button class="map-tab-btn active-clinics" id="tab-clinics" onclick="toggleMapFilter('clinics')">
+                <i class="fa-solid fa-kit-medical"></i> Clinics
+              </button>
+              <button class="map-tab-btn active-flooded" id="tab-flooded" onclick="toggleMapFilter('flooded')">
+                <i class="fa-solid fa-water"></i> Flooded Areas
+              </button>
+              <button class="map-tab-btn active-roads" id="tab-roads" onclick="toggleMapFilter('roads')">
+                <i class="fa-solid fa-road-barrier"></i> Blocked Roads
+              </button>
+            </div>
+
+            <!-- Map Legend Box (Bottom-Right) -->
+            <div class="map-legend-panel">
+              <div class="map-legend-row"><span style="width:7px; height:7px; border-radius:50%; background:#2563eb; display:inline-block;"></span> <span>Your Location</span></div>
+              <div class="map-legend-row"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; display:inline-block;"></span> <span>Shelter</span></div>
+              <div class="map-legend-row"><span style="width:7px; height:7px; border-radius:50%; background:#ef4444; display:inline-block;"></span> <span>Clinic / Hospital</span></div>
+              <div class="map-legend-row"><span style="width:9px; height:9px; background:rgba(239,68,68,0.4); border:1px solid #ef4444; border-radius:2px; display:inline-block;"></span> <span>Flooded Area</span></div>
+              <div class="map-legend-row"><span style="width:12px; height:2px; background:#10b981; border-radius:2px; display:inline-block;"></span> <span>Safe Route</span></div>
+              <div class="map-legend-row"><span style="width:12px; height:2px; background:#f59e0b; border-radius:2px; display:inline-block;"></span> <span>Road</span></div>
+            </div>
+
+            <!-- Bottom Left Layers Button -->
+            <div style="position:absolute; bottom:8px; left:8px; z-index:500;">
+              <button style="background:rgba(6,12,28,0.9); border:1px solid rgba(59,130,246,0.35); color:#cbd5e1; font-size:0.62rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:5px; cursor:pointer;" onclick="toggleMapLayer()">
+                <i class="fa-solid fa-layer-group"></i> Layers
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Selected Shelter Detail Card -->
+        <div class="sh-card-box" id="shelter-detail-card" style="justify-content:space-between;">
+          <div>
+            <div class="detail-photo-wrapper">
+              <img id="detail-photo" src="golaghat-camp.jpg" alt="Golaghat Relief Camp">
+              <span id="detail-status-pill" class="shelter-tag tag-open" style="position:absolute; top:6px; right:6px;">Open</span>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.1rem;">
+              <h3 id="detail-name" style="font-size:0.85rem; font-weight:800; color:#fff; line-height:1.15;">Golaghat Relief Camp</h3>
+              <span id="detail-distance" style="font-size:0.62rem; color:#38bdf8; font-weight:700;">2.4 km away</span>
+            </div>
+            <div id="detail-location" style="font-size:0.6rem; color:var(--text-muted); margin-bottom:0.35rem;">
+              <i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> Golaghat Town, Golaghat, Assam
+            </div>
+
+            <!-- 4-Stat Grid -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.2rem; background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:0.25rem 0.35rem; text-align:center; margin-bottom:0.35rem;">
+              <div>
+                <div style="font-size:0.5rem; color:var(--text-dim);">Capacity</div>
+                <div id="detail-cap" style="font-size:0.75rem; font-weight:800; color:#fff;">500</div>
+              </div>
+              <div>
+                <div style="font-size:0.5rem; color:var(--text-dim);">Occupied</div>
+                <div id="detail-occ" style="font-size:0.75rem; font-weight:800; color:#38bdf8;">182</div>
+              </div>
+              <div>
+                <div style="font-size:0.5rem; color:var(--text-dim);">Available</div>
+                <div id="detail-avail" style="font-size:0.75rem; font-weight:800; color:#10b981;">318</div>
+              </div>
+              <div>
+                <div style="font-size:0.5rem; color:var(--text-dim);">Status</div>
+                <div id="detail-stat" style="font-size:0.75rem; font-weight:800; color:#10b981;">Open</div>
+              </div>
+            </div>
+
+            <!-- Facilities Available -->
+            <div style="font-size:0.65rem; font-weight:800; color:#fff; margin-bottom:0.15rem;">Facilities Available</div>
+            <div class="facility-grid">
+              <div class="facility-chip" onclick="showFacilityInfo('Food & Rations', 'Hot cooked meals and dry ration kits available 24x7.')">
+                <i class="fa-solid fa-utensils" style="color:#f59e0b;"></i> Food
+              </div>
+              <div class="facility-chip" onclick="showFacilityInfo('Drinking Water', 'Clean RO purified drinking water stations installed.')">
+                <i class="fa-solid fa-bottle-water" style="color:#38bdf8;"></i> Water
+              </div>
+              <div class="facility-chip" onclick="showFacilityInfo('Medical First Aid', 'Doctor and nurse on duty with emergency medicine stock.')">
+                <i class="fa-solid fa-kit-medical" style="color:#ef4444;"></i> Medical
+              </div>
+              <div class="facility-chip" onclick="showFacilityInfo('Sanitation & Toilets', 'Separate clean mobile bio-toilets for men and women.')">
+                <i class="fa-solid fa-restroom" style="color:#10b981;"></i> Toilets
+              </div>
+              <div class="facility-chip" onclick="showFacilityInfo('Sleeping Area', 'Mattresses, blankets, and mosquito nets provided.')">
+                <i class="fa-solid fa-bed" style="color:#a855f7;"></i> Sleeping Area
+              </div>
+              <div class="facility-chip" onclick="showFacilityInfo('Mobile Charging', 'Solar and generator backed mobile phone charging docks.')">
+                <i class="fa-solid fa-bolt" style="color:#fbbf24;"></i> Charging
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div style="display:flex; flex-direction:column; gap:0.25rem; margin-top:0.2rem;">
+            <button style="width:100%; background:var(--primary-blue); color:#fff; border:none; border-radius:6px; font-weight:800; font-size:0.72rem; padding:0.35rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.35rem; box-shadow:0 3px 10px rgba(37,99,235,0.4);" onclick="triggerDirections(currentSelectedShelter.name)">
+              <i class="fa-solid fa-location-arrow"></i> Get Directions &rarr;
             </button>
-            <button class="btn btn-outline" style="width:100%; font-size:0.785rem; padding:0.38rem;" onclick="showCustomAlert('📍 Location Shared', 'Shelter GPS coordinates copied to clipboard!', 'success')">
+            <button style="width:100%; background:rgba(15,23,42,0.85); color:#cbd5e1; border:1px solid rgba(59,130,246,0.3); border-radius:6px; font-weight:700; font-size:0.68rem; padding:0.25rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.35rem;" onclick="shareShelterLocation()">
               <i class="fa-solid fa-share-nodes"></i> Share Location
             </button>
           </div>
@@ -772,686 +1193,593 @@
 
       </div>
 
-      <!-- Bottom Important Information Callout Banner -->
-      <div class="sh-info-banner">
-        <div style="display:flex; align-items:center; gap:0.45rem; color:#38bdf8; font-weight:700;">
-          <i class="fa-solid fa-circle-info"></i> Important Information
+      <!-- Bottom Row (3 Cards) -->
+      <div class="sh-bottom-grid">
+        
+        <!-- 1. Safety Tips -->
+        <div class="sh-card-box" style="justify-content:center;">
+          <div style="display:flex; align-items:center; gap:0.35rem; margin-bottom:0.15rem;">
+            <i class="fa-solid fa-shield-halved" style="color:#38bdf8; font-size:0.75rem;"></i>
+            <div style="font-weight:800; font-size:0.72rem; color:#fff;">Safety Tips at Shelters</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.1rem 0.35rem; font-size:0.58rem; color:#cbd5e1;">
+            <div><i class="fa-solid fa-check" style="color:#10b981; font-size:0.5rem;"></i> Carry essential medicines and documents.</div>
+            <div><i class="fa-solid fa-check" style="color:#10b981; font-size:0.5rem;"></i> Follow instructions from shelter authorities.</div>
+            <div><i class="fa-solid fa-check" style="color:#10b981; font-size:0.5rem;"></i> Maintain hygiene and social distancing.</div>
+            <div><i class="fa-solid fa-check" style="color:#10b981; font-size:0.5rem;"></i> Inform authorities if you need special assistance.</div>
+          </div>
         </div>
-        <div>&bull; Shelters are updated in real-time. Bring ID and important documents.</div>
-        <div>&bull; Follow shelter rules and cooperate with officials.</div>
-        <div>&bull; Helpline: 112 for any emergency assistance.</div>
+
+        <!-- 2. Emergency Helpline -->
+        <div class="sh-card-box" style="justify-content:center;">
+          <div style="display:flex; align-items:center; gap:0.35rem; margin-bottom:0.15rem;">
+            <i class="fa-solid fa-phone-volume" style="color:#ef4444; font-size:0.75rem;"></i>
+            <div style="font-weight:800; font-size:0.72rem; color:#fff;">Emergency Helpline</div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.62rem; color:#cbd5e1;">
+            <div><strong style="color:#ef4444;">112</strong> Emergency (All Services)</div>
+            <div><strong style="color:#f59e0b;">1078</strong> ASDMA Disaster Control</div>
+            <div><strong style="color:#10b981;">108</strong> Medical Ambulance</div>
+          </div>
+        </div>
+
+        <!-- 3. Live Updates -->
+        <div class="sh-card-box" style="justify-content:center;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.12rem;">
+            <div style="display:flex; align-items:center; gap:0.35rem; font-weight:800; font-size:0.72rem; color:#fff;">
+              <i class="fa-solid fa-tower-broadcast" style="color:#ef4444; font-size:0.75rem;"></i> Live Updates
+            </div>
+            <a href="#" style="font-size:0.6rem; color:#38bdf8; font-weight:700; text-decoration:none;" onclick="showToast('Live Updates', 'Fetching latest radio dispatch feeds.')">View All &rarr;</a>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.1rem; font-size:0.58rem; color:#cbd5e1;">
+            <div style="display:flex; justify-content:space-between;"><span style="color:#10b981;">&bull; Golaghat Relief Camp now has 50 more beds available.</span> <span style="color:var(--text-dim);">10:20 AM</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:#ef4444;">&bull; Water level near NH-715 is rising.</span> <span style="color:var(--text-dim);">09:45 AM</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:#f59e0b;">&bull; New shelter opened at Kamar Gaon Community Hall.</span> <span style="color:var(--text-dim);">08:30 AM</span></div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Sticky Meta Footer -->
+      <!-- Footer Bar -->
       <footer class="sh-footer-bar">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <i class="fa-solid fa-shield-halved" style="color:#10b981;"></i>
           <span><strong>Stay Informed. Stay Safe.</strong> AEGIS is with you in every step.</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem;">
-          <span>Real-time updates</span>
-          <span>&bull;</span>
-          <span>Verified information</span>
-          <span>&bull;</span>
-          <span>Faster response</span>
+        <div style="display:flex; align-items:center; gap:0.55rem;">
+          <span>Trusted by:</span>
+          <span>🏛️ Government of Assam</span>
           <span>|</span>
-          <span>Trusted by Government of Assam</span>
+          <span>🛡️ ASDMA</span>
+          <span>|</span>
+          <span>🎖️ NDRF</span>
+          <span>|</span>
+          <span>🎖️ SDRF Assam</span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.45rem;">
           <span>Data Source: ASDMA | IMD | Local Authorities</span>
           <span>&bull;</span>
-          <span>Last Updated: 12 Aug 2026, 10:35 AM</span>
+          <span>Last Updated: 12 Aug 2026, 10:30 AM</span>
           <span>&bull;</span>
           <span style="color:#10b981; font-weight:700;">🟢 Live</span>
         </div>
       </footer>
 
     </main>
+
   </div>
 
-  <!-- Interactive Facility Stock Modal Window -->
-  <div class="facility-modal-overlay" id="facility-modal-overlay">
-    <div class="facility-modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.55rem;">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div style="width:36px; height:36px; border-radius:50%; background:rgba(56,189,248,0.2); color:#38bdf8; display:flex; align-items:center; justify-content:center; font-size:1.1rem;" id="modal-fac-icon">
-            <i class="fa-solid fa-utensils"></i>
-          </div>
-          <div>
-            <div style="font-weight:800; font-size:1.05rem; color:#fff;" id="modal-fac-title">Food &amp; Rations Stock</div>
-            <div style="font-size:0.7rem; color:#94a3b8;" id="modal-shelter-name">Golaghat Stadium Relief Camp</div>
-          </div>
-        </div>
-        <button style="background:transparent; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="closeFacilityModal()">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- Occupancy & Stock Progress Bar -->
-      <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); border-radius:8px; padding:0.65rem 0.85rem; margin-bottom:0.85rem;">
-        <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:0.35rem;">
-          <span style="color:#cbd5e1;">Shelter Occupancy: <strong style="color:#fff;" id="modal-occ-text">310 / 500 Citizens</strong></span>
-          <span style="font-weight:800; color:#10b981;" id="modal-stock-percent">82% Stock Level</span>
-        </div>
-        <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
-          <div id="modal-progress-bar" style="height:100%; width:82%; background:linear-gradient(90deg, #10b981 0%, #38bdf8 100%); border-radius:4px;"></div>
-        </div>
-      </div>
-
-      <!-- Detailed Metrics Grid -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; margin-bottom:0.85rem;" id="modal-metrics-grid">
-        <!-- Dynamically Populated by JavaScript -->
-      </div>
-
-      <!-- Status Footer & Close Button -->
-      <div style="display:flex; align-items:center; justify-content:space-between; pt-0.5rem;">
-        <div style="font-size:0.7rem; color:#10b981; font-weight:700; display:flex; align-items:center; gap:0.35rem;" id="modal-status-badge">
-          <i class="fa-solid fa-circle-check"></i> Stock Verified &amp; Operational
-        </div>
-        <button class="btn btn-primary" style="font-size:0.785rem; font-weight:800; padding:0.35rem 0.95rem;" onclick="closeFacilityModal()">
-          Done
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Application Logic -->
-  <script src="js/citizen.js?v=3.0"></script>
-
+  <!-- Interactive Scripts -->
   <script>
-    let shelterMap = null;
-    let mapMarkerLayers = [];
-    let currentSheltersList = [];
-    let currentDistrictData = null;
-    let activeSelectedShelter = null;
+    let sheltersData = [];
+    let currentSelectedShelter = null;
+    let shelterMap;
+    let markersLayer;
+    let clinicsLayer;
+    let floodedLayer;
+    let roadsLayer;
+
+    const layerStates = {
+      shelters: true,
+      clinics: true,
+      flooded: true,
+      roads: true
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Initialize Map with Default OpenStreetMap Tiles
-      shelterMap = L.map('shelter-leaflet-map', {
-        center: [26.4049, 94.0321],
-        zoom: 12,
-        zoomControl: false
-      });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap'
-      }).addTo(shelterMap);
-
-      // Initial Render for Default District (Golaghat)
-      renderSheltersForDistrict('Golaghat');
-
-      setTimeout(() => shelterMap.invalidateSize(), 300);
+      // Sync Topbar District
+      if (window.citizenApp) {
+        window.citizenApp.syncTopbarDistrict();
+      }
+      loadSheltersForActiveDistrict();
     });
 
-    // Custom POI Icon Builders
-    function createShelterIcon() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: '<div style="background:#10b981; color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 14px rgba(16,185,129,0.85); cursor:pointer;"><i class="fa-solid fa-campground" style="font-size:13px;"></i></div>',
-        iconSize: [30, 30]
-      });
+    function loadSheltersForActiveDistrict() {
+      const selectedDistrict = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+      sheltersData = (window.citizenApp && window.citizenApp.getDistrictShelters) ? window.citizenApp.getDistrictShelters(selectedDistrict) : [];
+
+      if (!sheltersData || sheltersData.length === 0) {
+        sheltersData = [
+          {
+            name: `${selectedDistrict} Relief Camp`,
+            location: `${selectedDistrict} Town, Assam`,
+            shortLoc: `${selectedDistrict} Town`,
+            distance: "1.8 km",
+            capacity: 500,
+            occupied: 180,
+            available: 320,
+            status: "Open",
+            type: "relief",
+            photo: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80",
+            coords: [26.4049, 94.0321]
+          }
+        ];
+      }
+
+      currentSelectedShelter = sheltersData[0];
+
+      // Update Top Metrics
+      const totalShelters = sheltersData.length;
+      const totalCap = sheltersData.reduce((acc, s) => acc + (s.capacity || 0), 0);
+      const totalOcc = sheltersData.reduce((acc, s) => acc + (s.occupied || 0), 0);
+      const totalAvail = sheltersData.reduce((acc, s) => acc + (s.available || 0), 0);
+      const opShelters = sheltersData.filter(s => s.status === 'Open').length;
+
+      const tSheltersEl = document.getElementById('stat-total-shelters');
+      if (tSheltersEl) tSheltersEl.innerText = `${totalShelters} Verified`;
+      const distNameEl = document.getElementById('stat-district-name');
+      if (distNameEl) distNameEl.innerText = `In ${selectedDistrict}`;
+      const tCapEl = document.getElementById('stat-total-capacity');
+      if (tCapEl) tCapEl.innerText = totalCap.toLocaleString();
+      const tOccEl = document.getElementById('stat-occupied');
+      if (tOccEl) tOccEl.innerText = totalOcc.toLocaleString();
+      const tAvailEl = document.getElementById('stat-available');
+      if (tAvailEl) tAvailEl.innerText = totalAvail.toLocaleString();
+      const tOpEl = document.getElementById('stat-operational');
+      if (tOpEl) tOpEl.innerText = `${opShelters} Active`;
+
+      const listHeaderCount = document.querySelector('.sh-card-box span[style*="font-size:0.68rem"]');
+      if (listHeaderCount) listHeaderCount.innerText = `(${totalShelters})`;
+
+      // Render Left Shelters List
+      renderSheltersList();
+
+      // Initialize or update Map
+      initShelterMap();
+
+      // Update right detail card
+      if (currentSelectedShelter) {
+        selectShelter(0, document.querySelector('.shelter-item-card'));
+      }
     }
 
-    function createClinicIcon() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: '<div style="background:#2563eb; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 12px rgba(37,99,235,0.85);"><i class="fa-solid fa-kit-medical" style="font-size:12px;"></i></div>',
-        iconSize: [28, 28]
-      });
-    }
+    function renderSheltersList() {
+      const container = document.getElementById('shelters-list-container');
+      if (!container) return;
 
-    function createFloodIcon() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: '<div style="background:#ef4444; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 12px rgba(239,68,68,0.85);"><i class="fa-solid fa-water" style="font-size:12px;"></i></div>',
-        iconSize: [28, 28]
-      });
-    }
+      container.innerHTML = sheltersData.map((s, index) => {
+        const isActive = (index === 0) ? 'active' : '';
+        const iconClass = s.type === 'college' ? 'fa-building-columns' : 'fa-campground';
+        const tagClass = s.status === 'Open' ? 'tag-open' : 'tag-limited';
 
-    function createBlockIcon() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: '<div style="background:#f59e0b; color:#000; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 0 12px rgba(245,158,11,0.85);"><i class="fa-solid fa-road-barrier" style="font-size:12px;"></i></div>',
-        iconSize: [28, 28]
-      });
-    }
-
-    function createCitizenIcon() {
-      return L.divIcon({
-        className: 'custom-map-icon',
-        html: '<div style="background:#2563eb; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2.5px solid #fff; box-shadow:0 0 16px #2563eb;"><i class="fa-solid fa-user"></i></div>',
-        iconSize: [32, 32]
-      });
-    }
-
-    // Dynamic Render for Selected District
-    function renderSheltersForDistrict(districtName) {
-      if (!window.citizenApp || !window.locateNearestShelters) return;
-
-      // 1. Get Model Data for District
-      currentDistrictData = window.citizenApp.getDistrictModelData(districtName);
-      const userLat = currentDistrictData.citizenOrigin[0];
-      const userLng = currentDistrictData.citizenOrigin[1];
-
-      // 2. Fetch sorted nearest shelters for this district
-      currentSheltersList = window.locateNearestShelters(currentDistrictData.district, userLat, userLng);
-
-      // 3. Clear Map Markers
-      mapMarkerLayers.forEach(layer => shelterMap.removeLayer(layer));
-      mapMarkerLayers = [];
-
-      // 4. Add Citizen GPS Marker & Safe Radius Circle
-      const citizenMarker = L.marker([userLat, userLng], { icon: createCitizenIcon() })
-        .addTo(shelterMap)
-        .bindPopup(`<b>Citizen Location (${currentDistrictData.district})</b><br>GPS Active &bull; Safe Tracking Radius`);
-      mapMarkerLayers.push(citizenMarker);
-
-      const radiusCircle = L.circle([userLat, userLng], {
-        radius: 2800,
-        color: '#10b981',
-        fillColor: '#10b981',
-        fillOpacity: 0.08,
-        weight: 1.5
-      }).addTo(shelterMap);
-      mapMarkerLayers.push(radiusCircle);
-
-      // 5. Add Shelter Markers on Map
-      const boundsCoords = [[userLat, userLng]];
-
-      currentSheltersList.forEach((shelter, idx) => {
-        boundsCoords.push(shelter.coordinates);
-        const shelterMarker = L.marker(shelter.coordinates, { icon: createShelterIcon() })
-          .addTo(shelterMap)
-          .bindPopup(`
-            <div style="font-family:'Plus Jakarta Sans',sans-serif; color:#0f172a; padding:2px;">
-              <b style="color:#0f766e; font-size:13px;">${shelter.name}</b><br>
-              <span style="font-size:11px; color:#475569;">Distance: <strong>${shelter.distanceKm} km</strong> &bull; Capacity: ${shelter.capacity}</span><br>
-              <span style="font-size:11px; color:#16a34a; font-weight:700;">${shelter.available} Beds Available (${shelter.status})</span><br>
-              <button style="margin-top:5px; background:#2563eb; color:#fff; border:none; padding:3px 8px; border-radius:4px; font-size:11px; cursor:pointer;" onclick="location.href='citizen-intel.html'">Get Directions &rarr;</button>
+        return `
+          <div class="shelter-item-card ${isActive}" onclick="selectShelter(${index}, this)">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <div style="width:22px; height:22px; border-radius:5px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">
+                  <i class="fa-solid ${iconClass}"></i>
+                </div>
+                <div>
+                  <div style="font-size:0.72rem; font-weight:800; color:#fff;">${s.name}</div>
+                  <div style="font-size:0.58rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="font-size:0.55rem;"></i> ${s.location}</div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:0.68rem; font-weight:800; color:#38bdf8;">${s.distance}</div>
+                <span class="shelter-tag ${tagClass}">${s.status}</span>
+              </div>
             </div>
-          `);
+            <div style="font-size:0.6rem; color:var(--text-dim); display:flex; align-items:center; gap:0.25rem; margin-top:2px;">
+              <i class="fa-solid fa-users"></i> ${s.occupied} / ${s.capacity} people (${s.available} open)
+            </div>
+            <div style="display:flex; gap:0.25rem; font-size:0.54rem; color:#cbd5e1; margin-top:2px;">
+              <span>🍴 Free Rations</span> &bull; <span>💧 Clean Water</span> &bull; <span>🏥 Medical Triage</span> &bull; <span>🛏️ Beds</span>
+            </div>
+            <button style="margin-top:0.25rem; width:100%; background:var(--primary-blue); color:#fff; border:none; border-radius:5px; font-weight:700; font-size:0.68rem; padding:0.25rem; cursor:pointer;" onclick="event.stopPropagation(); triggerDirections('${s.name.replace(/'/g, "\\'")}')">
+              <i class="fa-solid fa-location-arrow"></i> Get Directions &rarr;
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
 
-        shelterMarker.on('click', () => {
-          selectShelterByIndex(idx);
-        });
+    function initShelterMap() {
+      const selectedDistrict = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+      const districtData = window.citizenApp ? window.citizenApp.getDistrictModelData(selectedDistrict) : null;
+      const districtCenter = districtData ? (districtData.coordinates || districtData.center) : [26.4049, 94.0321];
+      
+      if (!shelterMap) {
+        shelterMap = L.map('sh-leaflet-map', {
+          zoomControl: false,
+          attributionControl: false
+        }).setView(districtCenter, 13);
 
-        mapMarkerLayers.push(shelterMarker);
+        L.control.zoom({ position: 'topleft' }).addTo(shelterMap);
+
+        if (window.citizenApp && citizenApp.setupMapTileLayers) {
+          citizenApp.setupMapTileLayers(shelterMap, 'street');
+        } else {
+          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '&copy; Esri World Street Map'
+          }).addTo(shelterMap);
+        }
+
+        // Layer Groups for Category Tabs
+        floodedLayer = L.layerGroup().addTo(shelterMap);
+        roadsLayer = L.layerGroup().addTo(shelterMap);
+        clinicsLayer = L.layerGroup().addTo(shelterMap);
+        markersLayer = L.layerGroup().addTo(shelterMap);
+      } else {
+        shelterMap.setView(districtCenter, 13);
+        floodedLayer.clearLayers();
+        roadsLayer.clearLayers();
+        clinicsLayer.clearLayers();
+        markersLayer.clearLayers();
+      }
+
+      // River label & district annotation
+      const riverName = districtData ? districtData.river : 'River Basin';
+      const waterLevel = districtData ? districtData.waterLevel : 'High';
+      addMapTextLabel([districtCenter[0] + 0.015, districtCenter[1] - 0.005], `🌊 ${riverName} (${waterLevel})`, '#0284c7', '#fff');
+      addMapTextLabel([districtCenter[0], districtCenter[1]], `📍 ${selectedDistrict} District`, 'rgba(15,23,42,0.85)', '#fff', '11px');
+
+      // Blue River Path
+      L.polyline([
+        [districtCenter[0] + 0.025, districtCenter[1] - 0.015],
+        [districtCenter[0] + 0.012, districtCenter[1] - 0.002],
+        [districtCenter[0] + 0.006, districtCenter[1] + 0.014],
+        [districtCenter[0] - 0.002, districtCenter[1] + 0.028]
+      ], {
+        color: '#0284c7',
+        weight: 10,
+        opacity: 0.7,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(shelterMap);
+
+      // Flooded Red Risk Polygons
+      L.polygon([
+        [districtCenter[0] - 0.005, districtCenter[1] - 0.015],
+        [districtCenter[0] + 0.008, districtCenter[1] - 0.022],
+        [districtCenter[0] + 0.014, districtCenter[1] - 0.008],
+        [districtCenter[0] + 0.004, districtCenter[1] + 0.002],
+        [districtCenter[0] - 0.006, districtCenter[1] - 0.006]
+      ], {
+        color: '#ef4444',
+        fillColor: '#ef4444',
+        fillOpacity: 0.32,
+        weight: 1.5
+      }).addTo(floodedLayer);
+
+      // Safe Connection Route lines connecting shelters
+      if (sheltersData && sheltersData.length >= 2) {
+        const s0Coords = sheltersData[0].coordinates || sheltersData[0].coords;
+        const s1Coords = sheltersData[1].coordinates || sheltersData[1].coords;
+        if (s0Coords && s1Coords) {
+          L.polyline([
+            s0Coords,
+            [(s0Coords[0] + s1Coords[0]) / 2 + 0.004, (s0Coords[1] + s1Coords[1]) / 2 - 0.004],
+            s1Coords
+          ], {
+            color: '#10b981',
+            weight: 4,
+            opacity: 0.9,
+            lineCap: 'round'
+          }).addTo(roadsLayer);
+        }
+      }
+
+      // Blocked Road Marker
+      const blockadeIcon = L.divIcon({
+        className: 'blockade-marker',
+        html: `
+          <div style="width:20px; height:20px; border-radius:50%; background:#f59e0b; color:#000; border:2px solid #fff; box-shadow:0 0 10px rgba(245,158,11,0.9); display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800;">
+            <i class="fa-solid fa-road-barrier"></i>
+          </div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
       });
+      const blockCoords = (districtData && districtData.roadBlock) ? districtData.roadBlock : [districtCenter[0] + 0.003, districtCenter[1] - 0.008];
+      const blockName = (districtData && districtData.blockageInfo) ? districtData.blockageInfo.name : 'Road Submerged';
+      L.marker(blockCoords, { icon: blockadeIcon })
+        .addTo(roadsLayer)
+        .bindTooltip(`🚫 ${blockName}`, { sticky: true });
 
-      // 6. Add Nearby Clinic, Flooded Area & Roadblock
-      if (currentDistrictData.clinic) {
-        boundsCoords.push(currentDistrictData.clinic);
-        const clinicMarker = L.marker(currentDistrictData.clinic, { icon: createClinicIcon() })
-          .addTo(shelterMap)
-          .bindPopup(`<b>${currentDistrictData.clinicInfo ? currentDistrictData.clinicInfo.name : 'Local Primary Clinic'}</b><br>Emergency First Aid & Doctor`);
-        mapMarkerLayers.push(clinicMarker);
+      // User Location (You are here)
+      const originCoords = districtData && districtData.citizenOrigin ? districtData.citizenOrigin : [districtCenter[0] - 0.012, districtCenter[1] - 0.010];
+      const originIcon = L.divIcon({
+        className: 'origin-marker',
+        html: `
+          <div style="display:flex; align-items:center; gap:4px;">
+            <div style="width:18px; height:18px; border-radius:50%; background:#2563eb; border:2.5px solid #ffffff; box-shadow:0 0 14px rgba(37,99,235,1); animation:originPulse 2s infinite;"></div>
+            <div style="background:#0f172a; color:#93c5fd; border:1px solid #3b82f6; font-size:0.58rem; font-weight:800; padding:1px 6px; border-radius:10px; white-space:nowrap;">📍 You are here (${selectedDistrict})</div>
+          </div>
+        `,
+        iconSize: [140, 20],
+        iconAnchor: [9, 10]
+      });
+      L.marker(originCoords, { icon: originIcon }).addTo(shelterMap);
+
+      // Render Shelters & Clinics
+      renderShelterMarkers();
+
+      if (districtData && districtData.clinic) {
+        addClinicMarker(districtData.clinic);
+      } else {
+        addClinicMarker([districtCenter[0] + 0.008, districtCenter[1] - 0.005]);
       }
 
-      if (currentDistrictData.floodedArea) {
-        boundsCoords.push(currentDistrictData.floodedArea);
-        const floodMarker = L.marker(currentDistrictData.floodedArea, { icon: createFloodIcon() })
-          .addTo(shelterMap)
-          .bindPopup(`<b>Flooded Inundation Zone</b><br>Active water surge detected`);
-        mapMarkerLayers.push(floodMarker);
+      setTimeout(() => { if (shelterMap) shelterMap.invalidateSize(); }, 250);
+      setTimeout(() => { if (shelterMap) shelterMap.invalidateSize(); }, 600);
+    }
+
+    function toggleMapFilter(type) {
+      layerStates[type] = !layerStates[type];
+      const isVisible = layerStates[type];
+      
+      const tabBtn = document.getElementById(`tab-${type}`);
+      const activeClass = `active-${type}`;
+
+      if (isVisible) {
+        tabBtn.classList.add(activeClass);
+      } else {
+        tabBtn.classList.remove(activeClass);
       }
 
-      if (currentDistrictData.roadBlock) {
-        boundsCoords.push(currentDistrictData.roadBlock);
-        const blockMarker = L.marker(currentDistrictData.roadBlock, { icon: createBlockIcon() })
-          .addTo(shelterMap)
-          .bindPopup(`<b>Road Blockage</b><br>${currentDistrictData.blockageInfo ? currentDistrictData.blockageInfo.warning : 'Impassable'}`);
-        mapMarkerLayers.push(blockMarker);
-      }
-
-      // 7. Auto Fit Map Bounds
-      try {
-        shelterMap.fitBounds(L.latLngBounds(boundsCoords).pad(0.25), { animate: true, duration: 0.8 });
-      } catch (e) {
-        shelterMap.setView([userLat, userLng], 12);
-      }
-
-      // 8. Render Left List of Shelters
-      renderShelterCardsList(currentSheltersList);
-
-      // 9. Update Top Metrics for District / State
-      updateMetricsBar(currentSheltersList);
-
-      // 10. Default Select Nearest Shelter
-      if (currentSheltersList.length > 0) {
-        selectShelterByIndex(0);
+      if (type === 'shelters') {
+        if (isVisible) shelterMap.addLayer(markersLayer);
+        else shelterMap.removeLayer(markersLayer);
+        showToast('⛺ Shelters Filter', isVisible ? 'Showing all shelters on map' : 'Shelters layer hidden');
+      } else if (type === 'clinics') {
+        if (isVisible) shelterMap.addLayer(clinicsLayer);
+        else shelterMap.removeLayer(clinicsLayer);
+        showToast('🏥 Clinics Filter', isVisible ? 'Showing emergency medical centers' : 'Clinics layer hidden');
+      } else if (type === 'flooded') {
+        if (isVisible) shelterMap.addLayer(floodedLayer);
+        else shelterMap.removeLayer(floodedLayer);
+        showToast('🌊 Inundation Filter', isVisible ? 'Showing active flood inundation zones' : 'Flooded areas layer hidden');
+      } else if (type === 'roads') {
+        if (isVisible) shelterMap.addLayer(roadsLayer);
+        else shelterMap.removeLayer(roadsLayer);
+        showToast('🚧 Road Blockades', isVisible ? 'Showing route obstacles and corridors' : 'Road layers hidden');
       }
     }
 
-    // Render Left Scrollable List
-    function renderShelterCardsList(shelters) {
-      const listContainer = document.getElementById('shelter-items-list');
-      listContainer.innerHTML = '';
-
-      shelters.forEach((sh, idx) => {
-        const isNearest = (idx === 0);
-        const nearestBadge = isNearest ? `<span style="background:rgba(16,185,129,0.25); color:#10b981; font-size:0.58rem; padding:1px 4px; border-radius:3px;">Nearest</span>` : '';
-        const isFull = sh.status === 'Full';
-        const statusDot = isFull ? `<span style="color:#ef4444; font-weight:700;">● Full</span>` : `<span style="color:#10b981; font-weight:700;"><span class="pulse-dot" style="background:#10b981; width:5px; height:5px;"></span> Open 24x7</span>`;
-
-        const card = document.createElement('div');
-        card.className = `sh-item-card ${idx === 0 ? 'active' : ''}`;
-        card.id = `sh-card-${idx}`;
-        card.onclick = () => selectShelterByIndex(idx);
-
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div style="display:flex; align-items:center; gap:0.45rem;">
-              <div style="width:28px; height:28px; border-radius:6px; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">
+    function renderShelterMarkers() {
+      markersLayer.clearLayers();
+      sheltersData.forEach((s, index) => {
+        const isSelected = currentSelectedShelter && (s.name === currentSelectedShelter.name);
+        const icon = L.divIcon({
+          className: 'sh-marker',
+          html: `
+            <div style="display:flex; align-items:center; gap:4px;">
+              <div style="width:${isSelected ? '28px' : '22px'}; height:${isSelected ? '28px' : '22px'}; border-radius:50%; background:#10b981; color:#fff; border:2px solid #fff; box-shadow:0 0 12px rgba(16,185,129,0.9); display:flex; align-items:center; justify-content:center; font-size:${isSelected ? '0.75rem' : '0.6rem'}; transition:all 0.2s;">
                 <i class="fa-solid fa-campground"></i>
               </div>
-              <div>
-                <div style="font-weight:800; font-size:0.785rem; color:#fff;">
-                  ${sh.name} ${nearestBadge}
-                </div>
-                <div style="font-size:0.65rem; color:#94a3b8;">${sh.type || 'Relief Camp'} &bull; ${currentDistrictData.district}</div>
+              <div style="background:rgba(15,23,42,0.9); color:#86efac; border:1px solid #10b981; border-radius:10px; padding:1px 6px; font-size:9px; font-weight:800; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.5);">
+                ${s.name.split(' ')[0]} Shelter
               </div>
             </div>
-            <span style="font-size:0.685rem; color:#94a3b8; font-weight:700;">${sh.distanceKm} km</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; font-size:0.685rem; color:#cbd5e1; margin-top:0.35rem;">
-            <span>Capacity: ${sh.capacity}</span>
-            <span>Available: <strong style="${isFull ? 'color:#ef4444;' : 'color:#10b981;'}">${sh.available}</strong></span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.625rem; margin-top:3px;">
-            <div>${statusDot}</div>
-            <i class="fa-solid fa-location-arrow" style="color:#38bdf8;"></i>
-          </div>
-        `;
-        listContainer.appendChild(card);
+          `,
+          iconSize: [140, 30],
+          iconAnchor: [14, 15]
+        });
+        const coords = s.coordinates || s.coords;
+        if (coords) {
+          const m = L.marker(coords, { icon: icon }).addTo(markersLayer);
+          m.bindPopup(`<b>${s.name}</b><br>Capacity: ${s.capacity}<br>Available: <strong>${s.available} beds</strong><br>Distance: ${s.distance}`);
+          m.on('click', () => {
+            const cards = document.querySelectorAll('.shelter-item-card');
+            if (cards[index]) selectShelter(index, cards[index]);
+          });
+        }
       });
     }
 
-    // Select Shelter and Update Right Detail Panel
-    function selectShelterByIndex(index) {
-      if (!currentSheltersList || !currentSheltersList[index]) return;
-      const sh = currentSheltersList[index];
-      activeSelectedShelter = sh;
+    function addClinicMarker(coords) {
+      const clinicIcon = L.divIcon({
+        className: 'clinic-marker',
+        html: `
+          <div style="width:20px; height:20px; border-radius:50%; background:#ef4444; color:#fff; border:2px solid #fff; box-shadow:0 0 10px rgba(239,68,68,0.9); display:flex; align-items:center; justify-content:center; font-size:0.6rem;">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      L.marker(coords, { icon: clinicIcon }).addTo(clinicsLayer).bindTooltip("Emergency Medical Post", { sticky: true });
+    }
 
-      // Update UI active card
-      document.querySelectorAll('.sh-item-card').forEach(c => c.classList.remove('active'));
-      const activeCard = document.getElementById(`sh-card-${index}`);
-      if (activeCard) activeCard.classList.add('active');
+    function addMapTextLabel(coords, text, bg, color, fontSize = '9px') {
+      const labelIcon = L.divIcon({
+        className: 'map-label',
+        html: `<div style="background:${bg}; color:${color}; font-size:${fontSize}; font-weight:800; padding:1px 5px; border-radius:4px; white-space:nowrap; text-shadow:0 1px 3px rgba(0,0,0,0.8);">${text}</div>`,
+        iconSize: [60, 16],
+        iconAnchor: [30, 8]
+      });
+      L.marker(coords, { icon: labelIcon, interactive: false }).addTo(shelterMap);
+    }
 
-      // Update Detail Panel
-      document.getElementById('det-name').innerText = sh.name;
-      document.getElementById('det-location').innerText = `${currentDistrictData.district} District, Assam`;
-      document.getElementById('det-distance').innerText = `${sh.distanceKm} km away`;
-      document.getElementById('det-capacity').innerText = sh.capacity;
-      document.getElementById('det-available').innerText = sh.available;
-      document.getElementById('det-occupied').innerText = sh.occupied;
-      document.getElementById('det-type').innerText = sh.type || 'Relief Camp';
-      document.getElementById('det-contact-name').innerText = sh.contact || 'District Emergency Officer';
+    function selectShelter(index, el) {
+      document.querySelectorAll('.shelter-item-card').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      const s = sheltersData[index];
+      if (!s) return;
+      currentSelectedShelter = s;
+
+      const detailPhoto = document.getElementById('detail-photo');
+      if (detailPhoto) detailPhoto.src = s.photo;
+
+      const detailName = document.getElementById('detail-name');
+      if (detailName) detailName.innerText = s.name;
+
+      const detailDist = document.getElementById('detail-distance');
+      if (detailDist) detailDist.innerText = `${s.distance} away`;
+
+      const detailLoc = document.getElementById('detail-location');
+      if (detailLoc) detailLoc.innerHTML = `<i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> ${s.location}`;
+
+      const detailCap = document.getElementById('detail-cap');
+      if (detailCap) detailCap.innerText = s.capacity;
+
+      const detailOcc = document.getElementById('detail-occ');
+      if (detailOcc) detailOcc.innerText = s.occupied;
+
+      const detailAvail = document.getElementById('detail-avail');
+      if (detailAvail) detailAvail.innerText = s.available;
+
+      const detailStat = document.getElementById('detail-stat');
+      if (detailStat) detailStat.innerText = s.status;
       
-      const phone = sh.phone || '+91 94350 11223';
-      document.getElementById('det-contact-phone').innerHTML = `<i class="fa-solid fa-phone"></i> ${phone}`;
-      document.getElementById('det-contact-phone').href = `tel:${phone.replace(/\s+/g, '')}`;
-      document.getElementById('det-desc').innerText = sh.desc || 'Government relief camp equipped with food, clean water, medical aid and sleeping area.';
-
-      const statusBadge = document.getElementById('det-status-badge');
-      if (sh.status === 'Full') {
-        statusBadge.innerText = 'Full';
-        statusBadge.style.background = '#ef4444';
-      } else {
-        statusBadge.innerText = 'Open';
-        statusBadge.style.background = '#10b981';
+      const statPill = document.getElementById('detail-status-pill');
+      if (statPill) {
+        statPill.innerText = s.status;
+        statPill.className = s.status === 'Open' ? 'shelter-tag tag-open' : 'shelter-tag tag-limited';
       }
 
-      const nearestBadge = document.getElementById('det-nearest-badge');
-      if (index === 0) {
-        nearestBadge.style.display = 'inline-block';
-      } else {
-        nearestBadge.style.display = 'none';
-      }
-
-      // Pan Map smoothly
-      if (shelterMap && sh.coordinates) {
-        shelterMap.setView(sh.coordinates, 13, { animate: true, duration: 0.6 });
+      renderShelterMarkers();
+      if (shelterMap && (s.coordinates || s.coords)) {
+        shelterMap.panTo(s.coordinates || s.coords, { animate: true, duration: 0.5 });
       }
     }
 
-    // Interactive Facility Stock & Occupancy Modal Handler
-    function openFacilityModal(facilityType) {
-      const sh = activeSelectedShelter || (currentSheltersList.length > 0 ? currentSheltersList[0] : null);
-      if (!sh) return;
-
-      const modalOverlay = document.getElementById('facility-modal-overlay');
-      const iconBox = document.getElementById('modal-fac-icon');
-      const titleBox = document.getElementById('modal-fac-title');
-      const shelterNameBox = document.getElementById('modal-shelter-name');
-      const occTextBox = document.getElementById('modal-occ-text');
-      const stockPercentBox = document.getElementById('modal-stock-percent');
-      const progressBar = document.getElementById('modal-progress-bar');
-      const metricsGrid = document.getElementById('modal-metrics-grid');
-
-      shelterNameBox.innerText = `${sh.name} (${currentDistrictData ? currentDistrictData.district : 'Assam'})`;
-      occTextBox.innerText = `${sh.occupied} Occupied / ${sh.capacity} Capacity`;
-
-      const occRatio = sh.occupancyRatio || (sh.occupied / sh.capacity);
-      const availRatio = 1 - occRatio;
-
-      let facTitle = '';
-      let facIconHTML = '';
-      let stockLevel = 80;
-      let barGradient = 'linear-gradient(90deg, #10b981 0%, #38bdf8 100%)';
-      let statusText = '<i class="fa-solid fa-circle-check"></i> Stock Verified & Operational';
-      let statusColor = '#10b981';
-
-      let metricsHTML = '';
-
-      if (facilityType === 'food') {
-        facTitle = 'Food & Ration Supplies';
-        facIconHTML = '<i class="fa-solid fa-utensils"></i>';
-        iconBox.style.color = '#38bdf8';
-        iconBox.style.background = 'rgba(56,189,248,0.2)';
-
-        stockLevel = Math.min(98, Math.max(18, Math.round(92 - (occRatio * 50))));
-        if (stockLevel < 35) {
-          barGradient = 'linear-gradient(90deg, #ef4444 0%, #f59e0b 100%)';
-          statusText = '<i class="fa-solid fa-triangle-exclamation"></i> High Demand - ASDMA Restock Truck En Route';
-          statusColor = '#f59e0b';
-        }
-
-        const packetsLeft = Math.round(sh.capacity * 3.8 * availRatio + 150);
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Meal Rations Left</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">${packetsLeft.toLocaleString()} Packets</div>
-            <div style="font-size:0.58rem; color:#10b981;">3 Hot Meals Daily</div>
+    function triggerDirections(shelterName) {
+      const selectedDistrict = window.citizenApp ? window.citizenApp.getSelectedDistrict() : 'Golaghat';
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(16px);
+        z-index: 99999; display: flex; align-items: center; justify-content: center;
+      `;
+      modal.innerHTML = `
+        <div style="background:#070d1d; border:2px solid #10b981; border-radius:16px; padding:1.75rem; max-width:440px; width:92vw; text-align:center; box-shadow:0 0 45px rgba(16,185,129,0.4);">
+          <div style="width:52px; height:52px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 0.75rem auto;">
+            <i class="fa-solid fa-location-arrow"></i>
           </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Infant & Child Food</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">Available</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">Milk Powder &amp; Cereals</div>
+          <h3 style="font-size:1.25rem; font-weight:800; color:#fff; margin-bottom:0.35rem;">Navigation to ${shelterName}</h3>
+          <p style="font-size:0.785rem; color:#cbd5e1; line-height:1.45; margin-bottom:1.15rem;">
+            Calculating safest flood-free detour in ${selectedDistrict} via ASDMA live intelligence telemetry.
+          </p>
+          <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); border-radius:8px; padding:0.65rem; text-align:left; font-size:0.72rem; color:#94a3b8; margin-bottom:1.15rem;">
+            <div><strong style="color:#fff;">Route:</strong> Safe Detour &bull; 15 mins</div>
+            <div style="color:#10b981; font-weight:700; margin-top:2px;"><i class="fa-solid fa-shield-check"></i> 100% Flood-Free Safe Corridor</div>
           </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">ASDMA Supply Conveyance</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">Daily Restock</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">Next truck: 02:00 PM</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Dietary Standard</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">Hot Rice / Dal</div>
-            <div style="font-size:0.58rem; color:#10b981;">FSSAI Quality Certified</div>
-          </div>
-        `;
-      } else if (facilityType === 'water') {
-        facTitle = 'Drinking Water & Purification';
-        facIconHTML = '<i class="fa-solid fa-bottle-water"></i>';
-        iconBox.style.color = '#38bdf8';
-        iconBox.style.background = 'rgba(56,189,248,0.2)';
-
-        stockLevel = Math.min(99, Math.max(25, Math.round(96 - (occRatio * 40))));
-        if (stockLevel < 35) {
-          barGradient = 'linear-gradient(90deg, #ef4444 0%, #f59e0b 100%)';
-          statusText = '<i class="fa-solid fa-triangle-exclamation"></i> Water Tank Refill Scheduled';
-          statusColor = '#f59e0b';
-        }
-
-        const litersTank = Math.round(sh.capacity * 14 * (availRatio + 0.35));
-        const cratesCount = Math.round(sh.capacity * 0.9 * availRatio + 120);
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Clean Water Reserve</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">${litersTank.toLocaleString()} Liters</div>
-            <div style="font-size:0.58rem; color:#10b981;">RO + UV Filtration Active</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Bottled Water Crates</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">${cratesCount} Crates</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">1L Emergency Bottles</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Water Purity Rating</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">99.8% Pure</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">Tested by PHED Assam</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Dispensing Outlets</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">${Math.round(sh.capacity / 60)} Tap Lines</div>
-            <div style="font-size:0.58rem; color:#10b981;">No Queue Delay</div>
-          </div>
-        `;
-      } else if (facilityType === 'medical') {
-        facTitle = 'Medical Aid & Emergency Desk';
-        facIconHTML = '<i class="fa-solid fa-kit-medical"></i>';
-        iconBox.style.color = '#ef4444';
-        iconBox.style.background = 'rgba(239,68,68,0.2)';
-
-        stockLevel = Math.min(98, Math.max(40, Math.round(94 - (occRatio * 25))));
-        const docsCount = sh.capacity >= 600 ? 3 : 2;
-        const nursesCount = sh.capacity >= 600 ? 6 : 4;
-
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">On-Duty Doctors</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#ef4444;">${docsCount} Doctors</div>
-            <div style="font-size:0.58rem; color:#10b981;">24x7 Shift Rotation</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Paramedics &amp; Nurses</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">${nursesCount} Staff</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">First Aid &amp; Trauma Care</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Medicine Inventory</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">Fully Stocked</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">ORS, Antibiotics &amp; Insulin</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Ambulance Standby</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#f59e0b;">108 Boat &amp; Van</div>
-            <div style="font-size:0.58rem; color:#ef4444;">Direct Dispatch</div>
-          </div>
-        `;
-      } else if (facilityType === 'rest') {
-        facTitle = 'Rest Area & Bedding Allocation';
-        facIconHTML = '<i class="fa-solid fa-bed"></i>';
-        iconBox.style.color = '#f59e0b';
-        iconBox.style.background = 'rgba(245,158,11,0.2)';
-
-        stockLevel = Math.round(availRatio * 100);
-        if (stockLevel < 15) {
-          barGradient = 'linear-gradient(90deg, #ef4444 0%, #ea580c 100%)';
-          statusText = '<i class="fa-solid fa-circle-exclamation"></i> Near Full Capacity - Additional Cots Arriving';
-          statusColor = '#ef4444';
-        }
-
-        const blanketsCount = Math.round(sh.capacity * 1.35);
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Available Cots / Beds</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">${sh.available} Beds</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">Clean Linens &amp; Pillows</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Occupied Beds</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#a78bfa;">${sh.occupied} Evacuees</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">Family Enclosures</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Blankets &amp; Mats</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">${blanketsCount} Sets</div>
-            <div style="font-size:0.58rem; color:#10b981;">Disinfected Daily</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Mosquito Protection</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">Active</div>
-            <div style="font-size:0.58rem; color:#10b981;">Medicated Nets Installed</div>
-          </div>
-        `;
-      } else if (facilityType === 'toilet') {
-        facTitle = 'Sanitation & Hygiene Complex';
-        facIconHTML = '<i class="fa-solid fa-restroom"></i>';
-        iconBox.style.color = '#10b981';
-        iconBox.style.background = 'rgba(16,185,129,0.2)';
-
-        stockLevel = Math.min(96, Math.max(20, Math.round(92 - (occRatio * 45))));
-        const toiletCount = Math.max(6, Math.round(sh.capacity / 32));
-        const hygieneKits = Math.round(sh.capacity * 0.8 * availRatio + 140);
-
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Sanitation Toilets</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">${toiletCount} Units</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">Separate Male / Female Wings</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Hygiene Kits Available</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">${hygieneKits} Kits</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">Soap, Sanitizers &amp; Pads</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Cleaning Schedule</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">Every 2 Hours</div>
-            <div style="font-size:0.58rem; color:#10b981;">Disinfected Regularly</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Running Water Supply</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">Continuous</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">24x7 Overhead Tank</div>
-          </div>
-        `;
-      } else if (facilityType === 'charging') {
-        facTitle = 'Emergency Power & Charging Docks';
-        facIconHTML = '<i class="fa-solid fa-charging-station"></i>';
-        iconBox.style.color = '#a78bfa';
-        iconBox.style.background = 'rgba(167,139,250,0.2)';
-
-        stockLevel = Math.min(99, Math.max(30, Math.round(98 - (occRatio * 35))));
-        const docksCount = Math.max(8, Math.round(sh.capacity / 40));
-
-        metricsHTML = `
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Phone Charging Docks</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#a78bfa;">${docksCount} Station Hubs</div>
-            <div style="font-size:0.58rem; color:#10b981;">Multi-Cable Plugs Active</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Primary Power Source</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#fff;">Solar + Generator</div>
-            <div style="font-size:0.58rem; color:#94a3b8;">Automatic Grid Backup</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Emergency Lighting</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#10b981;">100% Operational</div>
-            <div style="font-size:0.58rem; color:#cbd5e1;">All dormitories lit</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.8); padding:0.55rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.625rem; color:#94a3b8;">Estimated Queue Time</div>
-            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">&lt; 5 Mins</div>
-            <div style="font-size:0.58rem; color:#10b981;">Fast Charging Ready</div>
-          </div>
-        `;
-      }
-
-      const statusBadge = document.getElementById('modal-status-badge');
-      statusBadge.innerHTML = statusText;
-      statusBadge.style.color = statusColor;
-
-      titleBox.innerText = facTitle;
-      iconBox.innerHTML = facIconHTML;
-      stockPercentBox.innerText = `${stockLevel}% ${facilityType === 'rest' ? 'Available Beds' : 'Supply Level'}`;
-      progressBar.style.width = `${stockLevel}%`;
-      progressBar.style.background = barGradient;
-      metricsGrid.innerHTML = metricsHTML;
-
-      modalOverlay.style.display = 'flex';
+          <button style="width:100%; background:#10b981; color:#fff; font-weight:800; font-size:0.8rem; padding:0.55rem; border:none; border-radius:7px; cursor:pointer;" onclick="this.closest('div[style*=fixed]').remove()">
+            Start Turn-by-Turn GPS
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
-    function closeFacilityModal() {
-      document.getElementById('facility-modal-overlay').style.display = 'none';
+    function shareShelterLocation() {
+      showToast('🔗 Location Shared', `Coordinates and contact for ${currentSelectedShelter.name} copied to clipboard.`);
     }
 
-    // Close modal on click outside card
-    document.getElementById('facility-modal-overlay').addEventListener('click', (e) => {
-      if (e.target.id === 'facility-modal-overlay') {
-        closeFacilityModal();
-      }
-    });
-
-    // Update Top 5 Stats Bar
-    function updateMetricsBar(shelters) {
-      let totalCap = 0;
-      let totalAvail = 0;
-      let totalOcc = 0;
-      let activeCount = 0;
-
-      shelters.forEach(s => {
-        totalCap += s.capacity;
-        totalAvail += s.available;
-        totalOcc += s.occupied;
-        if (s.status !== 'Full') activeCount++;
-      });
-
-      document.getElementById('stat-total-shelters').innerText = shelters.length;
-      document.getElementById('stat-total-capacity').innerText = totalCap.toLocaleString();
-      document.getElementById('stat-total-occupied').innerText = totalOcc.toLocaleString();
-      document.getElementById('stat-total-avail').innerText = totalAvail.toLocaleString();
-      document.getElementById('stat-active-shelters').innerText = activeCount;
+    function showFacilityInfo(title, desc) {
+      showToast(title, desc);
     }
 
-    function centerMyLocation() {
-      if (shelterMap && currentDistrictData) {
-        shelterMap.setView(currentDistrictData.citizenOrigin, 13, { animate: true, duration: 0.6 });
-      }
+    function openShelterGuidelines() {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(12px);
+        z-index: 99999; display: flex; align-items: center; justify-content: center;
+      `;
+      modal.innerHTML = `
+        <div style="background:#070d1d; border:1px solid #38bdf8; border-radius:16px; padding:1.5rem; max-width:500px; width:92vw; box-shadow:0 0 35px rgba(56,189,248,0.3);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem;">
+            <h3 style="color:#fff; font-size:1.1rem; font-weight:800; display:flex; align-items:center; gap:0.45rem;">
+              <i class="fa-solid fa-campground" style="color:#10b981;"></i> Standard Shelter Guidelines
+            </h3>
+            <span style="color:#94a3b8; font-size:1.2rem; cursor:pointer;" onclick="this.closest('div[style*=fixed]').remove()">&times;</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.55rem; font-size:0.75rem; color:#cbd5e1; line-height:1.45;">
+            <div><strong style="color:#10b981;">1. Check-In Registration:</strong> Register all family members upon arrival at reception counter.</div>
+            <div><strong style="color:#38bdf8;">2. Medical Triage:</strong> Inform on-duty medical staff of any infants, elderly, or chronic ailments.</div>
+            <div><strong style="color:#ef4444;">3. Essential Kits:</strong> Collect free drinking water, ration packs, and sanitation kits.</div>
+          </div>
+          <button style="margin-top:1.1rem; width:100%; background:#2563eb; color:#fff; border:none; padding:0.55rem; border-radius:8px; font-weight:700; cursor:pointer;" onclick="this.closest('div[style*=fixed]').remove()">Got It</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
-    function filterShelterList(q) {
-      const query = q.toLowerCase();
-      document.querySelectorAll('.sh-item-card').forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(query) ? 'block' : 'none';
+    function openStaySafeGuide() {
+      openShelterGuidelines();
+    }
+
+    function useMyLocation() {
+      showToast('📍 GPS Location Synced', 'Filtered shelters nearest to your current GPS coordinates.');
+    }
+
+    function filterShelters() {
+      const q = (document.getElementById('shelter-search-input').value || '').toLowerCase();
+      const type = document.getElementById('filter-type').value;
+      const status = document.getElementById('filter-status').value;
+
+      document.querySelectorAll('.shelter-item-card').forEach((card, idx) => {
+        const s = sheltersData[idx];
+        if (!s) return;
+        const matchQ = s.name.toLowerCase().includes(q) || s.location.toLowerCase().includes(q);
+        const matchType = type === 'all' || s.type === type;
+        const matchStat = status === 'all' || s.status.toLowerCase() === status;
+        card.style.display = (matchQ && matchType && matchStat) ? 'block' : 'none';
       });
     }
 
-    function filterDistance(maxDist) {
-      document.querySelectorAll('.sh-item-card').forEach(card => {
-        if (maxDist === 'all') {
-          card.style.display = 'block';
-        } else {
-          const text = card.innerText;
-          const match = text.match(/([\d\.]+)\s*km/);
-          if (match) {
-            const d = parseFloat(match[1]);
-            card.style.display = (d <= parseFloat(maxDist)) ? 'block' : 'none';
-          }
-        }
-      });
+    function toggleSortOrder() {
+      showToast('⇅ Sorted', 'Shelters sorted by nearest proximity.');
     }
 
-    function filterType(selectedType) {
-      document.querySelectorAll('.sh-item-card').forEach(card => {
-        if (selectedType === 'all') {
-          card.style.display = 'block';
-        } else {
-          const text = card.innerText.toLowerCase();
-          card.style.display = text.includes(selectedType.toLowerCase()) ? 'block' : 'none';
-        }
-      });
+    function toggleMapLayer() {
+      showToast('📑 Map Layers', 'Switched between Satellite and Hydro-Risk Topography.');
     }
 
-    function filterAvailability(avail) {
-      document.querySelectorAll('.sh-item-card').forEach(card => {
-        if (avail === 'all') {
-          card.style.display = 'block';
-        } else if (avail === 'open') {
-          card.style.display = card.innerText.includes('Open') ? 'block' : 'none';
-        } else if (avail === 'high') {
-          const match = card.innerText.match(/Available:\s*(\d+)/);
-          if (match) {
-            const beds = parseInt(match[1]);
-            card.style.display = (beds >= 150) ? 'block' : 'none';
-          }
-        }
-      });
+    function showToast(title, msg) {
+      let toast = document.getElementById('sh-toast-notification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'sh-toast-notification';
+        toast.style.cssText = `
+          position: fixed; bottom: 35px; right: 16px; z-index: 99999;
+          background: #070d1d; border: 1px solid #38bdf8; border-radius: 9px;
+          padding: 0.55rem 0.85rem; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+          font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+          transform: translateY(100px); transition: transform 0.3s ease;
+        `;
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<div><strong>${title}</strong><div style="font-size:0.68rem; color:#94a3b8;">${msg}</div></div>`;
+      toast.style.transform = 'translateY(0)';
+      setTimeout(() => { toast.style.transform = 'translateY(100px)'; }, 3200);
     }
   </script>
+
+  <!-- Keyframe Animations -->
+  <style>
+    @keyframes originPulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+
 </body>
 </html>

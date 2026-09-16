@@ -154,14 +154,39 @@ select.form-control {
   padding: 1rem;
 }
 
+/* Master Citizen Layout Grid Container */
+.citizen-layout-container,
+.dash-layout-container,
+.cmd-layout-container,
+.intel-layout-container,
+.sh-layout-container,
+.sos-layout-container,
+.track-layout-container,
+.notif-layout-container,
+.contacts-layout-container,
+.prof-layout-container,
+.help-layout-container {
+  display: grid !important;
+  grid-template-columns: 250px 1fr !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+}
+
 /* Responsive Split-Screen Rules for Dual Window Showcase (~768px - 1100px width) */
 @media (max-width: 1100px) {
+  .citizen-layout-container,
   .dash-layout-container,
+  .cmd-layout-container,
   .intel-layout-container,
   .sh-layout-container,
   .sos-layout-container,
-  .track-layout-container {
-    grid-template-columns: 190px 1fr !important;
+  .track-layout-container,
+  .notif-layout-container,
+  .contacts-layout-container,
+  .prof-layout-container,
+  .help-layout-container {
+    grid-template-columns: 200px 1fr !important;
   }
   
   .dash-upper-grid {
@@ -212,3 +237,387 @@ select.form-control {
     font-size: 0.65rem !important;
   }
 }
+
+/* Tactical Dark Command Center Map Tile Filter */
+.dark-tiles,
+img.leaflet-tile.dark-tiles {
+  filter: brightness(0.6) invert(1) contrast(1.8) hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
+  -webkit-filter: brightness(0.6) invert(1) contrast(1.8) hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
+}
+
+/* ==========================================================================
+   AEGIS - UNIFIED CITIZEN MASTER SIDEBAR DESIGN SYSTEM
+   Pixel-perfect alignment, typography, spacing & micro-interactions
+   ========================================================================== */
+
+.citizen-sidebar,
+.dash-sidebar,
+.cmd-sidebar,
+.intel-sidebar,
+.sh-sidebar,
+.sos-sidebar,
+.track-sidebar,
+.notif-sidebar,
+.contacts-sidebar,
+.prof-sidebar,
+.help-sidebar {
+  background: #091122 !important;
+  border-right: 1px solid rgba(59, 130, 246, 0.2) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 1.1rem 0.85rem !important;
+  height: 100vh !important;
+  width: 250px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+}
+
+/* Custom scrollbar for sidebar */
+.citizen-sidebar::-webkit-scrollbar,
+.dash-sidebar::-webkit-scrollbar,
+.cmd-sidebar::-webkit-scrollbar,
+.intel-sidebar::-webkit-scrollbar,
+.sh-sidebar::-webkit-scrollbar,
+.sos-sidebar::-webkit-scrollbar,
+.track-sidebar::-webkit-scrollbar,
+.notif-sidebar::-webkit-scrollbar,
+.contacts-sidebar::-webkit-scrollbar,
+.prof-sidebar::-webkit-scrollbar,
+.help-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.citizen-sidebar::-webkit-scrollbar-thumb,
+.dash-sidebar::-webkit-scrollbar-thumb,
+.cmd-sidebar::-webkit-scrollbar-thumb,
+.intel-sidebar::-webkit-scrollbar-thumb,
+.sh-sidebar::-webkit-scrollbar-thumb,
+.sos-sidebar::-webkit-scrollbar-thumb,
+.track-sidebar::-webkit-scrollbar-thumb,
+.notif-sidebar::-webkit-scrollbar-thumb,
+.contacts-sidebar::-webkit-scrollbar-thumb,
+.prof-sidebar::-webkit-scrollbar-thumb,
+.help-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.25);
+  border-radius: 4px;
+}
+
+/* Brand Header */
+.citizen-sidebar-logo,
+.dash-sidebar-logo,
+.cmd-sidebar-logo,
+.intel-sidebar-logo,
+.sh-sidebar-logo,
+.sos-sidebar-logo,
+.track-sidebar-logo,
+.notif-sidebar-logo,
+.contacts-sidebar-logo,
+.prof-sidebar-logo,
+.help-sidebar-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.15rem 0.35rem 0.95rem 0.35rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  margin-bottom: 0.85rem !important;
+  flex-shrink: 0 !important;
+}
+
+.citizen-logo-shield {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.citizen-brand-name {
+  font-weight: 800 !important;
+  font-size: 1.22rem !important;
+  color: #ffffff !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.03em !important;
+}
+
+.citizen-brand-sub {
+  font-size: 0.65rem !important;
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+  white-space: nowrap !important;
+}
+
+/* Navigation Menu */
+.citizen-nav-menu,
+.dash-nav-menu,
+.cmd-nav-menu,
+.intel-nav-menu,
+.sh-nav-menu,
+.sos-nav-menu,
+.track-nav-menu,
+.notif-nav-menu,
+.contacts-nav-menu,
+.prof-nav-menu,
+.help-nav-menu {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+  flex: 1 !important;
+}
+
+.citizen-nav-item,
+.dash-nav-item,
+.cmd-nav-item,
+.intel-nav-item,
+.sh-nav-item,
+.sos-nav-item,
+.track-nav-item,
+.notif-nav-item,
+.contacts-nav-item,
+.prof-nav-item,
+.help-nav-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.8rem !important;
+  padding: 0.58rem 0.85rem !important;
+  color: #94a3b8 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 0.86rem !important;
+  border-radius: 9px !important;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  border: 1px solid transparent !important;
+}
+
+.citizen-nav-item i,
+.dash-nav-item i,
+.cmd-nav-item i,
+.intel-nav-item i,
+.sh-nav-item i,
+.sos-nav-item i,
+.track-nav-item i,
+.notif-nav-item i,
+.contacts-nav-item i,
+.prof-nav-item i,
+.help-nav-item i {
+  width: 18px !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+}
+
+.citizen-nav-item:hover,
+.dash-nav-item:hover,
+.cmd-nav-item:hover,
+.intel-nav-item:hover,
+.sh-nav-item:hover,
+.sos-nav-item:hover,
+.track-nav-item:hover,
+.notif-nav-item:hover,
+.contacts-nav-item:hover,
+.prof-nav-item:hover,
+.help-nav-item:hover {
+  background: rgba(59, 130, 246, 0.12) !important;
+  color: #ffffff !important;
+  transform: translateX(2px);
+}
+
+.citizen-nav-item.active,
+.dash-nav-item.active,
+.cmd-nav-item.active,
+.intel-nav-item.active,
+.sh-nav-item.active,
+.sos-nav-item.active,
+.track-nav-item.active,
+.notif-nav-item.active,
+.contacts-nav-item.active,
+.prof-nav-item.active,
+.help-nav-item.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transform: none !important;
+}
+
+/* Nav Dividers & Badges */
+.citizen-nav-divider,
+.dash-nav-divider,
+.cmd-nav-divider,
+.intel-nav-divider,
+.sh-nav-divider,
+.sos-nav-divider,
+.track-nav-divider,
+.notif-nav-divider,
+.contacts-nav-divider,
+.prof-nav-divider,
+.help-nav-divider {
+  height: 1px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  margin: 0.35rem 0.25rem !important;
+}
+
+.nav-badge {
+  margin-left: auto !important;
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  font-size: 0.6rem !important;
+  font-weight: 800 !important;
+  padding: 1px 6px !important;
+  border-radius: 9999px !important;
+  min-width: 18px !important;
+  text-align: center !important;
+}
+
+/* Logout link */
+.citizen-nav-item.nav-logout,
+.dash-nav-item.nav-logout,
+.cmd-nav-item.nav-logout,
+.intel-nav-item.nav-logout,
+.sh-nav-item.nav-logout,
+.sos-nav-item.nav-logout,
+.track-nav-item.nav-logout,
+.notif-nav-item.nav-logout,
+.contacts-nav-item.nav-logout,
+.prof-nav-item.nav-logout,
+.help-nav-item.nav-logout {
+  margin-top: 0.35rem !important;
+  color: #ef4444 !important;
+}
+.citizen-nav-item.nav-logout:hover,
+.dash-nav-item.nav-logout:hover,
+.cmd-nav-item.nav-logout:hover,
+.intel-nav-item.nav-logout:hover,
+.sh-nav-item.nav-logout:hover,
+.sos-nav-item.nav-logout:hover,
+.track-nav-item.nav-logout:hover,
+.notif-nav-item.nav-logout:hover,
+.contacts-nav-item.nav-logout:hover,
+.prof-nav-item.nav-logout:hover,
+.help-nav-item.nav-logout:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+
+/* Bottom Emergency Box */
+.citizen-emergency-card,
+.dash-emergency-call-box,
+.intel-emergency-card,
+.sh-emergency-card,
+.sos-emergency-card,
+.track-emergency-card,
+.notif-emergency-card,
+.contacts-emergency-card,
+.prof-emergency-card,
+.help-emergency-card {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border: 1px solid rgba(59, 130, 246, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 0.85rem 0.75rem !important;
+  text-align: center !important;
+  margin-top: auto !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+  flex-shrink: 0 !important;
+}
+
+.emergency-card-title {
+  font-size: 0.65rem !important;
+  color: #94a3b8 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.emergency-card-call {
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  margin: 0.2rem 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+}
+
+.emergency-card-desc {
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
+  margin-bottom: 0.55rem !important;
+}
+
+.emergency-card-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 0.52rem 0.85rem !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4) !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+.emergency-card-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55) !important;
+  transform: translateY(-1px);
+}
+
+.emergency-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  display: inline-block;
+}
+
+/* Leaflet Layer Control Styling */
+.leaflet-control-layers {
+  background: rgba(9, 17, 34, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  padding: 6px 10px !important;
+  font-family: inherit !important;
+  font-size: 0.725rem !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+  z-index: 800 !important;
+}
+
+.leaflet-control-layers-toggle {
+  background-color: rgba(9, 17, 34, 0.92) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+}
+
+.leaflet-control-layers-base label {
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  margin-bottom: 4px !important;
+}
+
+.leaflet-control-layers-expanded {
+  background: rgba(9, 17, 34, 0.95) !important;
+  padding: 8px 12px !important;
+}
+

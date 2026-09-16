@@ -456,10 +456,20 @@
         zoomControl: false
       });
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; CartoDB',
-        maxZoom: 19
+      const darkTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        className: 'dark-tiles',
+        attribution: '&copy; Esri World Street Map',
+        maxZoom: 18
       }).addTo(gisMap);
+
+      const streetTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, attribution: '&copy; Esri World Street Map' });
+      const satelliteTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18, attribution: '&copy; Esri' });
+
+      L.control.layers({
+        "🌙 Dark View": darkTile,
+        "🗺️ Street View": streetTile,
+        "🛰️ Satellite View": satelliteTile
+      }, null, { position: 'topright', collapsed: true }).addTo(gisMap);
 
       L.control.zoom({ position: 'bottomright' }).addTo(gisMap);
 
