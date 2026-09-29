@@ -1,9 +1,100 @@
 /*
- * AEGIS Rescue Command System - State-Wide Assam Dashboard Data Matrix
- * Full 21 District Telemetry, Dynamic SOS Queue, Team Deployments & Coordinates
+ * AEGIS National Weather Big Data Analytics Platform - MoES / SIH26069
+ * Multi-Source Ingestion Telemetry, AI Verification Matrix & City Nodes
+ * Primary Live Demo: Hyderabad, Telangana (Deccan / Musi River Basin)
  */
 
 const assamStateDistrictData = {
+  "Hyderabad": {
+    district: "Hyderabad, Telangana (Active Demo Center)",
+    division: "Telangana / Musi River Basin",
+    riskLevel: "Critical",
+    riskColor: "#ef4444",
+    coordinates: [17.3850, 78.4867],
+    activeSos: 16,
+    ongoingRescues: 8,
+    peopleRescuedToday: 142,
+    teamsDeployed: 12,
+    river: "Musi River: High Level (4.2m) • Osman Sagar Gates 2 & 4 Open",
+    rainfall: "128 mm (Intense Cloudburst / Downpour)",
+    status: "Severe Urban Inundation Active",
+    weatherCategory: "Flooding & Cloudburst",
+    activeSosList: [
+      { id: "IMD-HYD-901", priority: "HIGH", priorityClass: "red", countBadge: "4", title: "Khairatabad Underpass Submerged", headcount: "6 Commuters Trapped", location: "Khairatabad Junction", coordinates: [17.4125, 78.4682], time: "10:25 AM", assignedTeam: "GHMC DRF Unit 1", statusBadge: "On the way", eta: "8 min" },
+      { id: "IMD-HYD-902", priority: "HIGH", priorityClass: "red", countBadge: "3", title: "Musi River Causeway Inundation", headcount: "Family of 5", location: "Moosarambagh Old Bridge", coordinates: [17.3712, 78.5089], time: "10:18 AM", assignedTeam: "NDRF 10th Bn Boat", statusBadge: "Active Rescue", eta: "Reached" },
+      { id: "IMD-HYD-903", priority: "MEDIUM", priorityClass: "orange", countBadge: "2", title: "Begumpet Nala Overflow Hazard", headcount: "8 Shop Owners", location: "Balanagar Main Road", coordinates: [17.4483, 78.4744], time: "10:30 AM", assignedTeam: "Telangana Fire Unit", statusBadge: "Enroute", eta: "12 min" },
+      { id: "IMD-HYD-904", priority: "LOW", priorityClass: "blue", countBadge: "1", title: "Hitec City Waterlogged Road (FLAGGED FAKE)", headcount: "Citizen Post", location: "Cyber Towers Inorbit Rd", coordinates: [17.4399, 78.3808], time: "10:35 AM", assignedTeam: "AI Quarantined", statusBadge: "Fake Post", eta: "Blocked" }
+    ],
+    teams: [
+      { team: "GHMC DRF Unit 1", type: "Inundation Dewatering Unit", location: "Khairatabad Flyover", eta: "ETA: 8 min", statusColor: "#38bdf8" },
+      { team: "NDRF 10th Bn Boat", type: "Inflatable Zodiac Boat", location: "Moosarambagh Musi", eta: "Active Rescue", statusColor: "#ef4444" },
+      { team: "Telangana Fire & Rescue", type: "Emergency Response Tender", location: "Begumpet / Balanagar", eta: "ETA: 12 min", statusColor: "#f59e0b" },
+      { team: "Traffic Taskforce", type: "Diversion Team", location: "Somajiguda Circle", eta: "Patrolling", statusColor: "#10b981" }
+    ]
+  },
+  "Mumbai": {
+    district: "Mumbai, Maharashtra",
+    division: "West Coast / Konkan",
+    riskLevel: "High",
+    riskColor: "#f59e0b",
+    coordinates: [19.0760, 72.8777],
+    activeSos: 14,
+    ongoingRescues: 6,
+    peopleRescuedToday: 110,
+    teamsDeployed: 9,
+    river: "Mithi River: Water Level 3.4m (Approaching Warning)",
+    rainfall: "185 mm (Heavy Monsoonal Squall)",
+    status: "High Alert",
+    weatherCategory: "Rainfall & Thunderstorm",
+    activeSosList: [
+      { id: "IMD-BOM-101", priority: "HIGH", priorityClass: "red", countBadge: "3", title: "Hindmata Waterlogging", headcount: "Transit Commuters", location: "Hindmata Flyover Underpass", coordinates: [19.0118, 72.8423], time: "10:12 AM", assignedTeam: "MCGM DRF-2", statusBadge: "Pumps Active", eta: "10 min" }
+    ],
+    teams: [
+      { team: "MCGM DRF-2", type: "High-Capacity Dewatering Pump", location: "Hindmata Underpass", eta: "Pumping", statusColor: "#10b981" }
+    ]
+  },
+  "Delhi": {
+    district: "Delhi NCR",
+    division: "Northern Plains",
+    riskLevel: "Moderate",
+    riskColor: "#38bdf8",
+    coordinates: [28.6139, 77.2090],
+    activeSos: 7,
+    ongoingRescues: 3,
+    peopleRescuedToday: 55,
+    teamsDeployed: 6,
+    river: "Yamuna River: 204.8m (Below Warning Mark)",
+    rainfall: "82 mm (Thunderstorm & Gusty Winds)",
+    status: "Thunderstorm Warning Active",
+    weatherCategory: "Thunderstorm",
+    activeSosList: [
+      { id: "IMD-DEL-201", priority: "MEDIUM", priorityClass: "orange", countBadge: "2", title: "Fallen Tree & Power Line", headcount: "Local Residents", location: "Minto Bridge", coordinates: [28.6340, 77.2240], time: "10:05 AM", assignedTeam: "NDMC Squad", statusBadge: "Clearing", eta: "15 min" }
+    ],
+    teams: [
+      { team: "NDMC Squad", type: "Tree Cutter & Generator", location: "Minto Bridge", eta: "Clearing", statusColor: "#38bdf8" }
+    ]
+  },
+  "Rajasthan": {
+    district: "Jodhpur & Thar Region, Rajasthan",
+    division: "North-Western Arid Zone",
+    riskLevel: "Critical",
+    riskColor: "#ef4444",
+    coordinates: [26.2389, 73.0243],
+    activeSos: 5,
+    ongoingRescues: 2,
+    peopleRescuedToday: 32,
+    teamsDeployed: 4,
+    river: "Luni River Basin: Dry",
+    rainfall: "0 mm (Severe Dust Storm & 68 km/h Gale Winds)",
+    status: "Dust Storm Red Alert",
+    weatherCategory: "Dust Storm",
+    activeSosList: [
+      { id: "IMD-RAJ-301", priority: "HIGH", priorityClass: "red", countBadge: "1", title: "Highway Zero Visibility Dust Storm", headcount: "Vehicles on NH-62", location: "NH-62 Jodhpur Bypass", coordinates: [26.2700, 73.0500], time: "10:20 AM", assignedTeam: "Highway Patrol 9", statusBadge: "Convoy Escort", eta: "Active" }
+    ],
+    teams: [
+      { team: "Highway Patrol 9", type: "Dust Storm Escort Convoy", location: "NH-62 Jodhpur", eta: "Patrolling", statusColor: "#ef4444" }
+    ]
+  },
   "Golaghat": {
     district: "Golaghat, Assam",
     division: "Upper Assam",
@@ -182,11 +273,14 @@ const assamStateDistrictData = {
   }
 };
 
-// Summary metrics across all 21 districts of Assam
-const assamStateTotalMetrics = {
-  totalDistricts: 21,
-  criticalDistrictsCount: 4,
-  highRiskDistrictsCount: 6,
+// National Weather Big Data Metrics (MoES / SIH26069)
+const nationalWeatherTotalMetrics = {
+  ingestionRate: "312 / sec",
+  totalPosts: "184,290",
+  verifiedRate: "94.2%",
+  misinfoBlocked: "1,248",
+  duplicatesMerged: "18,430",
+  activeSensors: "4,120",
   totalActiveSos: 94,
   totalOngoingRescues: 48,
   totalPeopleRescuedToday: 842,
@@ -197,3 +291,4 @@ const assamStateTotalMetrics = {
 
 window.assamStateDistrictData = assamStateDistrictData;
 window.assamStateTotalMetrics = assamStateTotalMetrics;
+window.nationalWeatherTotalMetrics = nationalWeatherTotalMetrics;

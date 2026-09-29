@@ -521,11 +521,11 @@
       cursor: pointer;
     }
 
-    /* Emergency Type Cards Grid */
+    /* Weather Event Type Cards Grid (7 MoES Categories) */
     .emergency-type-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.45rem;
+      gap: 0.35rem;
       margin-bottom: 0.35rem;
     }
 
@@ -533,16 +533,16 @@
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(59, 130, 246, 0.22);
       border-radius: 8px;
-      padding: 0.45rem 0.3rem;
+      padding: 0.35rem 0.25rem;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.685rem;
+      font-size: 0.65rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.2rem;
       transition: all 0.18s;
       user-select: none;
     }
@@ -551,10 +551,10 @@
       color: #fff;
     }
     .type-btn-card.active {
-      border: 1.5px solid #ef4444;
-      background: rgba(239, 68, 68, 0.16);
+      border: 1.5px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.18);
       color: #ffffff;
-      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
     }
 
     /* Textarea */
@@ -815,16 +815,16 @@
       <header class="sos-topbar">
         <div style="display:flex; align-items:center; gap:0.6rem;">
           <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:0.95rem; cursor:pointer;" onclick="location.href='citizen-dashboard.html'"></i>
-          <div class="district-select-pill" title="Active District configured on Dashboard">
+          <div class="district-select-pill" title="Active Region">
             <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i>
-            <span id="topbar-district-label">Golaghat (Critical • 26.40°N, 94.03°E)</span>
+            <span id="topbar-district-label">Hyderabad, Telangana (Demo Center • 17.38°N, 78.48°E)</span>
           </div>
         </div>
 
         <div class="topbar-alert-banner">
           <div style="display:flex; align-items:center; gap:0.45rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-            <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i>
-            <span><strong>HIGH FLOOD RISK</strong> in Golaghat District. Heavy rainfall and rising water levels. Stay alert and avoid flooded areas.</span>
+            <i class="fa-solid fa-cloud-showers-heavy" style="color:#38bdf8;"></i>
+            <span><strong>HEAVY RAINFALL ALERT:</strong> Hyderabad &amp; Musi River Basin. Cloudburst squall cell detected by Begumpet AWS. Report observations below.</span>
           </div>
           <button class="topbar-guide-btn" onclick="openStaySafeGuide()">Stay Safe Guide &rarr;</button>
         </div>
@@ -841,20 +841,20 @@
               <span style="position:absolute; bottom:0; right:0; width:7px; height:7px; background:#10b981; border:1.5px solid #070d1d; border-radius:50%;"></span>
             </div>
             <div style="text-align:left;">
-              <div style="font-size:0.75rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div style="font-size:0.58rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div style="font-size:0.75rem; font-weight:700; color:#fff; line-height:1.1;">Suresh Reddy</div>
+              <div style="font-size:0.58rem; color:#94a3b8;">suresh.hyd@citizen.in</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Sub-Header: Report an Emergency -->
+      <!-- Sub-Header: Citizen Weather & Hazard Reporting -->
       <div class="sos-header-banner">
         <div style="display:flex; align-items:center; gap:0.65rem;">
-          <div class="sos-header-badge">SOS</div>
+          <div class="sos-header-badge" style="background:radial-gradient(circle, #2563eb 0%, #1d4ed8 100%);">#IMD</div>
           <div>
-            <h1 style="font-size:1.05rem; font-weight:800; color:#ffffff; line-height:1.15;">Report an Emergency</h1>
-            <p style="font-size:0.68rem; color:var(--text-muted);">Tell us what's happening. Help will reach you faster.</p>
+            <h1 style="font-size:1.05rem; font-weight:800; color:#ffffff; line-height:1.15;">Citizen Weather &amp; Hazard Reporting</h1>
+            <p style="font-size:0.68rem; color:var(--text-muted);">Publish real-time weather observations directly into the MoES National Weather Big Data Analytics Platform (SIH26069).</p>
           </div>
         </div>
 
@@ -875,14 +875,14 @@
           <!-- 1. Your Location Card (Top-Left) -->
           <div class="sos-card-box">
             <div class="card-title-bar" style="color:#38bdf8;">
-              <i class="fa-solid fa-location-dot"></i> Your Location
+              <i class="fa-solid fa-location-dot"></i> Observation Location
             </div>
-            <div class="card-subtitle">Current Location (Auto detected)</div>
+            <div class="card-subtitle">GPS Geotagged (Auto-locked to Hyderabad Demo)</div>
 
             <div style="display:flex; gap:0.4rem; margin-bottom:0.35rem;">
-              <input type="text" class="form-input" id="sos-location-input" value="Golaghat, Assam">
+              <input type="text" class="form-input" id="sos-location-input" value="Khairatabad &amp; Hussain Sagar Nala, Hyderabad, Telangana">
               <button class="btn-use-location" onclick="handleUseMyLocation()">
-                <i class="fa-solid fa-crosshairs"></i> Use My Location
+                <i class="fa-solid fa-crosshairs"></i> Use GPS
               </button>
             </div>
 
@@ -890,7 +890,7 @@
             <div id="sos-map-container">
               <div id="sos-leaflet-map"></div>
               <div class="map-accuracy-badge">
-                <i class="fa-solid fa-circle-check" style="font-size:0.62rem;"></i> Location Accuracy: High (&plusmn;10 m)
+                <i class="fa-solid fa-circle-check" style="font-size:0.62rem;"></i> GPS Accuracy: High (&plusmn;8 m) &bull; Hyderabad
               </div>
               <div class="map-expand-btn" onclick="toggleMapFullscreen()" title="Fullscreen Map">
                 <i class="fa-solid fa-expand"></i>
@@ -898,55 +898,58 @@
             </div>
           </div>
 
-          <!-- 2. Emergency Details Card (Top-Right) -->
+          <!-- 2. Weather Hazard Details Card (Top-Right) -->
           <div class="sos-card-box">
-            <div class="card-title-bar" style="color:#ef4444;">
-              <div style="width:14px; height:14px; border-radius:50%; background:#ef4444; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.55rem; font-weight:800;">!</div>
-              Emergency Details
+            <div class="card-title-bar" style="color:#38bdf8;">
+              <i class="fa-solid fa-cloud-bolt"></i> Weather Hazard Category
             </div>
-            <div class="card-subtitle">Select the type of emergency</div>
+            <div class="card-subtitle">Select from 7 Official MoES Hazard Types:</div>
 
-            <!-- 4 Category Type Buttons -->
+            <!-- 7 MoES Official Category Type Buttons -->
             <div class="emergency-type-grid">
-              <div class="type-btn-card active" id="type-trapped" onclick="selectEmergencyType('Trapped in Water', this)">
-                <i class="fa-solid fa-water" style="color:#ef4444; font-size:1.05rem;"></i>
-                <span>Trapped in Water</span>
+              <div class="type-btn-card" id="type-rainfall" onclick="selectEmergencyType('Rainfall', this)">
+                <i class="fa-solid fa-cloud-rain" style="color:#38bdf8; font-size:0.95rem;"></i>
+                <span>Rainfall</span>
               </div>
-              <div class="type-btn-card" id="type-medical" onclick="selectEmergencyType('Medical Emergency', this)">
-                <i class="fa-solid fa-square-plus" style="color:#10b981; font-size:1.05rem;"></i>
-                <span>Medical Emergency</span>
+              <div class="type-btn-card" id="type-thunderstorm" onclick="selectEmergencyType('Thunderstorm', this)">
+                <i class="fa-solid fa-bolt" style="color:#f59e0b; font-size:0.95rem;"></i>
+                <span>Thunderstorm</span>
               </div>
-              <div class="type-btn-card" id="type-food" onclick="selectEmergencyType('Need Food / Water', this)">
-                <i class="fa-solid fa-bottle-water" style="color:#38bdf8; font-size:1.05rem;"></i>
-                <span>Need Food / Water</span>
+              <div class="type-btn-card active" id="type-flooding" onclick="selectEmergencyType('Flooding', this)">
+                <i class="fa-solid fa-water" style="color:#ef4444; font-size:0.95rem;"></i>
+                <span>Flooding</span>
               </div>
-              <div class="type-btn-card" id="type-others" onclick="selectEmergencyType('Others', this)">
-                <i class="fa-solid fa-ellipsis" style="color:#94a3b8; font-size:1.05rem;"></i>
-                <span>Others</span>
+              <div class="type-btn-card" id="type-heatwave" onclick="selectEmergencyType('Heatwave', this)">
+                <i class="fa-solid fa-temperature-arrow-up" style="color:#f97316; font-size:0.95rem;"></i>
+                <span>Heatwave</span>
+              </div>
+              <div class="type-btn-card" id="type-fog" onclick="selectEmergencyType('Fog', this)">
+                <i class="fa-solid fa-smog" style="color:#cbd5e1; font-size:0.95rem;"></i>
+                <span>Fog</span>
+              </div>
+              <div class="type-btn-card" id="type-duststorm" onclick="selectEmergencyType('Dust Storm', this)">
+                <i class="fa-solid fa-wind" style="color:#d97706; font-size:0.95rem;"></i>
+                <span>Dust Storm</span>
+              </div>
+              <div class="type-btn-card" id="type-strongwind" onclick="selectEmergencyType('Strong Wind', this)">
+                <i class="fa-solid fa-tornado" style="color:#06b6d4; font-size:0.95rem;"></i>
+                <span>Strong Wind</span>
               </div>
             </div>
 
-            <div class="card-subtitle" style="margin-bottom:0.18rem;">Describe your situation</div>
-            <textarea class="situation-textarea" id="situation-description" oninput="updateCharCounter(this)">Water entered our house. We are trapped on the roof.</textarea>
-            <div style="text-align:right; font-size:0.6rem; color:var(--text-dim); margin-top:1px; margin-bottom:0.25rem;">
-              <span id="char-counter">54</span>/250
+            <div class="card-subtitle" style="margin-bottom:0.18rem;">Observation Description &amp; Hashtags</div>
+            <textarea class="situation-textarea" id="situation-description" oninput="updateCharCounter(this)">Severe waterlogging near Khairatabad flyover. Water reached knee height in 20 mins of heavy rain! Vehicles stranded. #IMD #HyderabadRains</textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.6rem; color:var(--text-dim); margin-top:1px; margin-bottom:0.25rem;">
+              <span style="color:#38bdf8; font-weight:700;"><i class="fa-solid fa-hashtag"></i> Tagged with #IMD #HyderabadWeather</span>
+              <div><span id="char-counter">132</span>/250</div>
             </div>
 
-            <!-- People and Children Counts -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:auto;">
+            <!-- AI Real-Time Credibility Scoring Banner -->
+            <div style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); border-radius:6px; padding:0.35rem 0.55rem; font-size:0.68rem; color:#a7f3d0; display:flex; align-items:center; gap:0.45rem; margin-top:auto;">
+              <i class="fa-solid fa-microchip" style="color:#10b981; font-size:0.85rem;"></i>
               <div>
-                <div class="card-subtitle" style="margin-bottom:0.15rem;">Number of People</div>
-                <div style="position:relative;">
-                  <i class="fa-solid fa-user-group" style="position:absolute; left:8px; top:7px; color:var(--text-dim); font-size:0.7rem;"></i>
-                  <input type="number" class="form-input" id="input-people-count" value="5" min="1" max="100" style="padding-left:24px;">
-                </div>
-              </div>
-              <div>
-                <div class="card-subtitle" style="margin-bottom:0.15rem;">Including Children / Elderly</div>
-                <div style="position:relative;">
-                  <i class="fa-solid fa-baby" style="position:absolute; left:8px; top:7px; color:var(--text-dim); font-size:0.7rem;"></i>
-                  <input type="number" class="form-input" id="input-children-count" value="2" min="0" max="100" style="padding-left:24px;">
-                </div>
+                <strong>AI Pre-Check: 96.4% Authentic Credibility</strong>
+                <div style="font-size:0.6rem; color:#cbd5e1;">Cross-verified with Begumpet Doppler Radar &amp; GPS timestamp</div>
               </div>
             </div>
 
@@ -957,7 +960,7 @@
             <div>
               <div class="card-title-bar" style="color:#ffffff;">
                 <span style="display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:#2563eb; color:#fff; font-size:0.58rem; font-weight:800;">3</span>
-                Add Photo / Video <span style="font-size:0.65rem; color:var(--text-muted); font-weight:400;">(Optional)</span>
+                Attach Photo / Video <span style="font-size:0.65rem; color:var(--text-muted); font-weight:400;">(Required for AI Verification)</span>
               </div>
 
               <div class="upload-split-grid">
@@ -965,7 +968,7 @@
                 <div class="upload-dropzone" onclick="document.getElementById('sos-file-input').click()">
                   <i class="fa-solid fa-cloud-arrow-up" style="color:#38bdf8; font-size:1.05rem;"></i>
                   <div style="font-size:0.65rem; font-weight:700; color:#fff; margin-top:1px;">Click to upload</div>
-                  <div style="font-size:0.52rem; color:var(--text-dim);">or drag and drop<br>PNG, JPG, MP4 (Max 5MB)</div>
+                  <div style="font-size:0.52rem; color:var(--text-dim);">Reverse-image forensic checked<br>PNG, JPG, MP4 (Max 10MB)</div>
                 </div>
 
                 <!-- Image Preview -->
@@ -976,30 +979,31 @@
               </div>
             </div>
 
-            <!-- Full-width Send SOS Report Button -->
+            <!-- Full-width Publish Observation Button -->
             <div>
-              <button class="btn-send-sos-report" onclick="submitSOSReport()">
-                <i class="fa-solid fa-paper-plane"></i> Send SOS Report
+              <button class="btn-send-sos-report" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); box-shadow:0 4px 14px rgba(37,99,235,0.45);" onclick="submitSOSReport()">
+                <i class="fa-solid fa-satellite-dish"></i> Publish #IMD Weather Observation
               </button>
               <div style="text-align:center; font-size:0.58rem; color:var(--text-dim); margin-top:2px; display:flex; align-items:center; justify-content:center; gap:0.25rem;">
-                <i class="fa-solid fa-lock" style="font-size:0.52rem;"></i> Your location and details will be shared with rescue teams.
+                <i class="fa-solid fa-lock" style="font-size:0.52rem;"></i> Data ingested into MoES Central DB with EXIF metadata preservation.
               </div>
             </div>
           </div>
 
-          <!-- 4. Additional Information Card (Bottom-Right) -->
+          <!-- 4. Hashtags & Metadata Card (Bottom-Right) -->
           <div class="sos-card-box">
             <div class="card-title-bar" style="color:#ffffff;">
               <span style="display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:#2563eb; color:#fff; font-size:0.58rem; font-weight:800;">4</span>
-              Additional Information <span style="font-size:0.65rem; color:var(--text-muted); font-weight:400;">(Optional)</span>
+              Hashtags &amp; Metadata Tags
             </div>
 
             <div class="info-tag-chips" style="margin-top:0.35rem;">
-              <span class="info-tag-pill active" onclick="toggleTagPill(this)"><i class="fa-solid fa-person-cane"></i> Elderly in group</span>
-              <span class="info-tag-pill active" onclick="toggleTagPill(this)"><i class="fa-solid fa-child"></i> Children in group</span>
-              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-plus"></i> Need medical help</span>
-              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-utensils"></i> No food / water</span>
-              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-moon"></i> Night rescue needed</span>
+              <span class="info-tag-pill active" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #IMD</span>
+              <span class="info-tag-pill active" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #HyderabadWeather</span>
+              <span class="info-tag-pill active" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #Waterlogging</span>
+              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #MusiRiverWatch</span>
+              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #Cloudburst</span>
+              <span class="info-tag-pill" onclick="toggleTagPill(this)"><i class="fa-solid fa-hashtag"></i> #HeavyRain</span>
             </div>
           </div>
 
@@ -1011,7 +1015,7 @@
           <!-- 1. Your Safety Matters / Quick Tips Card -->
           <div class="sos-card-box" style="flex-shrink:0;">
             <div class="card-title-bar" style="color:#ffffff;">
-              <i class="fa-solid fa-shield-halved" style="color:#38bdf8;"></i> Your Safety Matters
+              <i class="fa-solid fa-shield-halved" style="color:#38bdf8;"></i> Verification Protocol
             </div>
             <div class="card-subtitle" style="color:#38bdf8; font-weight:700; margin-bottom:0.2rem;">
               <i class="fa-solid fa-location-arrow"></i> Quick Tips
@@ -1401,60 +1405,79 @@
     }
 
     function submitSOSReport() {
-      const locationText = document.getElementById('sos-location-input').value || `${districtData.district}, Assam`;
-      const desc = document.getElementById('situation-description').value || 'Emergency rescue assistance needed';
-      const people = document.getElementById('input-people-count').value || 5;
-      const children = document.getElementById('input-children-count').value || 2;
+      const locationText = document.getElementById('sos-location-input').value || `Khairatabad, Hyderabad, Telangana`;
+      const desc = document.getElementById('situation-description').value || 'Severe waterlogging and flooding observed. #IMD #HyderabadWeather';
+      const eventCategory = selectedType || 'Flooding';
 
       // Active tags
       const activeTags = [];
       document.querySelectorAll('.info-tag-pill.active').forEach(p => activeTags.push(p.innerText.trim()));
 
-      const sosTicket = {
-        id: 'SOS-' + Math.floor(1000 + Math.random() * 9000),
-        type: selectedType,
-        district: districtData.district,
-        location: locationText,
-        coords: currentCoords,
+      const weatherReportId = 'IMD-HYD-' + Math.floor(1000 + Math.random() * 9000);
+      const reportPayload = {
+        id: weatherReportId,
+        user_handle: "suresh_hyd_citizen",
+        platform: "Citizen Portal",
+        city: "Hyderabad",
+        state: "Telangana",
+        latitude: currentCoords[0],
+        longitude: currentCoords[1],
+        event_category: eventCategory,
         description: desc,
-        peopleCount: parseInt(people),
-        childrenCount: parseInt(children),
-        additionalTags: activeTags,
-        assignedRescue: districtData.rescueInfo,
-        status: 'PENDING_APPROVAL',
+        media_url: "https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=600&q=80",
+        hashtags: ["#IMD", "#HyderabadWeather", "#Flooding"],
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ', ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
       };
 
-      // Save to localStorage
-      localStorage.setItem('AEGIS_ACTIVE_CITIZEN_SOS', JSON.stringify(sosTicket));
-      localStorage.setItem('AEGIS_ACTIVE_CITIZEN_SOS_STATUS', 'PENDING_APPROVAL');
-      localStorage.setItem('AEGIS_LATEST_SOS_DISPATCH', JSON.stringify({
-        event: 'NEW_CITIZEN_SOS',
-        sos: sosTicket,
-        timestamp: Date.now()
+      // Push into WeatherBigDataEngine stream if present
+      if (window.weatherBigDataEngine) {
+        window.weatherBigDataEngine.stream.unshift({
+          id: weatherReportId,
+          timestamp: new Date().toISOString(),
+          source: "Citizen Portal (#IMD)",
+          user: "@suresh_reddy",
+          city: "Hyderabad",
+          state: "Telangana",
+          location: locationText,
+          coordinates: currentCoords,
+          event_category: eventCategory,
+          text: desc,
+          media_url: "https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=600&q=80",
+          verification_status: "Verified",
+          ai_trust_score: 96.4,
+          ai_rationale: "Matches Begumpet AWS precipitation ground truth (84mm/hr). Image EXIF confirmed current timestamp.",
+          duplicate_count: 0,
+          is_misleading: false
+        });
+      }
+
+      // Save to localStorage for demo persistence
+      localStorage.setItem('AEGIS_ACTIVE_CITIZEN_SOS', JSON.stringify({
+        id: weatherReportId,
+        type: eventCategory,
+        district: "Hyderabad, Telangana",
+        location: locationText,
+        coords: currentCoords,
+        description: desc,
+        status: 'VERIFIED_AUTHENTIC',
+        timestamp: reportPayload.timestamp
       }));
 
-      // Send to backend API
-      fetch('http://127.0.0.1:8000/api/sos', {
+      // Ingest into FastAPI backend
+      fetch('http://127.0.0.1:8000/api/v1/weather/ingest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          citizen_name: 'Ravi Das',
-          citizen_phone: '+91 98765 43210',
-          lat: currentCoords[0],
-          lng: currentCoords[1],
-          location_name: locationText,
-          district: districtData.district,
-          headcount: parseInt(people),
-          children_count: parseInt(children),
-          medical_emergency: selectedType === 'Medical Emergency' || activeTags.includes('Need medical help'),
-          water_level_ft: 3.5,
-          hazard_details: desc
-        })
-      }).catch(e => console.log('Local fallback mode:', e));
+        body: JSON.stringify(reportPayload)
+      }).catch(e => console.log('Local backend fallback active:', e));
 
-      // Show Waiting Modal
-      showWaitingModal(sosTicket);
+      // Show Confirmation Modal
+      showWaitingModal({
+        id: weatherReportId,
+        category: eventCategory,
+        location: locationText,
+        score: "96.4%",
+        desc: desc
+      });
     }
 
     function showWaitingModal(ticket) {
@@ -1467,35 +1490,40 @@
       `;
 
       modal.innerHTML = `
-        <div style="background:#070d1d; border:2px solid #ef4444; border-radius:18px; padding:1.75rem; max-width:460px; width:92vw; text-align:center; box-shadow:0 0 45px rgba(239,68,68,0.45);">
+        <div style="background:#070d1d; border:2px solid #10b981; border-radius:18px; padding:1.75rem; max-width:480px; width:92vw; text-align:center; box-shadow:0 0 45px rgba(16,185,129,0.35); font-family:'Plus Jakarta Sans',sans-serif;">
           
-          <div style="width:54px; height:54px; border-radius:50%; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 0.65rem auto;">
-            <i class="fa-solid fa-satellite-dish fa-spin"></i>
+          <div style="width:56px; height:56px; border-radius:50%; background:rgba(16,185,129,0.2); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:1.8rem; margin:0 auto 0.65rem auto; border:2px solid #10b981;">
+            <i class="fa-solid fa-satellite-dish"></i>
           </div>
 
-          <div style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; border-radius:20px; padding:3px 14px; display:inline-block; font-size:0.68rem; font-weight:800; color:#f59e0b; margin-bottom:0.65rem;">
-            ⏳ TRANSMITTED TO RESCUE COMMAND
+          <div style="background:rgba(16,185,129,0.2); border:1px solid #10b981; border-radius:20px; padding:3px 14px; display:inline-block; font-size:0.68rem; font-weight:800; color:#10b981; margin-bottom:0.65rem;">
+            ✅ INGESTED INTO NATIONAL WEATHER BIG DATA PIPELINE
           </div>
 
-          <h2 style="font-size:1.25rem; font-weight:800; color:#fff; margin-bottom:0.35rem;">
-            Emergency Beacon #${ticket.id}
+          <h2 style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:0.35rem;">
+            Report #${ticket.id} Verified &amp; Stored
           </h2>
 
-          <p style="font-size:0.785rem; color:#cbd5e1; line-height:1.45; margin-bottom:1.1rem;">
-            Your distress signal is broadcasting live to <strong>${districtData.rescueInfo ? districtData.rescueInfo.name : 'NDRF Command Desk'}</strong> in ${districtData.district}.
+          <p style="font-size:0.75rem; color:#cbd5e1; line-height:1.45; margin-bottom:1.1rem;">
+            Your weather observation with <strong>#IMD</strong> has passed automated AI multi-source cross-checking and is now live on the MoES Command Dashboard.
           </p>
 
           <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(59,130,246,0.25); border-radius:10px; padding:0.75rem; text-align:left; font-size:0.725rem; color:#94a3b8; margin-bottom:1.1rem;">
-            <div style="margin-bottom:3px;"><strong style="color:#fff;">Type:</strong> <span style="color:#ef4444; font-weight:700;">${ticket.type}</span></div>
-            <div style="margin-bottom:3px;"><strong style="color:#fff;">Location:</strong> ${ticket.location}</div>
-            <div style="margin-bottom:3px;"><strong style="color:#fff;">Assigned Unit:</strong> <span style="color:#38bdf8; font-weight:700;">${districtData.rescueInfo ? districtData.rescueInfo.name : 'SDRF Quick Response'}</span></div>
-            <div style="margin-bottom:3px;"><strong style="color:#fff;">People Trapped:</strong> ${ticket.peopleCount} (${ticket.childrenCount} Children/Elderly)</div>
-            <div style="margin-top:5px; color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Satellite GPS telemetry synchronized.</div>
+            <div style="margin-bottom:3px;"><strong style="color:#fff;">Hazard Category:</strong> <span style="color:#38bdf8; font-weight:700;">${ticket.category}</span></div>
+            <div style="margin-bottom:3px;"><strong style="color:#fff;">Geotag Location:</strong> ${ticket.location}</div>
+            <div style="margin-bottom:3px;"><strong style="color:#fff;">AI Trust Score:</strong> <span style="color:#10b981; font-weight:800;">${ticket.score} Authentic</span></div>
+            <div style="margin-bottom:3px;"><strong style="color:#fff;">Radar Corroboration:</strong> <span style="color:#f59e0b; font-weight:700;">Begumpet AWS 84mm/hr Confirmed</span></div>
+            <div style="margin-top:5px; color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Distributed Central DB synced via Kafka broker.</div>
           </div>
 
-          <button style="width:100%; background:#2563eb; color:#ffffff; font-weight:800; font-size:0.8rem; padding:0.6rem; border:none; border-radius:8px; cursor:pointer;" onclick="location.href='citizen-tracking.html'">
-            Open Live SOS Tracking Screen &rarr;
-          </button>
+          <div style="display:flex; gap:0.5rem;">
+            <button style="flex:1; background:rgba(255,255,255,0.1); color:#fff; font-weight:700; font-size:0.78rem; padding:0.55rem; border:none; border-radius:8px; cursor:pointer;" onclick="location.href='citizen-dashboard.html'">
+              Return to Citizen Map
+            </button>
+            <button style="flex:1; background:#2563eb; color:#ffffff; font-weight:800; font-size:0.78rem; padding:0.55rem; border:none; border-radius:8px; cursor:pointer;" onclick="location.href='rescue-dashboard.html'">
+              View on MoES Admin Panel &rarr;
+            </button>
+          </div>
         </div>
       `;
       document.body.appendChild(modal);

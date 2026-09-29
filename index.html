@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>AEGIS - AI-Powered Flood Response Platform</title>
+  <title>AEGIS - National Weather Big Data Analytics Platform (MoES | SIH26069)</title>
 
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -40,26 +40,25 @@
       </svg>
       <div>
         <div class="brand-title">AEGIS</div>
-        <div class="brand-subtitle">AI-Powered Flood Response Platform</div>
+        <div class="brand-subtitle">National Weather Big Data Analytics • MoES / MIC (SIH26069)</div>
       </div>
     </a>
 
     <ul class="nav-links" id="public-nav-links">
       <li><a href="#" class="active" onclick="app.showPage('landing-page')">Home</a></li>
-      <li><a href="#about-section">About</a></li>
-      <li><a href="#updates-section">Live Updates</a></li>
-      <li><a href="#shelters-section">Shelters</a></li>
-      <li><a href="#resources-section">Resources</a></li>
-      <li><a href="#" onclick="app.openAuthModal('rescue')">AI Command Center</a></li>
-      <li><a href="#contact-section">Contact</a></li>
+      <li><a href="#about-section">Architecture & AI</a></li>
+      <li><a href="#updates-section">Big Data Pipeline</a></li>
+      <li><a href="#shelters-section">Weather Stations</a></li>
+      <li><a href="#contact-section">MoES Directory</a></li>
+      <li><a href="rescue-dashboard.html" style="color:#ef4444; font-weight:700;"><i class="fa-solid fa-tower-broadcast"></i> MoES Admin Panel</a></li>
     </ul>
 
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <span id="user-status-badge" class="badge badge-warning hidden">
-        <i class="fa-solid fa-circle-user"></i> <span id="user-status-text">Citizen</span>
-      </span>
-      <button class="btn btn-primary btn-pill" id="main-dash-btn" onclick="app.openAuthModal('citizen')">
-        Enter Dashboard &rarr;
+    <div style="display: flex; align-items: center; gap: 0.65rem;">
+      <button class="btn btn-outline btn-pill" style="font-size:0.78rem; padding:0.45rem 1rem; border-color:#3b82f6; color:#93c5fd;" onclick="location.href='citizen-dashboard.html'">
+        <i class="fa-solid fa-user"></i> Citizen Portal &rarr;
+      </button>
+      <button class="btn btn-primary btn-pill" style="font-size:0.78rem; padding:0.45rem 1.1rem; background:#dc2626; border-color:#ef4444;" onclick="location.href='rescue-dashboard.html'">
+        <i class="fa-solid fa-shield-halved"></i> MoES Admin &rarr;
       </button>
     </div>
   </header>
@@ -78,23 +77,23 @@
         <!-- Hero Left Column -->
         <div class="hero-left">
           <div class="badge badge-live">
-            <span class="pulse-dot"></span> LIVE • Real-time Flood Monitoring Across Assam State
+            <span class="pulse-dot"></span> LIVE • National Weather Big Data Analytics Platform (MoES / SIH26069 • Sarim Moin)
           </div>
 
           <h1 class="hero-title">
-            Stronger Together,<br><span class="blue-text">Safer Together.</span>
+            National Weather<br><span class="blue-text">Big Data Analytics Platform</span>
           </h1>
 
           <p class="hero-desc">
-            AEGIS is an AI-powered platform that connects citizens, rescue teams, and government authorities in real-time to respond faster, coordinate better, and save lives.
+            AEGIS ingests 312+ events/sec from social media (#IMD), Doppler radars, satellite feeds, IoT weather stations, and citizen reports across India. Featuring real-time AI multimodal misinformation detection, deduplication, and dynamic flood evasion routing.
           </p>
 
           <div class="hero-buttons">
-            <button class="btn btn-primary btn-pill" style="padding: 0.75rem 1.8rem;" onclick="app.openAuthModal('citizen')">
-              Enter Dashboard &rarr;
+            <button class="btn btn-primary btn-pill" style="padding: 0.75rem 1.6rem; background:#2563eb;" onclick="location.href='citizen-dashboard.html'">
+              <i class="fa-solid fa-cloud-bolt"></i> Citizen Portal (User POV) &rarr;
             </button>
-            <button class="btn btn-outline btn-pill" style="padding: 0.75rem 1.6rem;" onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'})">
-              <i class="fa-solid fa-circle-play"></i> Learn More
+            <button class="btn btn-primary btn-pill" style="padding: 0.75rem 1.6rem; background:#dc2626; border-color:#ef4444;" onclick="location.href='rescue-dashboard.html'">
+              <i class="fa-solid fa-tower-broadcast"></i> MoES Big Data Admin (Admin POV) &rarr;
             </button>
           </div>
         </div>
@@ -104,68 +103,69 @@
           <!-- Left: Map Container -->
           <div>
             <div class="map-header-title">
-              <span>LIVE FLOOD MAP - ASSAM STATE</span>
-              <span class="badge badge-success" style="font-size:0.65rem;"><span class="pulse-dot" style="background:#10b981"></span> ASSAM BOUNDS LOCKED</span>
+              <span>LIVE NATIONAL WEATHER &amp; HAZARD GRID</span>
+              <div style="display:flex; align-items:center; gap:0.35rem;">
+                <button onclick="app.flyToHyderabad()" style="background:#2563eb; color:#fff; border:none; padding:3px 8px; border-radius:4px; font-size:0.65rem; font-weight:700; cursor:pointer;">⭐ Hyderabad</button>
+                <button onclick="app.locateUserLive()" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid #3b82f6; padding:3px 8px; border-radius:4px; font-size:0.65rem; font-weight:700; cursor:pointer;"><i class="fa-solid fa-crosshairs"></i> GPS</button>
+                <button onclick="app.flyToIndia()" style="background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.2); padding:3px 8px; border-radius:4px; font-size:0.65rem; font-weight:700; cursor:pointer;">🇮🇳 India</button>
+              </div>
             </div>
 
             <div id="landing-map" class="map-container-box"></div>
 
             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.65rem; font-size: 0.75rem; color: #94a3b8;">
-              <div>Risk Level: <span style="color:#ef4444">● Critical</span> <span style="color:#f97316">● High</span> <span style="color:#eab308">● Moderate</span> <span style="color:#38bdf8">● Low</span></div>
+              <div>Risk Level: <span style="color:#ef4444">● Critical</span> <span style="color:#f97316">● High</span> <span style="color:#eab308">● Moderate</span></div>
+              <div style="font-size:0.7rem; color:#38bdf8;"><i class="fa-solid fa-satellite-dish"></i> 4,120 Sensors Streaming</div>
             </div>
           </div>
 
           <!-- Right: District Status & Weather Alert Panel -->
           <div class="district-panel">
-            <div class="panel-title">DISTRICT STATUS</div>
+            <div class="panel-title">LIVE NATIONAL NODES (7 MOES CATEGORIES)</div>
 
             <div class="district-list">
-              <div class="district-item">
-                <span>🔴 Golaghat</span>
-                <span style="color:#ef4444">Critical</span>
+              <div class="district-item" onclick="app.flyToHyderabad()" style="cursor:pointer; background:rgba(239,68,68,0.12); padding:4px 6px; border-radius:6px; border:1px solid rgba(239,68,68,0.3);">
+                <span>🔴 <strong>Hyderabad (Telangana)</strong></span>
+                <span style="color:#ef4444; font-weight:800;">Flooding (Musi)</span>
               </div>
               <div class="district-item">
-                <span>🟠 Jorhat</span>
-                <span style="color:#f97316">High</span>
+                <span>🟠 Mumbai (Maharashtra)</span>
+                <span style="color:#f97316">Rainfall (94mm/h)</span>
               </div>
               <div class="district-item">
-                <span>🟠 Dibrugarh</span>
-                <span style="color:#f97316">High</span>
+                <span>🟠 Delhi NCR</span>
+                <span style="color:#f97316">Fog (<150m Vis)</span>
               </div>
               <div class="district-item">
-                <span>🟠 Sivasagar</span>
-                <span style="color:#f97316">High</span>
+                <span>🔴 Golaghat (Assam)</span>
+                <span style="color:#ef4444">Flooding (1.8m)</span>
               </div>
               <div class="district-item">
-                <span>🟠 Dhemaji</span>
-                <span style="color:#f97316">High</span>
+                <span>🔴 Bikaner (Rajasthan)</span>
+                <span style="color:#ef4444">Heatwave (44.8°C)</span>
               </div>
               <div class="district-item">
-                <span>🟠 Lakhimpur</span>
-                <span style="color:#f97316">High</span>
+                <span>🟡 Kolkata (West Bengal)</span>
+                <span style="color:#eab308">Thunderstorm</span>
               </div>
               <div class="district-item">
-                <span>🟡 Nagaon</span>
-                <span style="color:#eab308">Moderate</span>
-              </div>
-              <div class="district-item">
-                <span>🟡 Darrang</span>
-                <span style="color:#eab308">Moderate</span>
+                <span>🟡 Bengaluru (Karnataka)</span>
+                <span style="color:#eab308">Waterlogging</span>
               </div>
             </div>
 
-            <a href="#" style="color:#3b82f6; text-decoration:none; font-size:0.75rem; font-weight:700; margin-bottom: 0.85rem;" onclick="app.openAuthModal('rescue')">
-              View Full Map &rarr;
+            <a href="rescue-dashboard.html" style="color:#3b82f6; text-decoration:none; font-size:0.75rem; font-weight:700; margin-bottom: 0.65rem; display:block;">
+              Open MoES Admin Big Data Matrix &rarr;
             </a>
 
             <!-- Weather Alert Card -->
             <div class="weather-alert-card">
-              <div class="weather-title">WEATHER ALERT</div>
+              <div class="weather-title">MoES / IMD NATIONAL WARNING</div>
               <div style="display:flex; gap:0.6rem; align-items:center;">
                 <i class="fa-solid fa-cloud-showers-heavy" style="font-size:1.4rem; color:#60a5fa"></i>
                 <div style="font-size:0.725rem; color:#cbd5e1; line-height:1.35;">
-                  Heavy rainfall expected in Assam for next 24 hours.<br>
-                  <strong style="color:#ef4444">Stay alert. Stay safe.</strong>
+                  <strong>Red Alert:</strong> Hyderabad Musi River & Assam Basin overflow.<br>
+                  <span style="color:#ef4444; font-weight:700;">Kafka Stream: 312 msgs/sec active</span>
                 </div>
               </div>
             </div>
@@ -179,67 +179,67 @@
       <div class="stats-grid-row">
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(37,99,235,0.15); color: #3b82f6;">
-            <i class="fa-solid fa-users"></i>
+            <i class="fa-solid fa-bolt-lightning"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">People Affected</div>
-            <div class="stat-number">1.4 Lakh+</div>
-            <div class="stat-sublabel">Across 7 Primary Districts</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Stream Ingestion Speed</div>
+            <div class="stat-number">312 / sec</div>
+            <div class="stat-sublabel">Distributed Kafka Consumer Pipeline</div>
           </div>
         </div>
 
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(16,185,129,0.15); color: #10b981;">
-            <i class="fa-solid fa-circle-check"></i>
+            <i class="fa-solid fa-database"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Active Shelters</div>
-            <div class="stat-number">182</div>
-            <div class="stat-sublabel">Across Assam</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Records Ingested</div>
+            <div class="stat-number">184,290</div>
+            <div class="stat-sublabel">Social #IMD, AWS & Radars</div>
           </div>
         </div>
 
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(239,68,68,0.15); color: #ef4444;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+            <i class="fa-solid fa-shield-virus"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">SOS Requests</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Fake Reports Blocked</div>
             <div class="stat-number">1,248</div>
-            <div class="stat-sublabel">In Last 24 Hours</div>
+            <div class="stat-sublabel">AI Multi-Modal Reverse-Forensics</div>
           </div>
         </div>
 
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(139,92,246,0.15); color: #8b5cf6;">
-            <i class="fa-solid fa-user-shield"></i>
+            <i class="fa-solid fa-brain"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Rescue Teams Deployed</div>
-            <div class="stat-number">115</div>
-            <div class="stat-sublabel">NDRF • SDRF • Civil Defence</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">AI Verification Rate</div>
+            <div class="stat-number">94.2%</div>
+            <div class="stat-sublabel">Cross-Checked with Doppler Radar</div>
           </div>
         </div>
 
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(245,158,11,0.15); color: #f59e0b;">
-            <i class="fa-solid fa-sailboat"></i>
+            <i class="fa-solid fa-layer-group"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Boats & Vehicles</div>
-            <div class="stat-number">212</div>
-            <div class="stat-sublabel">Available</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Deduplicated Events</div>
+            <div class="stat-number">18,430</div>
+            <div class="stat-sublabel">Spatiotemporal Clustering</div>
           </div>
         </div>
 
         <div class="stat-box">
           <div class="stat-icon-wrap" style="background: rgba(6,182,212,0.15); color: #06b6d4;">
-            <i class="fa-solid fa-heart-pulse"></i>
+            <i class="fa-solid fa-tower-cell"></i>
           </div>
           <div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Lives Saved</div>
-            <div class="stat-number">3,842</div>
-            <div class="stat-sublabel">Till Now</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Active Sensor Feeds</div>
+            <div class="stat-number">4,120</div>
+            <div class="stat-sublabel">IMD Automatic Weather Stations</div>
           </div>
         </div>
       </div>
@@ -247,57 +247,57 @@
 
     <!-- Features Section + Live Updates Sidebar -->
     <section id="about-section" class="features-section">
-      <div class="features-header-tag">POWERED BY AI. DRIVEN BY COMPASSION.</div>
+      <div class="features-header-tag">SCALABLE BIG DATA ARCHITECTURE • MINISTRY OF EARTH SCIENCES (MoES)</div>
 
       <div class="features-grid-wrapper">
         <!-- 6 Feature Cards Row -->
         <div class="features-six-grid">
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(59,130,246,0.12); color: #3b82f6;">
-              <i class="fa-solid fa-brain"></i>
+              <i class="fa-solid fa-cloud-arrow-down"></i>
             </div>
-            <div class="feature-item-title">AI Risk Prediction</div>
-            <div class="feature-item-desc">Predict flood spread and identify high-risk zones using AI models.</div>
+            <div class="feature-item-title">Multi-Source Ingestion</div>
+            <div class="feature-item-desc">Ingests 312+ events/sec from #IMD social media, Doppler radars, AWS stations & citizen reports.</div>
           </div>
 
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(239,68,68,0.12); color: #ef4444;">
-              <i class="fa-solid fa-circle-exclamation"></i>
+              <i class="fa-solid fa-shield-virus"></i>
             </div>
-            <div class="feature-item-title">Smart SOS System</div>
-            <div class="feature-item-desc">Citizens can send SOS with location, details & images in real-time.</div>
+            <div class="feature-item-title">AI Fake Report Detection</div>
+            <div class="feature-item-desc">3-pillar verification: NLP sensationalism scoring, image EXIF forensics & Doppler radar cross-check.</div>
           </div>
 
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(16,185,129,0.12); color: #10b981;">
               <i class="fa-solid fa-route"></i>
             </div>
-            <div class="feature-item-title">Intelligent Routing</div>
-            <div class="feature-item-desc">AI finds the safest routes to shelters avoiding flooded areas.</div>
+            <div class="feature-item-title">Dynamic Hazard Evacuation</div>
+            <div class="feature-item-desc">Interactive Dijkstra/A* routing navigating around Musi river overflow to GHMC relief shelters.</div>
           </div>
 
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(139,92,246,0.12); color: #8b5cf6;">
-              <i class="fa-solid fa-house-chimney-medical"></i>
+              <i class="fa-solid fa-layer-group"></i>
             </div>
-            <div class="feature-item-title">Shelter Network</div>
-            <div class="feature-item-desc">Find nearby shelters, check capacity, facilities and contact details.</div>
+            <div class="feature-item-title">Spatiotemporal Deduplication</div>
+            <div class="feature-item-desc">Clusters burst social posts within 500m & 15 mins into single authoritative incident feeds.</div>
           </div>
 
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(6,182,212,0.12); color: #06b6d4;">
-              <i class="fa-solid fa-bell"></i>
+              <i class="fa-solid fa-cloud-bolt"></i>
             </div>
-            <div class="feature-item-title">Real-time Updates</div>
-            <div class="feature-item-desc">Get instant alerts, rescue updates, and weather warnings.</div>
+            <div class="feature-item-title">7 MoES Weather Categories</div>
+            <div class="feature-item-desc">Full support for Rainfall, Thunderstorm, Flooding, Heatwave, Fog, Dust Storm & Strong Wind.</div>
           </div>
 
           <div class="feature-item-card">
             <div class="feature-circle-icon" style="background: rgba(245,158,11,0.12); color: #f59e0b;">
-              <i class="fa-solid fa-comments"></i>
+              <i class="fa-solid fa-sliders"></i>
             </div>
-            <div class="feature-item-title">Two-way Communication</div>
-            <div class="feature-item-desc">Rescue teams respond back with ETA, help type, and shelter information.</div>
+            <div class="feature-item-title">4-Way Big Data Filtering</div>
+            <div class="feature-item-desc">Multi-dimensional querying by Date-wise, Location-wise, Event-wise, and Verification status.</div>
           </div>
         </div>
 
@@ -311,31 +311,31 @@
           <div id="live-updates-container">
             <div class="update-row">
               <div style="display:flex; align-items:center; gap:0.5rem;">
-                <i class="fa-solid fa-water" style="color:#ef4444"></i>
-                <span>Water level rising in Golaghat district</span>
+                <i class="fa-solid fa-cloud-showers-heavy" style="color:#ef4444"></i>
+                <span><strong>[Hyderabad]</strong> Flash cloudburst 114mm/h &amp; Musi overflow #IMD</span>
               </div>
-              <span style="color:#64748b; font-size:0.7rem;">10:25 AM</span>
+              <span style="color:#64748b; font-size:0.7rem;">10:42 AM</span>
             </div>
             <div class="update-row">
               <div style="display:flex; align-items:center; gap:0.5rem;">
-                <i class="fa-solid fa-road-barrier" style="color:#f59e0b"></i>
-                <span>Road blocked near NH-715, Jorhat</span>
+                <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b"></i>
+                <span><strong>[Hyderabad]</strong> Moosarambagh causeway closed; GHMC DRF on scene</span>
               </div>
-              <span style="color:#64748b; font-size:0.7rem;">09:48 AM</span>
+              <span style="color:#64748b; font-size:0.7rem;">10:35 AM</span>
             </div>
             <div class="update-row">
               <div style="display:flex; align-items:center; gap:0.5rem;">
-                <i class="fa-solid fa-campground" style="color:#10b981"></i>
-                <span>Relief camp opened in Nagaon</span>
+                <i class="fa-solid fa-bolt" style="color:#eab308"></i>
+                <span><strong>[Kolkata]</strong> Kalbaishakhi squall (78 km/h winds) #IMD</span>
               </div>
-              <span style="color:#64748b; font-size:0.7rem;">09:15 AM</span>
+              <span style="color:#64748b; font-size:0.7rem;">10:15 AM</span>
             </div>
             <div class="update-row">
               <div style="display:flex; align-items:center; gap:0.5rem;">
-                <i class="fa-solid fa-truck-medical" style="color:#3b82f6"></i>
-                <span>NDRF team deployed to Karbi Anglong</span>
+                <i class="fa-solid fa-smog" style="color:#38bdf8"></i>
+                <span><strong>[Delhi NCR]</strong> Dense radiation fog; visibility 140m</span>
               </div>
-              <span style="color:#64748b; font-size:0.7rem;">08:40 AM</span>
+              <span style="color:#64748b; font-size:0.7rem;">09:50 AM</span>
             </div>
           </div>
         </div>
@@ -704,8 +704,11 @@
           <input type="email" id="citizen-email" class="form-control" placeholder="name@example.com" value="ravi.das@email.com" required>
         </div>
         <div class="form-group">
-          <label>Assam Location / District</label>
+          <label>Select Current Location / District</label>
           <select id="citizen-location" class="form-control">
+            <optgroup label="⭐ Primary Live Demo Region">
+              <option value="Hyderabad" selected>Hyderabad, Telangana (17.38°N, 78.48°E - Active Demo)</option>
+            </optgroup>
             <optgroup label="📍 Upper Assam Division">
               <option value="Golaghat">Golaghat (Critical • 26.40°N, 94.03°E)</option>
               <option value="Jorhat">Jorhat (26.75°N, 94.20°E)</option>
@@ -752,24 +755,25 @@
 
       <form id="rescue-auth-form" class="hidden" onsubmit="app.handleRescueAuth(event); return false;">
         <div class="form-group">
-          <label>Rescue Unit Official ID / Email</label>
-          <input type="email" id="rescue-email" class="form-control" value="ndrf.golaghat@gov.in" required>
+          <label>MoES / IMD Officer ID or Official Email</label>
+          <input type="email" id="rescue-email" class="form-control" value="sarim.moin@moes.gov.in" required>
         </div>
         <div class="form-group">
           <label>Authorization Password</label>
           <input type="password" class="form-control" value="••••••••" required>
         </div>
         <div class="form-group">
-          <label>Command Division</label>
+          <label>Command Centre / Radar Node</label>
           <select class="form-control" id="rescue-division">
-            <option value="Golaghat">NDRF 1st Battalion - Golaghat Division</option>
-            <option value="Jorhat">SDRF 2nd Unit - Jorhat Division</option>
-            <option value="Sivasagar">NDRF 3rd Battalion - Sivasagar Sector</option>
+            <option value="Hyderabad">IMD Hyderabad Meteorological Centre (Begumpet Doppler Radar)</option>
+            <option value="HQ">Ministry of Earth Sciences (MoES HQ - New Delhi)</option>
+            <option value="Assam">IMD Regional Met Centre - Guwahati / Assam</option>
+            <option value="Mumbai">IMD Colaba & Santacruz Radar Centre</option>
           </select>
         </div>
 
         <button type="button" onclick="app.handleRescueAuth(event)" class="btn btn-primary" style="width: 100%; background:#ef4444; margin-top: 0.4rem;">
-          Login to Rescue Command Center &rarr;
+          Login to MoES Big Data Admin Panel &rarr;
         </button>
       </form>
     </div>

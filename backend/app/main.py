@@ -2,15 +2,15 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import sos, telemetry, ai_chat
+from .routers import sos, telemetry, ai_chat, weather_bigdata
 
 # Initialize Database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="AEGIS - AI-Powered Flood Response Platform API",
-    description="Unified Disaster Lifecycle Management API (SIH 2026 PS 26206)",
-    version="2.0.0"
+    title="AEGIS - National Weather Big Data Analytics Platform API",
+    description="Scalable Multi-Source Weather Ingestion, AI Verification & Disaster Intelligence (SIH26069 | MoES)",
+    version="2.1.0"
 )
 
 # Enable CORS for local and live web clients
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 
 # Include API Routers
+app.include_router(weather_bigdata.router)
 app.include_router(sos.router)
 app.include_router(telemetry.router)
 app.include_router(ai_chat.router)
@@ -30,10 +31,12 @@ app.include_router(ai_chat.router)
 @app.get("/")
 def read_root():
     return {
-        "system": "AEGIS AI Disaster Platform",
+        "system": "AEGIS National Weather Big Data Analytics Platform",
         "status": "ONLINE",
-        "ps_id": "26206",
-        "version": "2.0.0",
+        "ps_id": "SIH26069",
+        "ministry": "Ministry of Earth Sciences (MoES)",
+        "lead_evaluator": "Sarim Moin",
+        "version": "2.1.0",
         "documentation": "/docs"
     }
 

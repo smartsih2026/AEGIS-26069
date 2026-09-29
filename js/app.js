@@ -23,32 +23,25 @@ class AegisApp {
     });
   }
 
-  // Landing Page Interactive Map Initialization (With Collapsed Layer Control)
+  // Landing Page Interactive Map Initialization (National India Weather Big Data Grid)
   initLandingMap() {
     const mapElement = document.getElementById('landing-map');
     if (!mapElement) return;
 
-    // Center on Assam with Minimized All-Inclusive View (Zoom ~7.2)
-    const assamCenter = [26.2500, 92.8000];
+    // Center on India National View
+    const indiaCenter = [20.5937, 78.9629];
     this.landingMap = L.map('landing-map', {
-      center: assamCenter,
-      zoom: 7.2,
-      minZoom: 6.5,
-      maxZoom: 14,
+      center: [17.3850, 78.4867], // Default focused on Hyderabad (Primary Demo)
+      zoom: 6.5,
+      minZoom: 4.2,
+      maxZoom: 16,
       zoomControl: true
     });
-
-    // Assam Bounding Box Lock
-    const assamBounds = L.latLngBounds(
-      L.latLng(23.8000, 89.2000), // Southwest
-      L.latLng(28.4000, 96.5000)  // Northeast
-    );
-    this.landingMap.setMaxBounds(assamBounds);
 
     // Dark View (Default on Landing Page)
     const darkTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
       className: 'dark-tiles',
-      attribution: '&copy; Esri World Street Map',
+      attribution: '&copy; Esri World Street Map | MoES Big Data',
       maxZoom: 18
     });
 
@@ -67,35 +60,30 @@ class AegisApp {
     // Default to Dark View on Landing Page
     darkTile.addTo(this.landingMap);
 
-    // Base Layers Control Object for Layer Switcher
     this.baseLayers = {
       "🌙 Dark View": darkTile,
       "🗺️ Default Street View": streetTile,
       "🛰️ Satellite View": satelliteTile
     };
 
-    // Collapsed Layer Switcher Control in Top-Right (Hidden until clicked)
     L.control.layers(this.baseLayers, null, { position: 'topright', collapsed: true }).addTo(this.landingMap);
 
-    // 2. Heatmap Data Points across Assam
+    // Heatmap Data Points across India National Weather Grid
     const heatData = [
-      [26.4049, 94.0321, 1.0], // Golaghat (Critical)
-      [26.7578, 94.2080, 0.85], // Jorhat
-      [27.4845, 94.9019, 0.8], // Dibrugarh
-      [26.9826, 94.6425, 0.8], // Sivasagar
-      [27.4844, 94.5949, 0.75], // Dhemaji
-      [27.2374, 94.0954, 0.75], // Lakhimpur
-      [26.3471, 92.6841, 0.6], // Nagaon
-      [26.4497, 92.0294, 0.55], // Darrang
-      [26.3184, 90.9818, 0.5], // Barpeta
-      [26.1445, 91.7362, 0.45], // Guwahati
-      [26.1784, 90.6227, 0.4]  // Goalpara
+      [17.3850, 78.4867, 1.0],  // Hyderabad (Critical Flood / Musi)
+      [19.0760, 72.8777, 0.9],  // Mumbai (Extreme Rain)
+      [28.6139, 77.2090, 0.85], // Delhi NCR (Dense Fog)
+      [28.0229, 73.3119, 0.8],  // Rajasthan (Heatwave 44.8C)
+      [26.4049, 94.0321, 0.95], // Golaghat Assam (Brahmaputra Flood)
+      [22.5726, 88.3639, 0.75], // Kolkata (Thunderstorm)
+      [12.9716, 77.5946, 0.65], // Bengaluru (Waterlogging)
+      [13.0827, 80.2707, 0.6]   // Chennai (Wind)
     ];
 
     if (typeof L.heatLayer === 'function') {
       L.heatLayer(heatData, {
-        radius: 28,
-        blur: 18,
+        radius: 32,
+        blur: 20,
         maxZoom: 10,
         gradient: {
           0.2: '#38bdf8',
@@ -106,77 +94,109 @@ class AegisApp {
       }).addTo(this.landingMap);
     }
 
-    // 3. Transparent Risk Circles & Clean District Markers for Assam
-    const districtRisks = [
-      { name: 'Golaghat', lat: 26.4049, lng: 94.0321, risk: 'Critical', color: '#ef4444', radius: 22000 },
-      { name: 'Jorhat', lat: 26.7578, lng: 94.2080, risk: 'High', color: '#f97316', radius: 18000 },
-      { name: 'Dibrugarh', lat: 27.4845, lng: 94.9019, risk: 'High', color: '#f97316', radius: 17000 },
-      { name: 'Sivasagar', lat: 26.9826, lng: 94.6425, risk: 'High', color: '#f97316', radius: 16000 },
-      { name: 'Dhemaji', lat: 27.4844, lng: 94.5949, risk: 'High', color: '#f97316', radius: 16000 },
-      { name: 'Lakhimpur', lat: 27.2374, lng: 94.0954, risk: 'High', color: '#f97316', radius: 16000 },
-      { name: 'Nagaon', lat: 26.3471, lng: 92.6841, risk: 'Moderate', color: '#eab308', radius: 15000 },
-      { name: 'Darrang', lat: 26.4497, lng: 92.0294, risk: 'Moderate', color: '#eab308', radius: 14000 },
-      { name: 'Morigaon', lat: 26.2573, lng: 92.3377, risk: 'Moderate', color: '#eab308', radius: 13000 },
-      { name: 'Guwahati (Kamrup Metro)', lat: 26.1445, lng: 91.7362, risk: 'Low', color: '#38bdf8', radius: 12000 },
-      { name: 'Dima Hasao', lat: 25.4004, lng: 93.0752, risk: 'Low', color: '#38bdf8', radius: 14000 },
-      { name: 'Karimganj', lat: 24.8649, lng: 92.3592, risk: 'Low', color: '#38bdf8', radius: 12000 }
+    // National Weather Grid Hazard Points
+    const nationalHazards = [
+      { name: 'Hyderabad, Telangana (Demo Hub)', lat: 17.3850, lng: 78.4867, category: 'Flooding', risk: 'Critical', color: '#ef4444', desc: 'Musi River overflow, 114mm/h flash cloudburst. Begumpet Radar active.', radius: 35000, isPrimary: true },
+      { name: 'Mumbai, Maharashtra', lat: 19.0760, lng: 72.8777, category: 'Rainfall', risk: 'High', color: '#f97316', desc: '94mm/h extreme downpour + 4.2m Arabian Sea high tide.', radius: 28000 },
+      { name: 'Delhi NCR', lat: 28.6139, lng: 77.2090, category: 'Fog', risk: 'High', color: '#f97316', desc: 'Dense radiation smog, visibility < 150m, IGI Airport CAT-III.', radius: 25000 },
+      { name: 'Golaghat, Assam', lat: 26.4049, lng: 94.0321, category: 'Flooding', risk: 'Critical', color: '#ef4444', desc: 'Dhansiri & Brahmaputra basin 1.8m above danger level.', radius: 28000 },
+      { name: 'Bikaner, Rajasthan', lat: 28.0229, lng: 73.3119, category: 'Heatwave', risk: 'Critical', color: '#ef4444', desc: '44.8°C severe Loo heatwave warning. MoES Orange alert.', radius: 26000 },
+      { name: 'Kolkata, West Bengal', lat: 22.5726, lng: 88.3639, category: 'Thunderstorm', risk: 'Moderate', color: '#eab308', desc: 'Norwester Kalbaishakhi squall (78 km/h wind gusts).', radius: 22000 },
+      { name: 'Bengaluru, Karnataka', lat: 12.9716, lng: 77.5946, category: 'Rainfall', risk: 'Moderate', color: '#eab308', desc: 'Outer Ring Road Bellandur waterlogging reported via #IMD.', radius: 20000 }
     ];
 
-    districtRisks.forEach(d => {
-      // Translucent risk circle
+    nationalHazards.forEach(d => {
       const circle = L.circle([d.lat, d.lng], {
         color: d.color,
         fillColor: d.color,
         fillOpacity: 0.22,
-        weight: 1.5,
+        weight: d.isPrimary ? 2.5 : 1.5,
         radius: d.radius
       }).addTo(this.landingMap);
 
-      // Custom Glowing Pin Marker
       const pinHtml = `
-        <div style="background:${d.color}; color:#fff; width:22px; height:22px; border-radius:50%; border:2px solid #fff; display:flex; align-items:center; justify-content:center; box-shadow:0 0 12px ${d.color}; font-size:10px; font-weight:800;">
-          ${d.risk === 'Critical' ? '!' : '✓'}
+        <div style="background:${d.color}; color:#fff; width:${d.isPrimary ? 28 : 22}px; height:${d.isPrimary ? 28 : 22}px; border-radius:50%; border:2px solid #fff; display:flex; align-items:center; justify-content:center; box-shadow:0 0 16px ${d.color}; font-size:${d.isPrimary ? 12 : 10}px; font-weight:800; animation:${d.isPrimary ? 'pulse 1.8s infinite' : 'none'};">
+          ${d.isPrimary ? '⭐' : '!'}
         </div>
       `;
       const customIcon = L.divIcon({
         className: 'custom-map-icon',
         html: pinHtml,
-        iconSize: [22, 22]
+        iconSize: [d.isPrimary ? 28 : 22, d.isPrimary ? 28 : 22]
       });
 
       const marker = L.marker([d.lat, d.lng], { icon: customIcon }).addTo(this.landingMap);
 
-      // Tooltip: ONLY Place Name (Clean & Clutter-Free!)
       marker.bindTooltip(`<strong>${d.name}</strong>`, {
-        permanent: true,
+        permanent: d.isPrimary,
         direction: 'top',
         className: 'map-district-label'
       });
 
-      // Rich Glassmorphic Popup on CLICK
-      const badgeClass = d.risk === 'Critical' ? 'badge-danger' : d.risk === 'High' ? 'badge-warning' : 'badge-yellow';
+      const badgeClass = d.risk === 'Critical' ? 'badge-danger' : 'badge-warning';
       const popupContent = `
-        <div style="padding: 6px 8px; font-family: 'Plus Jakarta Sans', sans-serif;">
+        <div style="padding: 6px 8px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 200px;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:0.6rem; margin-bottom:0.35rem;">
             <div style="font-weight:800; font-size:0.85rem; color:#ffffff;">📍 ${d.name}</div>
             <span class="badge ${badgeClass}" style="font-size:0.6rem; padding:0.15rem 0.45rem;">${d.risk}</span>
           </div>
-          <div style="font-size:0.725rem; color:#cbd5e1; line-height:1.4;">
-            Status: <strong style="color:${d.color};">${d.risk} Risk Zone</strong><br>
-            Monitored by ASDMA & IMD Assam
-          </div>
+          <div style="font-size:0.75rem; color:#f8fafc; margin-bottom: 3px;"><strong>Event Category:</strong> ${d.category}</div>
+          <div style="font-size:0.72rem; color:#cbd5e1; line-height:1.4;">${d.desc}</div>
+          <div style="margin-top:6px; font-size:0.68rem; color:#38bdf8;">Tagged with #IMD • Real-time Big Data Stream</div>
         </div>
       `;
       marker.bindPopup(popupContent);
       circle.bindPopup(popupContent);
+
+      if (d.isPrimary) {
+        setTimeout(() => marker.openPopup(), 1200);
+      }
     });
 
     setTimeout(() => {
       if (this.landingMap) {
-        this.landingMap.setView([26.2500, 92.8000], 7.2);
         this.landingMap.invalidateSize();
       }
     }, 400);
+  }
+
+  flyToHyderabad() {
+    if (!this.landingMap) return;
+    this.landingMap.flyTo([17.3850, 78.4867], 11.5, { duration: 1.5 });
+  }
+
+  flyToIndia() {
+    if (!this.landingMap) return;
+    this.landingMap.flyTo([20.5937, 78.9629], 5.0, { duration: 1.5 });
+  }
+
+  locateUserLive() {
+    if (!this.landingMap) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userLat = pos.coords.latitude;
+          const userLng = pos.coords.longitude;
+          const userPin = L.marker([userLat, userLng], {
+            icon: L.divIcon({
+              className: 'user-live-gps-pin',
+              html: `<div style="background:#2563eb; width:22px; height:22px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 15px #3b82f6;"></div>`,
+              iconSize: [22, 22]
+            })
+          }).addTo(this.landingMap);
+          userPin.bindPopup(`<strong>📍 Your Detected GPS Location</strong><br>Accurate within ${Math.round(pos.coords.accuracy)}m<br><span style="color:#10b981;">Connected to AEGIS Weather Stream</span>`).openPopup();
+          this.landingMap.flyTo([userLat, userLng], 12.5, { duration: 1.5 });
+        },
+        (err) => {
+          console.warn("GPS access denied or unavailable, defaulting to Hyderabad demo hub:", err);
+          this.flyToHyderabad();
+          alert("📍 GPS access unavailable or blocked. Centering on Primary Demo Hub: Hyderabad, Telangana (17.38°N, 78.48°E).");
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      this.flyToHyderabad();
+    }
   }
 
   // Navigation Page Switching

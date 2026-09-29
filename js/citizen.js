@@ -1,11 +1,71 @@
 /* 
- * AEGIS Flood Emergency Platform
- * Master Citizen Portal Controller & Assam Flood Model Data Matrix
+ * AEGIS - National Weather Big Data Analytics Platform (SIH26069)
+ * Ministry of Earth Sciences (MoES) / MIC
+ * Master Citizen Portal Controller & National Weather/Flood Model Data Matrix
  * Complete genuine telemetry, POI markers, AI knowledge generator & storage sync
- * for all 21 Assam districts across 4 divisions.
+ * with primary live demo centered in Hyderabad (Telangana) and National coverage.
  */
 
 const assamFloodModelData = [
+  // ==========================================
+  // 0. PRIMARY LIVE DEMO REGION: HYDERABAD (TELANGANA)
+  // ==========================================
+  {
+    district: "Hyderabad",
+    division: "Telangana State (Live Demo Center)",
+    coordinates: [17.3850, 78.4867],
+    coordsLabel: "17.38°N, 78.48°E",
+    riskLevel: "Critical",
+    river: "Musi River & Hussain Sagar",
+    riverStatus: "Musi River Flowing 1.45m ABOVE Danger Mark at Moosarambagh Causeway",
+    waterLevel: "512.40m MSL (Danger: 511.00m MSL)",
+    rainfall24h: "98.5 mm (Begumpet IMD AWS)",
+    affectedPopulation: "62,400 Citizens",
+    originAddress: "Khairatabad & Hussain Sagar Circle, Hyderabad, Telangana",
+    citizenOrigin: [17.4125, 78.4682],
+    clinic: [17.4250, 78.4720], // Gandhi Hospital / NIMS Emergency Outpost
+    shelter: [17.4410, 78.4780], // GHMC Begumpet Indoor Stadium
+    rescueCamp: [17.3950, 78.4650], // SDRF Musi Flood Quick Reaction Unit
+    roadBlock: [17.4180, 78.4640], // Khairatabad Underpass Inundated
+    floodedArea: [17.4220, 78.4700], // Hussain Sagar Surplus Inundation Zone
+    deocPhone: "040-21111111 / 1070 (GHMC Disaster Control)",
+    landmarks: ["Khairatabad Flyover", "Hussain Sagar Lake", "Nizam College", "Begumpet Airport"],
+    shelterInfo: {
+      name: "GHMC Begumpet Indoor Stadium Emergency Shelter",
+      capacity: 850,
+      available: 340,
+      occupied: 510,
+      distance: "2.8 km",
+      foodSupplies: "Hot Meals 3x/Day, Purified RO Water, Baby Food",
+      medicalAid: "24x7 GHMC Doctor + Mobile Health Clinic"
+    },
+    clinicInfo: {
+      name: "NIMS Emergency Flood Relief Clinic",
+      doctor: "Dr. K. Srinivas (Emergency Head)",
+      distance: "1.4 km",
+      phone: "+91 94400 11223"
+    },
+    rescueInfo: {
+      name: "SDRF Telangana 3rd Battalion - Boat Unit 2",
+      commander: "Inspector M. Ramesh",
+      vehicle: "Inflatable Zodiac Motorboat",
+      phone: "+91 94400 99887",
+      radioChannel: "VHF-CH 16 (156.8 MHz)"
+    },
+    blockageInfo: {
+      name: "Khairatabad-Necklace Road Causeway Submerged",
+      waterDepth: "3.5 ft water",
+      warning: "Heavy waterlogging near Khairatabad underpass. Follow Tank Bund safe bypass."
+    },
+    safeRouteToShelter: [
+      [17.4125, 78.4682], // Citizen Origin (Khairatabad)
+      [17.4150, 78.4550], // Safe Waypoint 1 (Bypassing West through Lakdikapul)
+      [17.4320, 78.4620], // Safe Waypoint 2 (Punjagutta Main Corridor)
+      [17.4380, 78.4710], // Safe Waypoint 3 (Connecting Prakash Nagar)
+      [17.4410, 78.4780]  // Shelter (GHMC Begumpet Indoor Stadium)
+    ]
+  },
+
   // ==========================================
   // 1. UPPER ASSAM DIVISION
   // ==========================================
@@ -1183,6 +1243,15 @@ const assamFloodModelData = [
 // ==========================================
 const assamShelterNetwork = {
   // ==========================================
+  // 0. PRIMARY LIVE DEMO REGION: HYDERABAD (TELANGANA)
+  // ==========================================
+  "Hyderabad": [
+    { name: "GHMC Begumpet Indoor Stadium Emergency Shelter", coordinates: [17.4410, 78.4780], capacity: 850, status: "Open", type: "Mega Camp", contact: "GHMC Officer K. Varma", phone: "+91 94401 11223", desc: "Central GHMC stadium complex with 50-bed medical camp and 24x7 community kitchen." },
+    { name: "Nizam College Grounds Disaster Relief Camp", coordinates: [17.3980, 78.4750], capacity: 600, status: "Open", type: "College Shelter", contact: "Prof. P. Reddy", phone: "+91 94401 55664", desc: "Basheerbagh elevated campus with water filtration and power backup." },
+    { name: "Lal Bahadur Shastri Stadium Relief Enclave", coordinates: [17.4020, 78.4710], capacity: 1000, status: "Open", type: "Stadium Enclave", contact: "Commander A. Rao", phone: "+91 94401 99005", desc: "Multi-purpose covered stadium safe from Musi river floodwaters." }
+  ],
+
+  // ==========================================
   // UPPER ASSAM DIVISION
   // ==========================================
   "Golaghat": [
@@ -1375,12 +1444,12 @@ class CitizenApp {
     console.log(`AEGIS Citizen Portal Controller Initialized. Active District: ${this.currentDistrict}`);
   }
 
-  // Get active selected district from localStorage (defaults to Golaghat)
+  // Get active selected district from localStorage (defaults to Hyderabad for live demo)
   getSelectedDistrict() {
     try {
-      return localStorage.getItem('aegis_selected_district') || 'Golaghat';
+      return localStorage.getItem('aegis_selected_district') || 'Hyderabad';
     } catch (e) {
-      return 'Golaghat';
+      return 'Hyderabad';
     }
   }
 
@@ -1402,6 +1471,8 @@ class CitizenApp {
     const match = assamFloodModelData.find(d => {
       const dName = d.district.toLowerCase();
       return dName === query ||
+        (query.includes('hyd') && dName.includes('hyderabad')) ||
+        (query.includes('telangana') && dName.includes('hyderabad')) ||
         (query.includes('guwahati') && dName.includes('guwahati')) ||
         (query.includes('kamrup') && dName.includes('guwahati')) ||
         (query.includes('silchar') && dName.includes('cachar')) ||
@@ -1411,7 +1482,7 @@ class CitizenApp {
         query.includes(dName);
     });
 
-    return match || assamFloodModelData[0]; // fallback to Golaghat
+    return match || assamFloodModelData[0]; // fallback to Hyderabad (index 0)
   }
 
   // Get at least 3 genuine real-time shelters for the given district

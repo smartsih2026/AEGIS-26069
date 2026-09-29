@@ -1018,6 +1018,9 @@
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <i class="fa-solid fa-bars" style="color:#94a3b8; font-size:1.05rem; cursor:pointer;"></i>
           <select class="district-select-pill" id="district-selector" onchange="onDistrictChange(this.value)">
+            <optgroup label="⭐ Primary Live Demo Region">
+              <option value="Hyderabad" selected>Hyderabad, Telangana (17.38°N, 78.48°E - Active Demo)</option>
+            </optgroup>
             <optgroup label="📍 Upper Assam Division">
               <option value="Golaghat">Golaghat (Critical • 26.40°N, 94.03°E)</option>
               <option value="Jorhat">Jorhat (26.75°N, 94.20°E)</option>
@@ -1361,7 +1364,7 @@
     });
 
     function initSatelliteMap() {
-      const activeDist = citizenApp.getSelectedDistrict() || 'Golaghat';
+      const activeDist = citizenApp.getSelectedDistrict() || 'Hyderabad';
       const selector = document.getElementById('district-selector');
       if (selector) {
         selector.value = activeDist;
@@ -1370,7 +1373,7 @@
       const data = citizenApp.getDistrictModelData(activeDist);
 
       citizenMap = L.map('citizen-satellite-map', {
-        center: data.coordinates || [26.4049, 94.0321],
+        center: data.coordinates || [17.3850, 78.4867],
         zoom: 13,
         zoomControl: true,
         attributionControl: false

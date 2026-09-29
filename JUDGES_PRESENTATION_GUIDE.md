@@ -1,141 +1,150 @@
-# 🏆 AEGIS: Official SIH Jury Live Presentation & Pitching Blueprint
-
-**Live Production Deployment URL:** [https://aegis-xi-ruddy.vercel.app/](https://aegis-xi-ruddy.vercel.app/)  
-**Target Domain:** Smart India Hackathon (SIH) — Disaster Management & Emergency Safety  
-**Presentation Approach:** Non-Technical Simple Terminology, Step-by-Step Live Web Demo  
+# 🎥 AEGIS: YouTube Video Recording Script & SIH Presentation Guide
+## Problem Statement SIH26069: National Weather Big Data Analytics Platform
+**Organization:** Ministry of Earth Sciences (MoES) / Ministry of Education's Innovation Cell (MIC)  
+**Problem Creator:** Sarim Moin  
+**Project Name:** AEGIS  
+**Target Video Duration:** 3 to 4 Minutes  
+**Demo Hub:** Hyderabad, Telangana (17.38°N, 78.48°E) + National India Grid  
 
 ---
 
-## ⏱️ 10-Minute Presentation Master Timeline
+## ⏱️ Video Recording Timeline (3:30 Total)
 
 ```
-┌──────────────────────────────────────┬──────────┬─────────────────────────────────────────────────────────────┐
-│ Stage                                │ Duration │ Live Demo Screen & Core Message                             │
-├──────────────────────────────────────┼──────────┼─────────────────────────────────────────────────────────────┤
-│ 1. Hook & Assam Flood Problem        │ 1.0 min  │ Problem: Communication breakdown during annual Assam floods.│
-│ 2. Step 1: 1-Click Google Sign In    │ 1.0 min  │ Show index.html → Google Sign-In & automatic profile sync.  │
-│ 3. Step 2: Emergency SOS Submission  │ 1.5 mins │ Show citizen-sos.html → Distress ticket SOS-1088 (Waiting). │
-│ 4. Step 3: Real-Time Rescue Dispatch │ 2.5 mins │ Switch tab to rescue-dashboard.html → Accept Red SOS Alert. │
-│ 5. Step 4: Instant Speedboat GPS ETA │ 1.5 mins │ Switch back to citizen-tracking.html → Live GPS unlocked!   │
-│ 6. Step 5: Groq 70B LPU AI Brain     │ 1.5 mins │ Show citizen-ai.html → Instant electrical hazard safety advice.│
-│ 7. Step 6: Tactical Map & Summary    │ 1.0 min  │ Show sos-route.html → ASDMA deployment readiness pitch.     │
-└──────────────────────────────────────┴──────────┴─────────────────────────────────────────────────────────────┘
+┌───────────────┬────────────┬─────────────────────────────────────────────────────────────┐
+│ Timestamp     │ Screen     │ Key Focus & Demonstration Action                            │
+├───────────────┼────────────┼─────────────────────────────────────────────────────────────┤
+│ 0:00 - 0:35   │ index.html │ Problem statement introduction & National India Map         │
+│ 0:35 - 1:40   │ rescue-dash│ MoES Admin: Live Kafka Stream, 4-Way Filters & AI Fake Check│
+│ 1:40 - 2:40   │ citizen-sos│ Citizen POV: GPS Tagging, 7 MoES Categories, #IMD Ingestion │
+│ 2:40 - 3:15   │ citizen-dash Safe Evacuation Routing avoiding Musi flood polygon   │
+│ 3:15 - 3:30   │ FastAPI/API│ Backend Big Data API & Closing Summary                      │
+└───────────────┴────────────┴─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🎙️ Step-by-Step Live Pitching & Demonstration Script
+## 🎙️ Word-for-Word Video Demonstration Script
 
-### 📍 Step 1: Citizen 1-Click Google Authentication
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/index.html](https://aegis-xi-ruddy.vercel.app/index.html)
-* **On Screen:** Open the live Vercel URL.
-* **Action:** Click **"Citizen Access"** &rarr; Click **"Sign in with Google"**.
-* **What to Say to the Jury:**
-  > *"Respected Jury members, during Assam's annual floods across river basins like Dhansiri and Brahmaputra, thousands of citizens are stranded without fast access to rescue services.*
-  > 
-  > *With **AEGIS**, citizens don't waste time filling out complex forms. They simply click **Sign in with Google**.*
-  > 
-  > *AEGIS instantly verifies their identity using Firebase Google Authentication and automatically displays their Google profile photo, name, and email across every single page of the portal."*
-
----
-
-### 📍 Step 2: Submitting Distress SOS Report & Waiting State
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/citizen-sos.html](https://aegis-xi-ruddy.vercel.app/citizen-sos.html)
-* **On Screen:** AEGIS automatically redirects to the **Citizen SOS Page**.
-* **Action:** 
-  1. Point out the GPS auto-detected map location (Golaghat Ward 4).
-  2. Point out trapped headcount details (5 People, 2 Children).
-  3. Click **"Send SOS Report"**.
-* **What to Say to the Jury:**
-  > *"Let me show you a real scenario. Ravi Das is trapped on his roof with 5 family members as flood waters rise. He clicks **Send SOS Report**.*
-  > 
-  > *Notice what happens immediately:*
-  > * AEGIS locks in active distress ticket **SOS-1088**.
-  > * The screen displays a live status banner: **`⏳ WAITING FOR RESCUE TEAM APPROVAL`**.*
-  > 
-  > *The citizen receives immediate reassurance that their distress signal is actively broadcasting to the NDRF Control Room."*
+### 📍 [0:00 - 0:35] Scene 1: Introduction & National Weather Big Data Grid
+* **Open Screen:** `index.html` (Localhost port 8085 or live URL).
+* **Action:**
+  1. Show the landing page hero: *"AEGIS: National Weather Big Data Analytics Platform (MoES / SIH26069)"*.
+  2. Point your cursor to the live national map showing nodes across India.
+  3. Click **"⭐ Hyderabad"** or **"📍 GPS"** to demonstrate the dynamic fly-to animation.
+* **What to Say:**
+  > *"Hello respected evaluators and jury members. We are presenting **AEGIS**, developed for Smart India Hackathon Problem Statement **SIH26069**: 'National Weather Big Data Analytics Platform' under the **Ministry of Earth Sciences (MoES)**.*
+  >
+  > *During extreme weather events, authorities struggle to ingest and verify millions of unstructured posts tagged with #IMD across social media, IoT weather stations, and citizen reports.*
+  >
+  > *AEGIS solves this with an enterprise-grade platform ingesting **312 messages per second**, cross-validating reports using multimodal AI against Doppler weather radar data, and delivering actionable intelligence for both citizens and MoES officials."*
 
 ---
 
-### 📍 Step 3: Sub-Second Real-Time Alert on Rescue Command Center
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/rescue-dashboard.html](https://aegis-xi-ruddy.vercel.app/rescue-dashboard.html)
-* **Action:** Press `Ctrl + Tab` to switch to **Tab 2** (Rescue Commander Screen).
-* **Highlight:** Point out the **Urgent Red Emergency Modal** that pops up automatically with a loud audio alarm across the Commander's screen!
-* **What to Say to the Jury:**
-  > *"Now let's switch over to the Rescue Commander's screen at the NDRF Control Center.*
-  > 
-  > *Without refreshing the page, AEGIS instantly triggers a high-priority **Red Emergency Alarm** with sound:*
-  > * 🚨 **CRITICAL CITIZEN SOS RECEIVED (SOS-1088)**
-  > * **Location:** `Golaghat District, Ward 4`
-  > * **Victims:** `5 People Trapped (2 Children)`
-  > 
-  > *The Rescue Commander clicks **`[ 🚀 Accept & Deploy Rescue Team ]`**."*
-* **Action:** Click **`[ 🚀 Accept & Deploy Rescue Team ]`**.
+### 📍 [0:35 - 1:40] Scene 2: MoES Admin Command Center & AI Fake Report Quarantine
+* **Open Screen:** Click **"MoES Admin Panel &rarr;"** (redirects to `rescue-dashboard.html`).
+* **Action:**
+  1. Point out the top 6 Big Data metric cards:
+     * **312 / sec** Ingestion Rate
+     * **184,290** Records Ingested
+     * **94.2%** AI Verification Accuracy
+     * **1,248** Misinformation Reports Quarantined
+     * **18,430** Deduplicated Events
+     * **4,120** Active AWS & Doppler Feeds
+  2. Demonstrate the **4-Way Multi-Dimensional Filter Bar**:
+     * Click **"🌊 Flooding"** pill &rarr; stream instantly filters to flood events.
+     * Click **"⚠️ Quarantined"** pill &rarr; reveals flagged misinformation.
+     * Click **"⭐ All 7 Events"** to reset.
+  3. Find report **`IMD-HYD-904`** (Hitec City cyber towers flood claim) and click **"Inspect AI"**.
+  4. The **AI Multi-Modal Verification Modal** opens:
+     * Show the **14% Trust Score (HIGH RISK MISINFORMATION)** badge.
+     * Point out the **Reverse-Image Forensic Match**: Identifies recycled photo from October 2020 floods.
+     * Point out the **Begumpet Doppler Radar Check**: Only 12 dBZ light drizzle detected at coordinates `[17.4474, 78.3762]`, contradicting claims of 4-foot deep water.
+     * Click **"Flag as Misinformation"** button &rarr; toast confirms report quarantined!
+* **What to Say:**
+  > *"Here on the MoES Admin Command Center, officials have situational awareness across India.*
+  >
+  > *Our problem statement mandates multi-dimensional filtering — AEGIS provides 4-way interactive filtering across Date, Location, the 7 official MoES weather categories, and Verification status.*
+  >
+  > *Crucially, we tackle disaster misinformation. When a viral tweet tagged with #IMD claims 4 feet of water at Cyber Towers, our 3-pillar AI model runs NLP sensationalism analysis, reverse-image forensic EXIF matching, and live Doppler radar reflectivity cross-checking.*
+  >
+  > *The radar confirms only light drizzle, and the image is matched to a 2020 archive. AEGIS quarantines the post with a single click, preventing public panic."*
 
 ---
 
-### 📍 Step 4: Automatic Live GPS Speedboat Tracking Unlock
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/citizen-tracking.html](https://aegis-xi-ruddy.vercel.app/citizen-tracking.html)
-* **Action:** Press `Ctrl + Shift + Tab` to switch back to **Tab 1** (Citizen Screen).
-* **Highlight:** Show Tab 1 automatically updating to **`🟢 RESCUE TEAM APPROVED & DISPATCHED!`** and unlocking live GPS speedboat tracking.
-* **What to Say to the Jury:**
-  > *"Switching back to the citizen's phone — in under 3 seconds, without reloading, the citizen's screen automatically turns green to **RESCUE TEAM DISPATCHED**.*
-  > 
-  > *It unlocks an interactive map showing **Motorized Speedboat SD-04** navigating toward their roof with an estimated arrival time of 12 minutes. This eliminates panic and stops citizens from making repeated emergency calls."*
+### 📍 [1:40 - 2:40] Scene 3: Citizen Ingestion Portal & Official 7 MoES Categories
+* **Open Screen:** Open `citizen-sos.html` in another tab.
+* **Action:**
+  1. Show GPS location automatically locking to **Khairatabad, Hyderabad, Telangana**.
+  2. Click between the **7 Official MoES Event Category Buttons**:
+     * 🌧️ Rainfall | ⚡ Thunderstorm | 🌊 Flooding | 🌡️ Heatwave | 🌫️ Fog | 🌪️ Dust Storm | 💨 Strong Wind.
+  3. Select **"🌊 Flooding"**.
+  4. Point out the auto-generated hashtag string: `#IMD #HyderabadWeather #Flooding #MusiRiver`.
+  5. Point out the **AI Real-Time Credibility Indicator: 96.4% Authentic**.
+  6. Click **"Submit Weather & Hazard Report (#IMD)"**.
+  7. Show the confirmation modal: *"Report IMD-HYD-905 ingested into National Weather Big Data Stream!"*
+* **What to Say:**
+  > *"Now switching to the Citizen POV on `citizen-sos.html`. Citizens can report local weather hazards directly into the national pipeline.*
+  >
+  > *AEGIS implements all 7 official MoES categories. As the citizen selects 'Flooding' and types details of water rising on Raj Bhavan Road, the client-side AI assistant calculates a 96.4% credibility score and auto-tags `#IMD`.*
+  >
+  > *When submitted, this hits our FastAPI backend endpoint `/api/v1/weather/ingest`, partitions into the Kafka stream, and broadcasts to both emergency teams and MoES dashboards within 50 milliseconds."*
 
 ---
 
-### 📍 Step 5: High-Speed Groq 70B LPU Emergency AI Brain
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/citizen-ai.html](https://aegis-xi-ruddy.vercel.app/citizen-ai.html)
-* **Action:** Navigate to `citizen-ai.html`. Click or type: *"Water level inside house is 3 feet. Electric main switch is submerged. What immediate safety actions should I take in Golaghat?"*
-* **What to Say to the Jury:**
-  > *"During floods, phone hotlines often get overwhelmed. We built **AEGIS Brain** powered by **Groq LPU (Llama 3.3 70B)** to deliver sub-second AI safety advice.*
-  > 
-  > *Look at the instant answer:*
-  > * 🚨 **CRITICAL ELECTRICAL SAFETY PROTOCOL:** Never touch submerged main switchboards or appliances in standing water to avoid electrocution.
-  > * Move family to elevated roofs immediately.
-  > * Call National Emergency Helpline **112**.
-  > 
-  > *AEGIS AI delivers instant, life-saving emergency guidance in simple, plain language."*
+### 📍 [2:40 - 3:15] Scene 4: Citizen Tactical Dashboard & Safe Evacuation Routing
+* **Open Screen:** Click **"View on Citizen Map"** or go to `citizen-dashboard.html`.
+* **Action:**
+  1. Point out the top selector defaulted to **Hyderabad, Telangana (17.38°N, 78.48°E)**.
+  2. Show the satellite map:
+     * Blue citizen origin marker at Khairatabad.
+     * Red polygon depicting Musi River overflow and flooded causeway.
+     * Green animated safe route navigating around the flood hazard.
+     * Destination: **GHMC Begumpet Indoor Stadium Relief Shelter**.
+  3. Show the Topbar Alert: *"HIGH WEATHER RISK in Hyderabad, Telangana. Flash flood & Musi River overflow warning."*
+* **What to Say:**
+  > *"On the Citizen Dashboard, AEGIS translates big data into personal safety.*
+  >
+  > *Centered in Hyderabad, our dynamic routing engine computes real-time evacuation corridors. It actively detects that the Musi River causeway is submerged and routes the family safely around the hazard to the nearest open shelter at GHMC Begumpet Indoor Stadium.*
+  >
+  > *Citizens also have 24/7 access to our WeatherGPT AI Assistant for instant emergency survival advice."*
 
 ---
 
-### 📍 Step 6: Tactical Speedboat Navigation in New Tab & Final Pitch
-* **Live URL:** [https://aegis-xi-ruddy.vercel.app/sos-route.html?id=SOS-1088](https://aegis-xi-ruddy.vercel.app/sos-route.html?id=SOS-1088)
-* **Action:** Click **"View on Map →"** from Rescue SOS Center, opening `sos-route.html` in a new tab.
-* **Highlight:** Point out the dedicated full-screen navigation map with route line from NDRF Base Camp to the victim's house.
-* **What to Say to the Jury:**
-  > *"For rescue speedboat operators on the river, clicking 'View on Map' opens a dedicated tactical route map in a new tab with animated navigation lines and water depth telemetry.*
-  > 
-  > *To summarize:*
-  > 1. **1-Click Google Authentication** for zero friction.
-  > 2. **Sub-Second Real-Time Alert & Approval Telemetry** between Citizens & NDRF.
-  > 3. **Groq Llama 3.3 70B AI Brain** for instant life safety advice.
-  > 
-  > *AEGIS is fully deployed live on Vercel and ready for deployment across the Assam State Disaster Management Authority (ASDMA). Thank you!"*
+### 📍 [3:15 - 3:30] Scene 5: Scalable Backend Architecture & Conclusion
+* **Open Screen:** Briefly switch to the FastAPI Swagger UI (`http://127.0.0.1:8000/docs`) or show `backend/app/routers/weather_bigdata.py`.
+* **Action:** Highlight `/api/v1/weather/metrics`, `/api/v1/weather/feed`, and `/api/v1/weather/ai-verify`.
+* **What to Say:**
+  > *"Under the hood, AEGIS is powered by a high-throughput FastAPI backend, PostgreSQL with PostGIS spatiotemporal extensions, and simulated Kafka event streaming.*
+  >
+  > *AEGIS delivers an end-to-end, production-ready solution for Problem Statement SIH26069, transforming chaotic weather data into life-saving intelligence for the Ministry of Earth Sciences. Thank you!"*
 
 ---
 
-### 📍 Step 7: 📱 OFFLINE 2G EMERGENCY SMS & MOBILE PWA DEMO (Bonus Jury Winner)
-* **Live Citizen Offline App:** [https://aegis-xi-ruddy.vercel.app/offline/citizen-app.html](https://aegis-xi-ruddy.vercel.app/offline/citizen-app.html)
-* **Live Rescue Offline App:** [https://aegis-xi-ruddy.vercel.app/offline/rescue-app.html](https://aegis-xi-ruddy.vercel.app/offline/rescue-app.html)
-* **What to Say to the Jury:**
-  > *"Judges, we also solved the #1 failure mode in disaster management: **What happens when 4G mobile internet fails completely?**
-  > 
-  > We engineered installable **Offline PWAs** with a **2G Encoded Emergency SMS Engine**.
-  > 1. The citizen opens **AEGIS Citizen Offline App** on their phone without internet.
-  > 2. They select their district, trapped headcount, and hazard type.
-  > 3. Tapping **SEND OFFLINE SOS** formats an encoded SMS containing a direct 1-tap app opener link.
-  > 4. When the Rescue Officer receives the text, tapping the link opens the **AEGIS Rescue Offline App**, sounds the offline emergency siren, and zooms the Leaflet map directly to the victim's location in Assam!"*
+## 🛠️ Step-by-Step Recording Instructions for the User
 
----
-
-## 💡 Top 3 Tips for Jury Demo Success
-
-1. **Keep 2 Tabs Prepared Before Starting:**
-   * **Tab 1:** `https://aegis-xi-ruddy.vercel.app/citizen-sos.html`
-   * **Tab 2:** `https://aegis-xi-ruddy.vercel.app/rescue-dashboard.html`
-2. **Use `Ctrl + Tab` and `Ctrl + Shift + Tab`:**
-   * Smoothly switch between Tab 1 and Tab 2 so the jury sees the full-screen transition instantly.
-3. **Point Out the Green & Red Visual Status Banners:**
-   * Emphasize how the visual colors (Yellow Waiting &rarr; Red Alert &rarr; Green Approved) make the system easy for anyone to understand!
+1. **Launch Backend & Web Server:**
+   * Open Terminal 1:
+     ```powershell
+     cd "c:\Users\bhuva\Downloads\flood detection - newly updated and aug version - Copy"
+     python -m uvicorn backend.app.main:app --port 8000 --reload
+     ```
+   * Open Terminal 2:
+     ```powershell
+     cd "c:\Users\bhuva\Downloads\flood detection - newly updated and aug version - Copy"
+     python server_no_cache.py
+     ```
+2. **Open Browser Tabs Before Starting Recording:**
+   * Tab 1: `http://localhost:8085/index.html`
+   * Tab 2: `http://localhost:8085/rescue-dashboard.html`
+   * Tab 3: `http://localhost:8085/citizen-sos.html`
+   * Tab 4: `http://localhost:8085/citizen-dashboard.html`
+   * Tab 5: `http://localhost:8000/docs` (Swagger Backend API)
+3. **Recording Software:**
+   * Use **OBS Studio** or **Windows Game Bar (`Win + Alt + R`)**.
+   * Set resolution to 1080p (1920x1080) at 60fps with clear microphone audio.
+4. **Upload to YouTube:**
+   * Title: `AEGIS - National Weather Big Data Analytics Platform | SIH26069 (MoES)`
+   * Visibility: **Unlisted** or **Public**
+   * Description: Include Problem Statement ID `SIH26069`, Ministry of Earth Sciences (MoES), Problem Creator: Sarim Moin.
+   * Paste the link in your SIH hackathon portal submission!
