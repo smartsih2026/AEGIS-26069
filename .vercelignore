@@ -1,0 +1,6 @@
+backend/
+requirements.txt
+server_no_cache.py
+aegis_master.db
+*.py
+.git
