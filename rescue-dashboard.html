@@ -171,7 +171,7 @@
           <!-- Weather Widget (Hyderabad Live Focus) -->
           <div class="r-top-utility-box" style="border-color:rgba(56,189,248,0.4);">
             <i class="fa-solid fa-cloud-showers-heavy" style="color:#38bdf8;"></i>
-            <span><strong>26°C</strong> Heavy Rain &bull; <strong style="color:#38bdf8;">Hyderabad (Demo)</strong></span>
+            <span><strong>26°C</strong> Heavy Rain &bull; <strong style="color:#38bdf8;">Hyderabad Met Centre (Active Sector)</strong></span>
           </div>
 
           <!-- Big Data Pipeline Widget -->
@@ -278,7 +278,7 @@
         <div class="r-filter-group">
           <span class="r-filter-label"><i class="fa-solid fa-location-dot"></i> Region:</span>
           <select id="rescue-district-dropdown" class="r-filter-select" onchange="selectDistrictView(this.value)">
-            <option value="Hyderabad" selected>⭐ Hyderabad, Telangana (Live Demo)</option>
+            <option value="Hyderabad" selected>⭐ Hyderabad, Telangana (Primary Operational Sector)</option>
             <option value="ALL">🗺️ All India (National Overview)</option>
             <option value="Golaghat">Golaghat, Assam (Brahmaputra Basin)</option>
             <option value="Mumbai">Mumbai, Maharashtra (West Coast)</option>
@@ -335,7 +335,7 @@
               <!-- Quick Pan Buttons -->
               <div style="display:flex; align-items:center; gap:0.45rem; margin-left:auto;">
                 <button style="background:rgba(37,99,235,0.25); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; font-size:0.685rem; font-weight:700; padding:0.25rem 0.55rem; border-radius:5px; cursor:pointer;" onclick="selectDistrictView('Hyderabad')">
-                  ⭐ Hyderabad (Demo)
+                  ⭐ Hyderabad (Primary Sector)
                 </button>
                 <button style="background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.4); color:#10b981; font-size:0.685rem; font-weight:700; padding:0.25rem 0.55rem; border-radius:5px; cursor:pointer;" onclick="selectDistrictView('ALL')">
                   🗺️ All India Map
@@ -537,7 +537,7 @@
       // 1. Initialize Leaflet Map
       initRescueMap();
 
-      // 2. Select Hyderabad (Active Demo Center) by Default
+      // 2. Select Hyderabad (Primary Operational Sector) by Default
       selectDistrictView('Hyderabad');
 
       // 3. Render Live #IMD Ingestion Stream

@@ -1,12 +1,12 @@
 /*
  * AEGIS National Weather Big Data Analytics Platform - MoES / SIH26069
  * Multi-Source Ingestion Telemetry, AI Verification Matrix & City Nodes
- * Primary Live Demo: Hyderabad, Telangana (Deccan / Musi River Basin)
+ * Primary Operational Sector: Hyderabad, Telangana (Deccan / Musi River Basin)
  */
 
 const assamStateDistrictData = {
   "Hyderabad": {
-    district: "Hyderabad, Telangana (Active Demo Center)",
+    district: "Hyderabad, Telangana (Command Sector)",
     division: "Telangana / Musi River Basin",
     riskLevel: "Critical",
     riskColor: "#ef4444",

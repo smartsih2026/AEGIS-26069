@@ -4,7 +4,7 @@
 **Problem Creator:** Sarim Moin  
 **Project Name:** AEGIS  
 **Target Video Duration:** 3 to 4 Minutes  
-**Demo Hub:** Hyderabad, Telangana (17.38°N, 78.48°E) + National India Grid  
+**Primary Operational Sector:** Hyderabad, Telangana (17.38°N, 78.48°E) + National India Grid  
 
 ---
 

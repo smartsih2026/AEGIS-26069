@@ -3,16 +3,16 @@
  * Ministry of Earth Sciences (MoES) / MIC
  * Master Citizen Portal Controller & National Weather/Flood Model Data Matrix
  * Complete genuine telemetry, POI markers, AI knowledge generator & storage sync
- * with primary live demo centered in Hyderabad (Telangana) and National coverage.
+ * with primary operational sector centered in Hyderabad (Telangana) and National coverage.
  */
 
 const assamFloodModelData = [
   // ==========================================
-  // 0. PRIMARY LIVE DEMO REGION: HYDERABAD (TELANGANA)
+  // 0. PRIMARY OPERATIONAL SECTOR: HYDERABAD (TELANGANA)
   // ==========================================
   {
     district: "Hyderabad",
-    division: "Telangana State (Live Demo Center)",
+    division: "Telangana State (Primary Operational Sector)",
     coordinates: [17.3850, 78.4867],
     coordsLabel: "17.38°N, 78.48°E",
     riskLevel: "Critical",
@@ -1243,7 +1243,7 @@ const assamFloodModelData = [
 // ==========================================
 const assamShelterNetwork = {
   // ==========================================
-  // 0. PRIMARY LIVE DEMO REGION: HYDERABAD (TELANGANA)
+  // 0. PRIMARY OPERATIONAL SECTOR: HYDERABAD (TELANGANA)
   // ==========================================
   "Hyderabad": [
     { name: "GHMC Begumpet Indoor Stadium Emergency Shelter", coordinates: [17.4410, 78.4780], capacity: 850, status: "Open", type: "Mega Camp", contact: "GHMC Officer K. Varma", phone: "+91 94401 11223", desc: "Central GHMC stadium complex with 50-bed medical camp and 24x7 community kitchen." },
@@ -1444,7 +1444,7 @@ class CitizenApp {
     console.log(`AEGIS Citizen Portal Controller Initialized. Active District: ${this.currentDistrict}`);
   }
 
-  // Get active selected district from localStorage (defaults to Hyderabad for live demo)
+  // Get active selected district from localStorage (defaults to Hyderabad)
   getSelectedDistrict() {
     try {
       return localStorage.getItem('aegis_selected_district') || 'Hyderabad';

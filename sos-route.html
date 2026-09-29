@@ -220,9 +220,11 @@
         };
       }
 
-      // Populate UI
+      // Populate UI with Authenticated Citizen Details
+      const savedProfile = JSON.parse(localStorage.getItem('AEGIS_CITIZEN_PROFILE') || '{"name":"Ravi Das"}');
+      const citizenDispName = savedProfile.name || 'Ravi Das';
       document.getElementById('route-sos-title').innerText = `${sosData.id} Dispatch`;
-      document.getElementById('route-citizen-name').innerText = `👤 Ravi Das & Family (${sosData.peopleCount} Members, ${sosData.childrenCount} Children)`;
+      document.getElementById('route-citizen-name').innerText = `👤 ${citizenDispName} & Family (${sosData.peopleCount} Members, ${sosData.childrenCount} Children)`;
       document.getElementById('route-location').innerHTML = `<i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> ${sosData.locationName}, ${sosData.district}`;
       document.getElementById('route-details').innerText = `"${sosData.details}"`;
       document.getElementById('route-severity').innerText = `${sosData.severityCategory} (${sosData.severityScore}/100)`;
@@ -276,7 +278,7 @@
       L.marker(citizenCoords, { icon: sosIcon }).addTo(map).bindPopup(`
         <div style="font-family:'Plus Jakarta Sans',sans-serif; color:#fff;">
           <b style="color:#ef4444;">${sosData.id} - Citizen SOS Location</b><br>
-          <span style="font-size:11px; color:#cbd5e1;">Ravi Das & Family (${sosData.peopleCount} People)</span>
+          <span style="font-size:11px; color:#cbd5e1;">${citizenDispName} &amp; Family (${sosData.peopleCount} People)</span>
         </div>
       `).openPopup();
 

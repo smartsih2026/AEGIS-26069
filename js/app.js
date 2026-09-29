@@ -31,7 +31,7 @@ class AegisApp {
     // Center on India National View
     const indiaCenter = [20.5937, 78.9629];
     this.landingMap = L.map('landing-map', {
-      center: [17.3850, 78.4867], // Default focused on Hyderabad (Primary Demo)
+      center: [17.3850, 78.4867], // Default focused on Hyderabad (Primary Sector)
       zoom: 6.5,
       minZoom: 4.2,
       maxZoom: 16,
@@ -96,7 +96,7 @@ class AegisApp {
 
     // National Weather Grid Hazard Points
     const nationalHazards = [
-      { name: 'Hyderabad, Telangana (Demo Hub)', lat: 17.3850, lng: 78.4867, category: 'Flooding', risk: 'Critical', color: '#ef4444', desc: 'Musi River overflow, 114mm/h flash cloudburst. Begumpet Radar active.', radius: 35000, isPrimary: true },
+      { name: 'Hyderabad, Telangana (Command Grid)', lat: 17.3850, lng: 78.4867, category: 'Flooding', risk: 'Critical', color: '#ef4444', desc: 'Musi River overflow, 114mm/h flash cloudburst. Begumpet Radar active.', radius: 35000, isPrimary: true },
       { name: 'Mumbai, Maharashtra', lat: 19.0760, lng: 72.8777, category: 'Rainfall', risk: 'High', color: '#f97316', desc: '94mm/h extreme downpour + 4.2m Arabian Sea high tide.', radius: 28000 },
       { name: 'Delhi NCR', lat: 28.6139, lng: 77.2090, category: 'Fog', risk: 'High', color: '#f97316', desc: 'Dense radiation smog, visibility < 150m, IGI Airport CAT-III.', radius: 25000 },
       { name: 'Golaghat, Assam', lat: 26.4049, lng: 94.0321, category: 'Flooding', risk: 'Critical', color: '#ef4444', desc: 'Dhansiri & Brahmaputra basin 1.8m above danger level.', radius: 28000 },
@@ -188,9 +188,9 @@ class AegisApp {
           this.landingMap.flyTo([userLat, userLng], 12.5, { duration: 1.5 });
         },
         (err) => {
-          console.warn("GPS access denied or unavailable, defaulting to Hyderabad demo hub:", err);
+          console.warn("GPS access denied or unavailable, defaulting to Hyderabad sector:", err);
           this.flyToHyderabad();
-          alert("📍 GPS access unavailable or blocked. Centering on Primary Demo Hub: Hyderabad, Telangana (17.38°N, 78.48°E).");
+          alert("📍 GPS access unavailable or blocked. Centering on Primary Sector: Hyderabad, Telangana (17.38°N, 78.48°E).");
         },
         { enableHighAccuracy: true, timeout: 5000 }
       );

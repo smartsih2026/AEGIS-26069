@@ -1072,9 +1072,11 @@
           <button class="topbar-guide-btn" onclick="openSafetyGuideModal()">
             Stay Safe Guide &rarr;
           </button>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 0.95rem;">
+        </div>        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <button class="btn btn-pill" onclick="loginWithGoogleFirebase()" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.22); color:#fff; font-size:0.72rem; font-weight:600; padding:0.35rem 0.75rem; border-radius:18px; display:inline-flex; align-items:center; gap:0.4rem; cursor:pointer;" title="Sign in or sync with Google">
+            <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.87 10.78c-.18-.53-.29-1.1-.29-1.78s.11-1.25.29-1.78L.97 4.96C.35 6.18 0 7.55 0 9s.35 2.82.97 4.04l2.9-2.26z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.45 2.02.97 4.96l2.9 2.26C4.59 5.05 6.62 3.58 9 3.58z"/></svg>
+            <span class="google-auth-status-text">Google Sign In</span>
+          </button>
           <div style="position:relative; cursor:pointer;" onclick="location.href='citizen-notifications.html'">
             <i class="fa-solid fa-bell" style="color:#94a3b8; font-size:1.05rem;"></i>
             <span
@@ -1087,8 +1089,8 @@
               style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid rgba(59,130,246,0.4);"
               alt="Avatar">
             <div style="text-align:left;">
-              <div style="font-size:0.74rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
-              <div style="font-size:0.58rem; color:#94a3b8;">ravi.das@email.com</div>
+              <div class="citizen-user-name" style="font-size:0.74rem; font-weight:700; color:#fff; line-height:1.1;">Ravi Das</div>
+              <div class="citizen-user-email" style="font-size:0.58rem; color:#94a3b8;">ravi.das@gmail.com</div>
             </div>
           </div>
         </div>
