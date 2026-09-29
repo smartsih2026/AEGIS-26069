@@ -193,4 +193,4 @@ Open your browser in Fullscreen (press `F11` for a clean, professional view) wit
 * **Title:** `AEGIS - National Weather Big Data Analytics Platform | SIH26069 (MoES)`
 * **Visibility:** **Unlisted** (or Public).
 * **Category:** Science & Technology.
-* **Tags:** `SIH2024`, `SIH26069`, `Ministry of Earth Sciences`, `MoES`, `Big Data`, `Weather Analytics`, `FastAPI`, `IMD`.
+* **Tags:** `SIH2026`, `SIH26069`, `Ministry of Earth Sciences`, `MoES`, `Big Data`, `Weather Analytics`, `FastAPI`, `IMD`.
